@@ -25,10 +25,6 @@
  * 1 tab == 4 spaces!
  */
 
-/*
- * NOTE:  This file uses a third party USB CDC driver.
- */
-
 /* Standard includes. */
 #include "string.h"
 #include "stdio.h"
@@ -51,6 +47,9 @@
 /* The maximum time to wait for the mutex that guards the UART to become
 available. */
 #define cmdMAX_MUTEX_WAIT		pdMS_TO_TICKS( 300 )
+
+/* Flag to indicate if DMA transfer has completed */
+uint8_t uart_tx_ready = 0;
 
 /*-----------------------------------------------------------*/
 
@@ -94,7 +93,7 @@ void vUARTCommandConsoleStart( uint16_t usStackSize, UBaseType_t uxPriority )
 
 static void prvUARTCommandConsoleTask( void *pvParameters )
 {
-signed char cRxedChar = '0';
+signed char cRxedChar = '\0';
 uint8_t ucInputIndex = 0;
 char *pcOutputString;
 static char cInputString[ cmdMAX_INPUT_SIZE ], cLastInputString[ cmdMAX_INPUT_SIZE ];
@@ -108,7 +107,7 @@ BaseType_t xReturned;
 	pcOutputString = FreeRTOS_CLIGetOutputBuffer();
 
 	/* Send the welcome message. */
-	HAL_UART_Transmit_DMA(&huart1, (uint8_t *)pcWelcomeMessage, ( unsigned short ) strlen(pcWelcomeMessage));
+	UART_DMA_Transfer(&huart1, (uint8_t *)pcWelcomeMessage, ( unsigned short ) strlen(pcWelcomeMessage));
 
 	for( ;; )
 	{
@@ -123,13 +122,13 @@ BaseType_t xReturned;
 		{
 			/* Echo the character back. */
 			//xSerialPutChar( xPort, cRxedChar, portMAX_DELAY );
-			HAL_UART_Transmit_DMA(&huart1, (uint8_t *)&cRxedChar, 1);
+			UART_DMA_Transfer(&huart1, (uint8_t *)&cRxedChar, 1);
 
 			/* Was it the end of the line? */
 			if( cRxedChar == '\n' || cRxedChar == '\r' )
 			{
 				/* Just to space the output from the input. */
-				HAL_UART_Transmit_DMA(&huart1, (uint8_t *)pcNewLine, ( unsigned short ) strlen(pcNewLine));
+				UART_DMA_Transfer(&huart1, (uint8_t *)pcNewLine, ( unsigned short ) strlen(pcNewLine));
 
 				/* See if the command is empty, indicating that the last command
 				is to be executed again. */
@@ -149,7 +148,8 @@ BaseType_t xReturned;
 					xReturned = FreeRTOS_CLIProcessCommand( cInputString, pcOutputString, configCOMMAND_INT_MAX_OUTPUT_SIZE );
 
 					/* Write the generated string to the UART. */
-					HAL_UART_Transmit_DMA(&huart1, (uint8_t *)pcOutputString, ( unsigned short ) strlen(pcOutputString));
+
+					UART_DMA_Transfer(&huart1, (uint8_t *)pcOutputString, ( unsigned short ) strlen(pcOutputString));
 
 				} while( xReturned != pdFALSE );
 
@@ -161,7 +161,7 @@ BaseType_t xReturned;
 				ucInputIndex = 0;
 				memset( cInputString, 0x00, cmdMAX_INPUT_SIZE );
 
-				HAL_UART_Transmit_DMA(&huart1, (uint8_t *)pcEndOfOutputMessage, ( unsigned short ) strlen(pcEndOfOutputMessage));
+				UART_DMA_Transfer(&huart1, (uint8_t *)pcEndOfOutputMessage, ( unsigned short ) strlen(pcEndOfOutputMessage));
 			}
 			else
 			{
@@ -206,9 +206,27 @@ void vOutputString( const char * const pcMessage )
 {
 	if( xSemaphoreTake( xTxMutex, cmdMAX_MUTEX_WAIT ) == pdPASS )
 	{
-		HAL_UART_Transmit_DMA(&huart1, (uint8_t *)pcMessage, ( unsigned short ) strlen(pcMessage));
+		while(HAL_UART_Transmit_DMA(&huart1, (uint8_t *)pcMessage, ( unsigned short ) strlen(pcMessage)) != HAL_OK);
 		xSemaphoreGive( xTxMutex );
 	}
 }
 /*-----------------------------------------------------------*/
+
+void UART_DMA_Transfer(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size)
+{
+	//Set the flag to not ready
+	uart_tx_ready = 0;
+	while(HAL_UART_Transmit_DMA(huart, pData, Size) != HAL_OK);
+	// Wait for the transfer to finish
+	while(uart_tx_ready != 1);
+}
+/*-----------------------------------------------------------*/
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+    if (huart->Instance == USART1)
+    {
+    	uart_tx_ready = 1;
+    }
+}
 
