@@ -110,6 +110,12 @@ void StartDefaultTask(void const * argument);
 void LED_Blinky(void *pvParameters);
 void Read_ADC(void *pvParameters);
 
+/*
+ * Register commands that can be used with FreeRTOS+CLI through the UDP socket.
+ * The commands are defined in CLI-commands.c.
+ */
+extern void vRegisterCLICommands( void );
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -178,6 +184,9 @@ int main(void)
 
   /* Start the Command Line Interface on UART1 */
   vUARTCommandConsoleStart(configMINIMAL_STACK_SIZE, 2);
+
+  /* Register commands with the FreeRTOS+CLI command interpreter. */
+  vRegisterCLICommands();
 
   /* USER CODE END 2 */
 
@@ -515,10 +524,10 @@ static void MX_DMA_Init(void)
 
   /* DMA interrupt init */
   /* DMA1_Channel1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 3, 0);
+  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 2, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
   /* DMA1_Channel2_3_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 3, 0);
+  HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 2, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel2_3_IRQn);
 
 }
@@ -628,6 +637,10 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 	temperature = adc_buffer[5];
 }
 
+void _putchar(char character)
+{
+	while(HAL_UART_Transmit_DMA(&huart1, (uint8_t *)&character, 1) != HAL_OK);
+}
 
 /* USER CODE END 4 */
 
