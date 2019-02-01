@@ -28,6 +28,8 @@
 #ifndef UART_COMMAND_CONSOLE_H
 #define UART_COMMAND_CONSOLE_H
 
+#include "stm32g0xx_hal.h"
+
 /*
  * Create the task that implements a command console using the UART
  * port driver for intput and output.

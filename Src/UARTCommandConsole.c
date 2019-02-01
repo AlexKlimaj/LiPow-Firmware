@@ -35,8 +35,7 @@
 #include "semphr.h"
 
 #include "FreeRTOS_CLI.h"
-
-#include "stm32g0xx_hal.h"
+#include "UARTCommandConsole.h"
 
 /* Dimensions the buffer into which input characters are placed. */
 #define cmdMAX_INPUT_SIZE		50
