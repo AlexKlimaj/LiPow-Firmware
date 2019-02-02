@@ -48,7 +48,7 @@
 #define cmdMAX_MUTEX_WAIT	pdMS_TO_TICKS( 300 )
 
 /* Flag to indicate if DMA transfer has completed */
-volatile uint8_t uart_tx_ready = 0;
+static volatile uint8_t sUart_tx_ready = 0;
 
 /*-----------------------------------------------------------*/
 
@@ -184,11 +184,11 @@ static void prvUARTCommandConsoleTask(void *pvParameters) {
 void UART_Transfer(uint8_t *pData, uint16_t Size) {
 	if ( xSemaphoreTake( xTxMutex, cmdMAX_MUTEX_WAIT ) == pdPASS) {
 		//Set the flag to not ready
-		uart_tx_ready = 0;
+		sUart_tx_ready = 0;
 		while (HAL_UART_Transmit_DMA(&huart1, pData, Size) != HAL_OK)
 			;
 		// Wait for the transfer to finish
-		while (uart_tx_ready != 1)
+		while (sUart_tx_ready != 1)
 			;
 		xSemaphoreGive(xTxMutex);
 	}
@@ -197,7 +197,7 @@ void UART_Transfer(uint8_t *pData, uint16_t Size) {
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
 	if (huart->Instance == USART1) {
-		uart_tx_ready = 1;
+		sUart_tx_ready = 1;
 	}
 }
 
