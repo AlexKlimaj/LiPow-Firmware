@@ -48,7 +48,7 @@
 #define cmdMAX_MUTEX_WAIT	pdMS_TO_TICKS( 300 )
 
 /* Flag to indicate if DMA transfer has completed */
-uint8_t uart_tx_ready = 0;
+volatile uint8_t uart_tx_ready = 0;
 
 /*-----------------------------------------------------------*/
 
