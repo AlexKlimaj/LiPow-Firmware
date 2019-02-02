@@ -57,6 +57,8 @@
 
 #include "stm32g0xx_hal_tim.h"
 #include "UARTCommandConsole.h"
+#include "adc_interface.h"
+#include "printf.h"
 
 /* USER CODE END Includes */
 
@@ -67,6 +69,13 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+/* Priorities at which the tasks are created. */
+#define mainADC_TASK_PRIORITY			( tskIDLE_PRIORITY + 2 )
+#define	mainLED_TASK_PRIORITY			( tskIDLE_PRIORITY + 1 )
+#define mainUART_CLI_TASK_PRIORITY		( tskIDLE_PRIORITY )
+
+#define cliSTACK_SIZE				( configMINIMAL_STACK_SIZE*2 )
 
 /* USER CODE END PD */
 
@@ -90,8 +99,7 @@ DMA_HandleTypeDef hdma_usart1_rx;
 osThreadId defaultTaskHandle;
 /* USER CODE BEGIN PV */
 
-uint32_t adc[6], adc_buffer[6];
-float bat_voltage, cell_1_voltage, cell_2_voltage, cell_3_voltage, cell_4_voltage, temperature;
+uint32_t adc_buffer[6];
 
 /* USER CODE END PV */
 
@@ -131,12 +139,6 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
-	bat_voltage = 0.0f;
-	cell_1_voltage = 0.0f;
-	cell_2_voltage = 0.0f;
-	cell_3_voltage = 0.0f;
-	cell_4_voltage = 0.0f;
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -170,7 +172,7 @@ int main(void)
 	  (const char* const)"blink_led",   /* Text name for the task. */
 	  configMINIMAL_STACK_SIZE,     	/* Stack size in words, not bytes. */
 	  0,    							/* Parameter passed into the task. */
-	  2,								/* Priority at which the task is created. */
+	  mainLED_TASK_PRIORITY,					/* Priority at which the task is created. */
 	  0);     							/* Used to pass out the created task's handle. */
 
   /* Create the task, storing the handle. */
@@ -179,11 +181,11 @@ int main(void)
 	  (const char* const)"read_adc",    /* Text name for the task. */
 	  configMINIMAL_STACK_SIZE,     	/* Stack size in words, not bytes. */
 	  0,    							/* Parameter passed into the task. */
-	  2,								/* Priority at which the task is created. */
+	  mainADC_TASK_PRIORITY,					/* Priority at which the task is created. */
 	  0);     							/* Used to pass out the created task's handle. */
 
   /* Start the Command Line Interface on UART1 */
-  vUARTCommandConsoleStart(configMINIMAL_STACK_SIZE, 2);
+  vUARTCommandConsoleStart(cliSTACK_SIZE, mainUART_CLI_TASK_PRIORITY);
 
   /* Register commands with the FreeRTOS+CLI command interpreter. */
   vRegisterCLICommands();
@@ -524,10 +526,10 @@ static void MX_DMA_Init(void)
 
   /* DMA interrupt init */
   /* DMA1_Channel1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 2, 0);
+  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 3, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
   /* DMA1_Channel2_3_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 2, 0);
+  HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 3, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel2_3_IRQn);
 
 }
@@ -612,11 +614,11 @@ void Read_ADC(void *pvParameters)
 	// Start the DMA ADC
 	HAL_ADC_Start_DMA(&hadc1, adc_buffer, 6);
 
-	//char buffer[] = "HAL Call\r\n";
-
 	for(;;)
 	{
 		vTaskDelay(xDelay);
+
+		//printf("cell_one_adc value = %d\r\n", adc_buffer[1]);
 	}
 }
 
@@ -629,17 +631,17 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 
 	// Calculate the voltages based on the following data:
 	// https://docs.google.com/spreadsheets/d/1uXEK7AOaoLDN3ATuCtUCRYjI7-zBhgmvHDWbn-7-k90/edit?usp=sharing
-	bat_voltage = (adc_buffer[0] - 3.6f)/237.0f;
-	cell_1_voltage = adc_buffer[1];
-	cell_2_voltage = adc_buffer[2];
-	cell_3_voltage = adc_buffer[3];
-	cell_4_voltage = adc_buffer[4];
-	temperature = adc_buffer[5];
+	Set_Battery_Voltage((adc_buffer[0] - BATTERY_ADC_OFFSET) * BATTERY_ADC_SCALAR);
+	Set_Cell_One_Voltage((adc_buffer[1] - CELL_ONE_ADC_OFFSET) * CELL_ONE_ADC_SCALAR);
+	Set_Cell_One_Voltage((float)adc_buffer[2]);
+	Set_Cell_One_Voltage((float)adc_buffer[3]);
+	Set_Cell_One_Voltage((float)adc_buffer[4]);
+	Set_MCU_Temperature((float)adc_buffer[5]);
 }
 
 void _putchar(char character)
 {
-	while(HAL_UART_Transmit_DMA(&huart1, (uint8_t *)&character, 1) != HAL_OK);
+	UART_Transfer((uint8_t *)&character, 1);
 }
 
 /* USER CODE END 4 */
