@@ -36,9 +36,7 @@
  */
 void vUARTCommandConsoleStart( uint16_t usStackSize, unsigned portBASE_TYPE uxPriority );
 
-void vOutputString( const char * const pcMessage );
-
-void UART_DMA_Transfer(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size);
+void UART_Transfer(uint8_t *pData, uint16_t Size);
 
 #endif /* UART_COMMAND_CONSOLE_H */
 
