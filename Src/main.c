@@ -70,16 +70,6 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-/* Priorities at which the tasks are created. */
-#define mainADC_TASK_PRIORITY			( tskIDLE_PRIORITY + 2 )
-#define	mainLED_TASK_PRIORITY			( tskIDLE_PRIORITY + 1 )
-#define mainUART_CLI_TASK_PRIORITY		( tskIDLE_PRIORITY )
-
-#define cliSTACK_SIZE					( configMINIMAL_STACK_SIZE*2 )
-#define vRead_ADC_STACK_SIZE			( configMINIMAL_STACK_SIZE*2 )
-
-#define ADC_FILTER_SUM_COUNT			380
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -101,13 +91,6 @@ DMA_HandleTypeDef hdma_usart1_rx;
 
 osThreadId defaultTaskHandle;
 /* USER CODE BEGIN PV */
-
-TaskHandle_t adcTaskHandle = NULL;
-
-uint32_t adc_buffer[6];
-static volatile uint32_t adc_buffer_filtered[6], adc_filtered_output[6];
-
-static volatile uint32_t adc_sum_count;
 
 /* USER CODE END PV */
 
@@ -178,19 +161,14 @@ int main(void) {
 	(const char* const ) "blink_led", /* Text name for the task. */
 	configMINIMAL_STACK_SIZE, /* Stack size in words, not bytes. */
 	0, /* Parameter passed into the task. */
-	mainLED_TASK_PRIORITY, /* Priority at which the task is created. */
+	LED_TASK_PRIORITY, /* Priority at which the task is created. */
 	0); /* Used to pass out the created task's handle. */
 
-	/* Create the task, storing the handle. */
-	xTaskCreate(vRead_ADC, /* Function that implements the task. */
-	(const char* const ) "read_adc", /* Text name for the task. */
-	vRead_ADC_STACK_SIZE, /* Stack size in words, not bytes. */
-	0, /* Parameter passed into the task. */
-	mainADC_TASK_PRIORITY, /* Priority at which the task is created. */
-	&adcTaskHandle); /* Used to pass out the created task's handle. */
+	/* Start the adc task */
+	vCreateADCTask();
 
 	/* Start the Command Line Interface on UART1 */
-	vUARTCommandConsoleStart(cliSTACK_SIZE, mainUART_CLI_TASK_PRIORITY);
+	vUARTCommandConsoleStart(cliSTACK_SIZE, UART_CLI_TASK_PRIORITY);
 
 	/* Register commands with the FreeRTOS+CLI command interpreter. */
 	vRegisterCLICommands();
@@ -579,76 +557,6 @@ void vLED_Blinky(void *pvParameters) {
 		HAL_GPIO_WritePin(Green_LED_GPIO_Port, Green_LED_Pin, GPIO_PIN_RESET);
 		vTaskDelay(xDelay);
 	}
-}
-
-void vRead_ADC(void *pvParameters) {
-	// calibrate ADC
-	while (HAL_ADCEx_Calibration_Start(&hadc1) != HAL_OK)
-		;
-
-	adc_sum_count = 0;
-
-	static uint32_t thread_notification;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(500);
-
-	// Start the DMA ADC
-	HAL_ADC_Start_DMA(&hadc1, adc_buffer, 6);
-
-	for (;;) {
-		/* Wait to be notified of an interrupt. */
-		thread_notification = ulTaskNotifyTake(pdTRUE, xMaxBlockTime);
-
-		if (thread_notification) {
-			/* A notification was received. */
-			Set_Battery_Voltage(adc_filtered_output[0]);
-			Set_Cell_One_Voltage(adc_filtered_output[1]);
-			Set_Cell_Two_Voltage(adc_filtered_output[2]);
-			Set_Cell_Three_Voltage(adc_filtered_output[3]);
-			Set_Cell_Four_Voltage(adc_filtered_output[4]);
-		} else {
-			/* Did not receive a notification within the expected time. */
-			printf("Did Not Receive an ADC Notification\r\n");
-		}
-	}
-}
-
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
-	/* tCONV = Sampling time + 12.5 x ADC clock cycles
-	 For 160 sample time and 16MHz clock divided by 4
-	 tCONV = (160 + 12.5) x 1/(16MHz/4) = 43.125us
-	 For 6 reads = 258.75us or 3.864kHz */
-
-	adc_buffer_filtered[0] = adc_buffer_filtered[0] + adc_buffer[0];
-	adc_buffer_filtered[1] = adc_buffer_filtered[1] + adc_buffer[1];
-	adc_buffer_filtered[2] = adc_buffer_filtered[2] + adc_buffer[2];
-	adc_buffer_filtered[3] = adc_buffer_filtered[3] + adc_buffer[3];
-	adc_buffer_filtered[4] = adc_buffer_filtered[4] + adc_buffer[4];
-
-	adc_sum_count++;
-
-	if (adc_sum_count == ADC_FILTER_SUM_COUNT) {
-		adc_filtered_output[0] = adc_buffer_filtered[0] / adc_sum_count;
-		adc_filtered_output[1] = adc_buffer_filtered[1] / adc_sum_count;
-		adc_filtered_output[2] = adc_buffer_filtered[2] / adc_sum_count;
-		adc_filtered_output[3] = adc_buffer_filtered[3] / adc_sum_count;
-		adc_filtered_output[4] = adc_buffer_filtered[4] / adc_sum_count;
-
-		adc_sum_count = 0;
-
-		adc_buffer_filtered[0] = 0;
-		adc_buffer_filtered[1] = 0;
-		adc_buffer_filtered[2] = 0;
-		adc_buffer_filtered[3] = 0;
-		adc_buffer_filtered[4] = 0;
-
-		BaseType_t xHigherPriorityTaskWoken;
-		xHigherPriorityTaskWoken = pdFALSE;
-		vTaskNotifyGiveFromISR(adcTaskHandle, &xHigherPriorityTaskWoken);
-		portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-	}
-	//Set_MCU_Temperature(adc_buffer[5]);
-
-	//adc_temp = (adc_temp * 0.98) + (adc_buffer[0] * 0.02);
 }
 
 void _putchar(char character) {

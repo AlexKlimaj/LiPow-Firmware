@@ -113,6 +113,17 @@ standard names. */
 #define configCOMMAND_INT_MAX_OUTPUT_SIZE 400
 #define configUSE_STATS_FORMATTING_FUNCTIONS 1
 #define configUSE_TASK_NOTIFICATIONS 1
+
+/* Priorities at which the tasks are created. */
+#define ADC_TASK_PRIORITY				( tskIDLE_PRIORITY + 3 )
+#define	LED_TASK_PRIORITY				( tskIDLE_PRIORITY + 2 )
+#define UART_CLI_TASK_PRIORITY			( tskIDLE_PRIORITY + 1 )
+#define BATTERY_TASK_PRIORITY			( tskIDLE_PRIORITY + 3 )
+
+#define cliSTACK_SIZE					( configMINIMAL_STACK_SIZE * 2 )
+#define vRead_ADC_STACK_SIZE			( configMINIMAL_STACK_SIZE * 2 )
+#define vBattery_State_STACK_SIZE		( configMINIMAL_STACK_SIZE )
+
 /* USER CODE END Defines */ 
 
 #endif /* FREERTOS_CONFIG_H */
