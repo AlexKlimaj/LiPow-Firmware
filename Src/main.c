@@ -530,8 +530,8 @@ static void MX_GPIO_Init(void) {
 
 	/*Configure GPIO pin Output Level */
 	HAL_GPIO_WritePin(GPIOB,
-			EN_OTG_Pin | ILIM_HIZ_Pin | CELL_1S_DIS_EN_Pin | CELL_2S_DIS_EN_Pin | CELL_3S_DIS_EN_Pin
-					| CELL_4S_DIS_EN_Pin, GPIO_PIN_RESET);
+	EN_OTG_Pin | ILIM_HIZ_Pin | CELL_1S_DIS_EN_Pin | CELL_2S_DIS_EN_Pin | CELL_3S_DIS_EN_Pin | CELL_4S_DIS_EN_Pin,
+			GPIO_PIN_RESET);
 
 	/*Configure GPIO pin Output Level */
 	HAL_GPIO_WritePin(Red_LED_GPIO_Port, Red_LED_Pin, GPIO_PIN_SET);
