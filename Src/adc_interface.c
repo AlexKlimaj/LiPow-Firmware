@@ -15,15 +15,15 @@ extern ADC_HandleTypeDef hadc1;
 
 /* Private typedef -----------------------------------------------------------*/
 struct Adc {
-	int32_t bat_voltage;
-	int32_t cell_1_voltage;
-	int32_t cell_2_voltage;
-	int32_t cell_3_voltage;
-	int32_t cell_4_voltage;
+	uint32_t bat_voltage;
+	uint32_t cell_1_voltage;
+	uint32_t cell_2_voltage;
+	uint32_t cell_3_voltage;
+	uint32_t cell_4_voltage;
 	int32_t temperature;
-	int32_t two_s_battery_voltage;
-	int32_t three_s_battery_voltage;
-	int32_t four_s_battery_voltage;
+	uint32_t two_s_battery_voltage;
+	uint32_t three_s_battery_voltage;
+	uint32_t four_s_battery_voltage;
 };
 
 /* Private variables ---------------------------------------------------------*/
