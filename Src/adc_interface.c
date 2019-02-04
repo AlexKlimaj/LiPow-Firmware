@@ -10,6 +10,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "printf.h"
+#include "string.h"
 
 extern ADC_HandleTypeDef hadc1;
 
@@ -238,33 +239,29 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
 	 tCONV = (160 + 12.5) x 1/(16MHz/4) = 43.125us
 	 For 6 reads = 258.75us or 3.864kHz */
 
-	adc_buffer_filtered[0] = adc_buffer_filtered[0] + adc_buffer[0];
-	adc_buffer_filtered[1] = adc_buffer_filtered[1] + adc_buffer[1];
-	adc_buffer_filtered[2] = adc_buffer_filtered[2] + adc_buffer[2];
-	adc_buffer_filtered[3] = adc_buffer_filtered[3] + adc_buffer[3];
-	adc_buffer_filtered[4] = adc_buffer_filtered[4] + adc_buffer[4];
+	unsigned length = sizeof(adc_buffer_filtered)/sizeof(adc_buffer_filtered[0]);
+
+	for(unsigned i = 0; i < length; i++) {
+		adc_buffer_filtered[i] += adc_buffer[i];
+	}
 
 	adc_sum_count++;
 
 	if (adc_sum_count == ADC_FILTER_SUM_COUNT) {
-		adc_filtered_output[0] = adc_buffer_filtered[0] / adc_sum_count;
-		adc_filtered_output[1] = adc_buffer_filtered[1] / adc_sum_count;
-		adc_filtered_output[2] = adc_buffer_filtered[2] / adc_sum_count;
-		adc_filtered_output[3] = adc_buffer_filtered[3] / adc_sum_count;
-		adc_filtered_output[4] = adc_buffer_filtered[4] / adc_sum_count;
+
+		length = sizeof(adc_filtered_output)/sizeof(adc_filtered_output[0]);
+
+		for(unsigned i = 0; i < length; i++) {
+			adc_filtered_output[i] = adc_buffer[i];
+		}
 
 		adc_sum_count = 0;
 
-		adc_buffer_filtered[0] = 0;
-		adc_buffer_filtered[1] = 0;
-		adc_buffer_filtered[2] = 0;
-		adc_buffer_filtered[3] = 0;
-		adc_buffer_filtered[4] = 0;
+		// Clear the buffer
+		memset((uint32_t *)adc_buffer_filtered, 0, sizeof(adc_buffer_filtered));
 
-		BaseType_t xHigherPriorityTaskWoken;
-		xHigherPriorityTaskWoken = pdFALSE;
-		vTaskNotifyGiveFromISR(adcTaskHandle, &xHigherPriorityTaskWoken);
-		portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-		//Set_MCU_Temperature(adc_buffer[5]);
+		BaseType_t should_context_switch = pdFALSE;
+		vTaskNotifyGiveFromISR(adcTaskHandle, &should_context_switch);
+		portYIELD_FROM_ISR(should_context_switch);
 	}
 }
