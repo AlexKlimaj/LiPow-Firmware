@@ -259,10 +259,9 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
 		// Clear the buffer
 		memset((void*)adc_buffer_filtered, 0, sizeof(adc_buffer_filtered));
 
-		BaseType_t xHigherPriorityTaskWoken;
-		xHigherPriorityTaskWoken = pdFALSE;
-		vTaskNotifyGiveFromISR(adcTaskHandle, &xHigherPriorityTaskWoken);
-		portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+		BaseType_t should_context_switch = pdFALSE;
+		vTaskNotifyGiveFromISR(adcTaskHandle, &should_context_switch);
+		portYIELD_FROM_ISR(should_context_switch);
 		//Set_MCU_Temperature(adc_buffer[5]);
 	}
 }
