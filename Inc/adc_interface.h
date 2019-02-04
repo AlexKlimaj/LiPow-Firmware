@@ -17,29 +17,29 @@ extern "C" {
 // Calculate the voltages based on the following data:
 // https://docs.google.com/spreadsheets/d/1uXEK7AOaoLDN3ATuCtUCRYjI7-zBhgmvHDWbn-7-k90/edit?usp=sharing
 
-#define ADC_FILTER_SUM_COUNT		(int)380
+#define ADC_FILTER_SUM_COUNT		(unsigned)380
 
-#define BATTERY_ADC_MULTIPLIER 		(int)100000
+#define BATTERY_ADC_MULTIPLIER 		(unsigned)100000
 
-#define BATTERY_ADC_OFFSET 			(int)( 0.0542 * BATTERY_ADC_MULTIPLIER )
-#define BATTERY_ADC_SCALAR 			(int)( 0.00422 * BATTERY_ADC_MULTIPLIER )
-#define BATTERY_MIN_ADC_READING 	(int)10
+#define BATTERY_ADC_OFFSET 			(unsigned)( 0.0542 * BATTERY_ADC_MULTIPLIER )
+#define BATTERY_ADC_SCALAR 			(unsigned)( 0.00422 * BATTERY_ADC_MULTIPLIER )
+#define BATTERY_MIN_ADC_READING 	(unsigned)10
 
-#define CELL_ONE_ADC_OFFSET 		(int)( (-1) * 0.0102 * BATTERY_ADC_MULTIPLIER )
-#define CELL_ONE_ADC_SCALAR 		(int)( 0.00111 * BATTERY_ADC_MULTIPLIER )
-#define CELL_ONE_MIN_ADC_READING 	(int)10
+#define CELL_ONE_ADC_OFFSET 		(unsigned)( 0.0102 * BATTERY_ADC_MULTIPLIER )
+#define CELL_ONE_ADC_SCALAR 		(unsigned)( 0.00111 * BATTERY_ADC_MULTIPLIER )
+#define CELL_ONE_MIN_ADC_READING 	(unsigned)10
 
-#define CELL_TWO_ADC_OFFSET 		(int)( (-1) * 0.00573 * BATTERY_ADC_MULTIPLIER )
-#define CELL_TWO_ADC_SCALAR 		(int)( 0.00206 * BATTERY_ADC_MULTIPLIER )
-#define CELL_TWO_MIN_ADC_READING 	(int)10
+#define CELL_TWO_ADC_OFFSET 		(unsigned)( 0.00573 * BATTERY_ADC_MULTIPLIER )
+#define CELL_TWO_ADC_SCALAR 		(unsigned)( 0.00206 * BATTERY_ADC_MULTIPLIER )
+#define CELL_TWO_MIN_ADC_READING 	(unsigned)10
 
-#define CELL_THREE_ADC_OFFSET 		(int)( (-1) * 0.0375 * BATTERY_ADC_MULTIPLIER )
-#define CELL_THREE_ADC_SCALAR 		(int)( 0.00307 * BATTERY_ADC_MULTIPLIER )
-#define CELL_THREE_MIN_ADC_READING 	(int)10
+#define CELL_THREE_ADC_OFFSET 		(unsigned)( 0.0375 * BATTERY_ADC_MULTIPLIER )
+#define CELL_THREE_ADC_SCALAR 		(unsigned)( 0.00307 * BATTERY_ADC_MULTIPLIER )
+#define CELL_THREE_MIN_ADC_READING 	(unsigned)10
 
-#define CELL_FOUR_ADC_OFFSET 		(int)( 0.0542 * BATTERY_ADC_MULTIPLIER )
-#define CELL_FOUR_ADC_SCALAR 		(int)( 0.00422 * BATTERY_ADC_MULTIPLIER )
-#define CELL_FOUR_MIN_ADC_READING 	(int)10
+#define CELL_FOUR_ADC_OFFSET 		(unsigned)( 0.0542 * BATTERY_ADC_MULTIPLIER )
+#define CELL_FOUR_ADC_SCALAR 		(unsigned)( 0.00422 * BATTERY_ADC_MULTIPLIER )
+#define CELL_FOUR_MIN_ADC_READING 	(unsigned)10
 
 void vCreateADCTask(void);
 

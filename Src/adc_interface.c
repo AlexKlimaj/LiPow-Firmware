@@ -99,7 +99,7 @@ uint8_t Set_Cell_One_Voltage(uint32_t adc_reading) {
 		return 0;
 	}
 
-	adc_values.cell_1_voltage = (adc_reading * CELL_ONE_ADC_SCALAR) + CELL_ONE_ADC_OFFSET;
+	adc_values.cell_1_voltage = (adc_reading * CELL_ONE_ADC_SCALAR) - CELL_ONE_ADC_OFFSET;
 
 	return 1;
 }
@@ -124,7 +124,7 @@ uint8_t Set_Cell_Two_Voltage(uint32_t adc_reading) {
 		return 0;
 	}
 
-	adc_values.two_s_battery_voltage = ((adc_reading * CELL_TWO_ADC_SCALAR) + CELL_TWO_ADC_OFFSET);
+	adc_values.two_s_battery_voltage = ((adc_reading * CELL_TWO_ADC_SCALAR) - CELL_TWO_ADC_OFFSET);
 	adc_values.cell_2_voltage = adc_values.two_s_battery_voltage - adc_values.cell_1_voltage;
 
 	return 1;
@@ -149,7 +149,7 @@ uint8_t Set_Cell_Three_Voltage(uint32_t adc_reading) {
 		return 0;
 	}
 
-	adc_values.three_s_battery_voltage = ((adc_reading * CELL_THREE_ADC_SCALAR) + CELL_THREE_ADC_OFFSET);
+	adc_values.three_s_battery_voltage = ((adc_reading * CELL_THREE_ADC_SCALAR) - CELL_THREE_ADC_OFFSET);
 	adc_values.cell_3_voltage = adc_values.three_s_battery_voltage - adc_values.two_s_battery_voltage;
 
 	return 1;
@@ -238,28 +238,26 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
 	 tCONV = (160 + 12.5) x 1/(16MHz/4) = 43.125us
 	 For 6 reads = 258.75us or 3.864kHz */
 
-	adc_buffer_filtered[0] = adc_buffer_filtered[0] + adc_buffer[0];
-	adc_buffer_filtered[1] = adc_buffer_filtered[1] + adc_buffer[1];
-	adc_buffer_filtered[2] = adc_buffer_filtered[2] + adc_buffer[2];
-	adc_buffer_filtered[3] = adc_buffer_filtered[3] + adc_buffer[3];
-	adc_buffer_filtered[4] = adc_buffer_filtered[4] + adc_buffer[4];
+	unsigned length = sizeof(adc_buffer_filtered)/sizeof(adc_buffer_filtered[0]);
+
+	for(unsigned i = 0; i < length; i++) {
+		adc_buffer_filtered[i] += adc_buffer[i];
+	}
 
 	adc_sum_count++;
 
 	if (adc_sum_count == ADC_FILTER_SUM_COUNT) {
-		adc_filtered_output[0] = adc_buffer_filtered[0] / adc_sum_count;
-		adc_filtered_output[1] = adc_buffer_filtered[1] / adc_sum_count;
-		adc_filtered_output[2] = adc_buffer_filtered[2] / adc_sum_count;
-		adc_filtered_output[3] = adc_buffer_filtered[3] / adc_sum_count;
-		adc_filtered_output[4] = adc_buffer_filtered[4] / adc_sum_count;
+
+		length = sizeof(adc_filtered_output)/sizeof(adc_filtered_output[0]);
+
+		for(unsigned i = 0; i < length; i++) {
+			adc_filtered_output[i] /= adc_buffer[i];
+		}
 
 		adc_sum_count = 0;
 
-		adc_buffer_filtered[0] = 0;
-		adc_buffer_filtered[1] = 0;
-		adc_buffer_filtered[2] = 0;
-		adc_buffer_filtered[3] = 0;
-		adc_buffer_filtered[4] = 0;
+		// Clear the buffer
+		memset((void*)adc_buffer_filtered, 0, sizeof(adc_buffer_filtered));
 
 		BaseType_t xHigherPriorityTaskWoken;
 		xHigherPriorityTaskWoken = pdFALSE;

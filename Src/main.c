@@ -57,7 +57,6 @@
 
 #include "stm32g0xx_hal_tim.h"
 #include "UARTCommandConsole.h"
-#include "adc_interface.h"
 #include "printf.h"
 
 /* USER CODE END Includes */
