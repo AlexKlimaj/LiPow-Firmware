@@ -29,8 +29,8 @@ extern "C" {
 #define CELL_ONE_ADC_SCALAR 		(uint32_t)( 111 )
 #define CELL_ONE_MIN_ADC_READING 	20
 
-#define CELL_TWO_ADC_OFFSET 		(int32_t)( -573 )
-#define CELL_TWO_ADC_SCALAR 		(uint32_t)( 206 )
+#define CELL_TWO_ADC_OFFSET 		(int32_t)( -2157 )
+#define CELL_TWO_ADC_SCALAR 		(uint32_t)( 214 )
 #define CELL_TWO_MIN_ADC_READING 	20
 
 #define CELL_THREE_ADC_OFFSET 		(int32_t)( -3749 )

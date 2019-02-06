@@ -226,6 +226,8 @@ void vRead_ADC(void *pvParameters) {
 			Set_Cell_Two_Voltage(adc_filtered_output[2]);
 			Set_Cell_Three_Voltage(adc_filtered_output[3]);
 			Set_Cell_Four_Voltage(adc_filtered_output[4]);
+
+			//printf("adc 2 value = %d\r\n", adc_filtered_output[2]);
 		} else {
 			/* Did not receive a notification within the expected time. */
 			printf("Did Not Receive an ADC Notification\r\n");
@@ -252,7 +254,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
 		length = sizeof(adc_filtered_output)/sizeof(adc_filtered_output[0]);
 
 		for(unsigned i = 0; i < length; i++) {
-			adc_filtered_output[i] = adc_buffer[i];
+			adc_filtered_output[i] = ( adc_buffer_filtered[i] / ADC_FILTER_SUM_COUNT );
 		}
 
 		adc_sum_count = 0;
