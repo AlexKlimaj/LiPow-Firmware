@@ -28,13 +28,7 @@
 								<option id="com.atollic.truestudio.common_options.target.endianess.1608144567" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false" value="com.atollic.truestudio.common_options.target.endianess.little" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.286463162" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32G071CB" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.instr_set.2033833414" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" useByScannerDiscovery="false" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
-								<option id="com.atollic.truestudio.as.general.incpath.770237934" name="Include path" superClass="com.atollic.truestudio.as.general.incpath" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Middlewares/ST}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Middlewares/ST/STM32_USBPD_Library/Core}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Middlewares/ST/STM32_USBPD_Library/Devices}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Middlewares/ST/STM32_USBPD_Library/Devices/STM32G0XX/inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Middlewares/ST/STM32_USBPD_Library/Core/inc}&quot;"/>
-								</option>
+								<option id="com.atollic.truestudio.as.general.incpath.770237934" name="Include path" superClass="com.atollic.truestudio.as.general.incpath" useByScannerDiscovery="false" valueType="includePath"/>
 								<option id="com.atollic.truestudio.gcc.symbols.defined.1670122205" name="Defined symbols" superClass="com.atollic.truestudio.gcc.symbols.defined" useByScannerDiscovery="false"/>
 								<option id="com.atollic.truestudio.as.general.otherflags.51384659" name="Other options" superClass="com.atollic.truestudio.as.general.otherflags" useByScannerDiscovery="false" value="" valueType="string"/>
 								<option id="com.atollic.truestudio.as.general.warnings.1324541152" name="Suppress warnings " superClass="com.atollic.truestudio.as.general.warnings" useByScannerDiscovery="false" value="true" valueType="boolean"/>
@@ -54,11 +48,6 @@
 									<listOptionValue builtIn="false" value="../Drivers/include"/>
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32G0xx/Include"/>
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Middlewares/ST}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Middlewares/ST/STM32_USBPD_Library/Core}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Middlewares/ST/STM32_USBPD_Library/Devices}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Middlewares/ST/STM32_USBPD_Library/Devices/STM32G0XX/inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Middlewares/ST/STM32_USBPD_Library/Core/inc}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.gcc.symbols.defined.1670122205" name="Defined symbols" superClass="com.atollic.truestudio.gcc.symbols.defined" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__weak=__attribute__((weak))"/>

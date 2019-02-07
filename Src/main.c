@@ -107,7 +107,6 @@ void StartDefaultTask(void const * argument);
 /* USER CODE BEGIN PFP */
 
 void vLED_Blinky(void *pvParameters);
-void vRead_ADC(void *pvParameters);
 
 /*
  * Register commands that can be used with FreeRTOS+CLI through the UDP socket.
@@ -165,10 +164,10 @@ int main(void) {
 	0); /* Used to pass out the created task's handle. */
 
 	/* Start the adc task */
-	vCreateADCTask();
+	vCreateADCTask(vRead_ADC_STACK_SIZE, ADC_TASK_PRIORITY);
 
 	/* Start the Command Line Interface on UART1 */
-	vUARTCommandConsoleStart(cliSTACK_SIZE, UART_CLI_TASK_PRIORITY);
+	vUARTCommandConsoleStart(vcliSTACK_SIZE, UART_CLI_TASK_PRIORITY);
 
 	/* Register commands with the FreeRTOS+CLI command interpreter. */
 	vRegisterCLICommands();
