@@ -13,6 +13,7 @@ extern "C" {
 #endif
 
 #include "stm32g0xx_hal.h"
+#include "FreeRTOS.h"
 
 // Calculate the voltages based on the following data:
 // https://docs.google.com/spreadsheets/d/1uXEK7AOaoLDN3ATuCtUCRYjI7-zBhgmvHDWbn-7-k90/edit?usp=sharing
@@ -41,7 +42,7 @@ extern "C" {
 #define CELL_FOUR_ADC_SCALAR 		(uint32_t)( 423 )
 #define CELL_FOUR_MIN_ADC_READING 	20
 
-void vCreateADCTask(void);
+void vCreateADCTask( uint16_t usStackSize, unsigned portBASE_TYPE uxPriority );
 
 uint32_t Get_Battery_Voltage(void);
 

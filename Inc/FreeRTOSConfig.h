@@ -120,7 +120,7 @@ standard names. */
 #define UART_CLI_TASK_PRIORITY			( tskIDLE_PRIORITY + 1 )
 #define BATTERY_TASK_PRIORITY			( tskIDLE_PRIORITY + 3 )
 
-#define cliSTACK_SIZE					( configMINIMAL_STACK_SIZE * 2 )
+#define vcliSTACK_SIZE					( configMINIMAL_STACK_SIZE * 2 )
 #define vRead_ADC_STACK_SIZE			( configMINIMAL_STACK_SIZE * 2 )
 #define vBattery_State_STACK_SIZE		( configMINIMAL_STACK_SIZE )
 

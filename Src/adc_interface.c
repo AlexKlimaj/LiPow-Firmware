@@ -7,7 +7,6 @@
 
 #include "adc_interface.h"
 
-#include "FreeRTOS.h"
 #include "task.h"
 #include "printf.h"
 #include "string.h"
@@ -46,14 +45,14 @@ void vRead_ADC(void *pvParameters);
 /**
  * @brief Creates the adc task
  */
-void vCreateADCTask( void )
+void vCreateADCTask( uint16_t usStackSize, unsigned portBASE_TYPE uxPriority )
 {
 	/* Create the task, storing the handle. */
 	xTaskCreate(vRead_ADC, /* Function that implements the task. */
 		(const char* const ) "read_adc", /* Text name for the task. */
-		vRead_ADC_STACK_SIZE, /* Stack size in words, not bytes. */
+		usStackSize, /* Stack size in words, not bytes. */
 		0, /* Parameter passed into the task. */
-		ADC_TASK_PRIORITY, /* Priority at which the task is created. */
+		uxPriority, /* Priority at which the task is created. */
 		&adcTaskHandle); /* Used to pass out the created task's handle. */
 }
 

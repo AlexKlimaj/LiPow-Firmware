@@ -32,7 +32,7 @@
 
 /*
  * Create the task that implements a command console using the UART
- * port driver for intput and output.
+ * port driver for input and output.
  */
 void vUARTCommandConsoleStart( uint16_t usStackSize, unsigned portBASE_TYPE uxPriority );
 
