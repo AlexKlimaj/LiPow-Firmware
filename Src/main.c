@@ -55,10 +55,11 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "adc_interface.h"
+#include "battery.h"
+#include "printf.h"
 #include "stm32g0xx_hal_tim.h"
 #include "UARTCommandConsole.h"
-#include "adc_interface.h"
-#include "printf.h"
 
 /* USER CODE END Includes */
 
@@ -165,6 +166,9 @@ int main(void) {
 
 	/* Start the adc task */
 	vCreateADCTask(vRead_ADC_STACK_SIZE, ADC_TASK_PRIORITY);
+
+	/* Start the battery task */
+	vCreateBatteryTask(vBattery_State_STACK_SIZE, BATTERY_TASK_PRIORITY);
 
 	/* Start the Command Line Interface on UART1 */
 	vUARTCommandConsoleStart(vcliSTACK_SIZE, UART_CLI_TASK_PRIORITY);
