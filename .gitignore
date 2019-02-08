@@ -53,3 +53,7 @@ dkms.conf
 
 # Folders
 Debug/
+
+# Project files
+.settings/language.settings.xml
+.cproject
