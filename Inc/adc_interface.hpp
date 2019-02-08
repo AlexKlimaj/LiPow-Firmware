@@ -5,12 +5,14 @@
  ******************************************************************************
  */
 
-#ifndef ADC_INTERFACE_H_
-#define ADC_INTERFACE_H_
+#ifndef ADC_INTERFACE_HPP_
+#define ADC_INTERFACE_HPP_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include <stdint.h>
 
 #include "stm32g0xx_hal.h"
 #include "FreeRTOS.h"
@@ -60,4 +62,4 @@ uint32_t Get_MCU_Temperature(void);
 }
 #endif
 
-#endif /* ADC_INTERFACE_H_ */
+#endif /* ADC_INTERFACE_HPP_ */

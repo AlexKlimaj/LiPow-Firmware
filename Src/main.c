@@ -49,13 +49,13 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
+#include <adc_interface.hpp>
 #include "main.h"
 #include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#include "adc_interface.h"
 #include "battery.h"
 #include "printf.h"
 #include "stm32g0xx_hal_tim.h"

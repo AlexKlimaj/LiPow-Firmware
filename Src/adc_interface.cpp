@@ -5,7 +5,10 @@
  ******************************************************************************
  */
 
-#include "adc_interface.h"
+#include <adc_interface.hpp>
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "task.h"
 #include "printf.h"
@@ -266,3 +269,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
 		portYIELD_FROM_ISR(should_context_switch);
 	}
 }
+
+#ifdef __cplusplus
+}
+#endif

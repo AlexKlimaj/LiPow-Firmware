@@ -26,6 +26,7 @@
  */
 
 /* FreeRTOS includes. */
+#include <adc_interface.hpp>
 #include "FreeRTOS.h"
 #include "task.h"
 
@@ -35,7 +36,6 @@
 #include "string.h"
 #include "printf.h"
 
-#include "adc_interface.h"
 #include "UARTCommandConsole.h"
 
 /*
