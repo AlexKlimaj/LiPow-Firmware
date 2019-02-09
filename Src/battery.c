@@ -8,7 +8,7 @@
 
 #include "battery.h"
 
-#include "adc_interface.h"
+#include "adc_interface.hpp"
 #include "task.h"
 
 /* Private typedef -----------------------------------------------------------*/
