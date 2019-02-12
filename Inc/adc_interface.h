@@ -34,12 +34,12 @@ extern "C" {
 #define CELL_TWO_ADC_SCALAR 		(uint32_t)( 214 )
 #define CELL_TWO_MIN_ADC_READING 	20
 
-#define CELL_THREE_ADC_OFFSET 		(int32_t)( -3749 )
-#define CELL_THREE_ADC_SCALAR 		(uint32_t)( 307 )
+#define CELL_THREE_ADC_OFFSET 		(int32_t)( -2834 )
+#define CELL_THREE_ADC_SCALAR 		(uint32_t)( 325 )
 #define CELL_THREE_MIN_ADC_READING 	20
 
-#define CELL_FOUR_ADC_OFFSET 		(int32_t)( 5298 )
-#define CELL_FOUR_ADC_SCALAR 		(uint32_t)( 423 )
+#define CELL_FOUR_ADC_OFFSET 		(int32_t)( 134 )
+#define CELL_FOUR_ADC_SCALAR 		(uint32_t)( 421 )
 #define CELL_FOUR_MIN_ADC_READING 	20
 
 void vCreateADCTask( uint16_t usStackSize, unsigned portBASE_TYPE uxPriority );
