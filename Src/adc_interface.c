@@ -226,7 +226,7 @@ void vRead_ADC(void *pvParameters) {
 			Set_Cell_Three_Voltage(adc_filtered_output[3]);
 			Set_Cell_Four_Voltage(adc_filtered_output[4]);
 
-			//printf("adc 2 value = %d\r\n", adc_filtered_output[2]);
+			//printf("adc 4 value = %d\r\n", adc_filtered_output[4]);
 		} else {
 			/* Did not receive a notification within the expected time. */
 			printf("Did Not Receive an ADC Notification\r\n");
