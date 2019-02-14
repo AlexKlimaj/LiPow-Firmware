@@ -36,6 +36,7 @@
 #include "printf.h"
 
 #include "adc_interface.h"
+#include "battery.h"
 #include "UARTCommandConsole.h"
 
 /*
@@ -117,13 +118,32 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 	float cell_four_voltage_float = ((float)Get_Cell_Four_Voltage()/BATTERY_ADC_MULTIPLIER);
 
 	/* Generate a table of stats. */
-	sprintf(pcWriteBuffer, "Variable                Value\r\n************************************************\r\n"
-			"Battery Voltage (V)     %f\r\n"
-			"Cell One Voltage (V)    %f\r\n"
-			"Cell Two Voltage (V)    %f\r\n"
-			"Cell Three Voltage (V)  %f\r\n"
-			"Cell Four Voltage (V)   %f\r\n"
-			"MCU Temperature (C)     %f\r\n", battery_voltage_float, cell_one_voltage_float, cell_two_voltage_float, cell_three_voltage_float, cell_four_voltage_float, Get_MCU_Temperature());
+	sprintf(pcWriteBuffer,
+			"Variable                  Value\r\n************************************************\r\n"
+			"Battery Voltage (V)       %f\r\n"
+			"Cell One Voltage (V)      %f\r\n"
+			"Cell Two Voltage (V)      %f\r\n"
+			"Cell Three Voltage (V)    %f\r\n"
+			"Cell Four Voltage (V)     %f\r\n"
+			"MCU Temperature (C)       %d\r\n"
+			"XT60 Connected            %u\r\n"
+			"Balance Connection State  %u\r\n"
+			"Number of Cells           %u\r\n"
+			"Balancing State           %u\r\n"
+			"Charging State            %u\r\n"
+			"Battery Error State       %u\r\n",
+			battery_voltage_float,
+			cell_one_voltage_float,
+			cell_two_voltage_float,
+			cell_three_voltage_float,
+			cell_four_voltage_float,
+			Get_MCU_Temperature(),
+			Get_XT60_Connection_State(),
+			Get_Balance_Connection_State(),
+			Get_Number_Of_Cells(),
+			Get_Balancing_State(),
+			Get_Charging_State(),
+			Get_Battery_Error_State());
 
 	/* There is no more data to return after this single string, so return
 	 pdFALSE. */
