@@ -6,6 +6,7 @@
  */
 
 #include "adc_interface.h"
+#include "battery.h"
 
 #include "task.h"
 #include "printf.h"
@@ -100,6 +101,9 @@ uint8_t Set_Cell_One_Voltage(uint32_t adc_reading) {
 	}
 
 	adc_values.cell_1_voltage = (adc_reading * CELL_ONE_ADC_SCALAR) + CELL_ONE_ADC_OFFSET;
+	if (adc_values.cell_1_voltage > CELL_MAX_VOLTAGE) {
+		adc_values.cell_1_voltage = 0;
+	}
 
 	return 1;
 }
@@ -125,7 +129,16 @@ uint8_t Set_Cell_Two_Voltage(uint32_t adc_reading) {
 	}
 
 	adc_values.two_s_battery_voltage = ((adc_reading * CELL_TWO_ADC_SCALAR) + CELL_TWO_ADC_OFFSET);
-	adc_values.cell_2_voltage = adc_values.two_s_battery_voltage - adc_values.cell_1_voltage;
+	if (adc_values.two_s_battery_voltage > TWO_S_MAX_VOLTAGE) {
+		adc_values.two_s_battery_voltage = 0;
+	}
+
+	if ( adc_values.two_s_battery_voltage > adc_values.cell_1_voltage ) {
+		adc_values.cell_2_voltage = adc_values.two_s_battery_voltage - adc_values.cell_1_voltage;
+	}
+	else {
+		adc_values.cell_2_voltage = 0;
+	}
 
 	return 1;
 }
@@ -150,7 +163,16 @@ uint8_t Set_Cell_Three_Voltage(uint32_t adc_reading) {
 	}
 
 	adc_values.three_s_battery_voltage = ((adc_reading * CELL_THREE_ADC_SCALAR) + CELL_THREE_ADC_OFFSET);
-	adc_values.cell_3_voltage = adc_values.three_s_battery_voltage - adc_values.two_s_battery_voltage;
+	if (adc_values.three_s_battery_voltage > THREE_S_MAX_VOLTAGE) {
+		adc_values.three_s_battery_voltage = 0;
+	}
+
+	if ( adc_values.three_s_battery_voltage > adc_values.two_s_battery_voltage ) {
+		adc_values.cell_3_voltage = adc_values.three_s_battery_voltage - adc_values.two_s_battery_voltage;
+	}
+	else {
+		adc_values.cell_3_voltage = 0;
+	}
 
 	return 1;
 }
@@ -175,7 +197,17 @@ uint8_t Set_Cell_Four_Voltage(uint32_t adc_reading) {
 	}
 
 	adc_values.four_s_battery_voltage = ((adc_reading * CELL_FOUR_ADC_SCALAR) + CELL_FOUR_ADC_OFFSET);
-	adc_values.cell_4_voltage = adc_values.four_s_battery_voltage - adc_values.three_s_battery_voltage;
+	if (adc_values.four_s_battery_voltage > FOUR_S_MAX_VOLTAGE) {
+		adc_values.four_s_battery_voltage = 0;
+	}
+
+	if ( adc_values.four_s_battery_voltage > adc_values.three_s_battery_voltage ) {
+		adc_values.cell_4_voltage = adc_values.four_s_battery_voltage - adc_values.three_s_battery_voltage;
+	}
+	else {
+		adc_values.cell_4_voltage = 0;
+	}
+
 
 	return 1;
 }
@@ -184,7 +216,7 @@ uint8_t Set_Cell_Four_Voltage(uint32_t adc_reading) {
  * @brief Gets mcu junction temperature that was read in from the ADC
  * @retval MCU junction temperature in celcius
  */
-uint32_t Get_MCU_Temperature(void) {
+int32_t Get_MCU_Temperature(void) {
 	return adc_values.temperature;
 }
 
@@ -227,6 +259,8 @@ void vRead_ADC(void *pvParameters) {
 			Set_Cell_Three_Voltage(adc_filtered_output[3]);
 			Set_Cell_Four_Voltage(adc_filtered_output[4]);
 
+			Battery_Connection_State();
+
 			//printf("adc 4 value = %d\r\n", adc_filtered_output[4]);
 		} else {
 			/* Did not receive a notification within the expected time. */
@@ -267,3 +301,16 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
 		portYIELD_FROM_ISR(should_context_switch);
 	}
 }
+
+uint32_t Get_Two_S_Voltage() {
+	return adc_values.two_s_battery_voltage;
+}
+
+uint32_t Get_Three_S_Voltage() {
+	return adc_values.three_s_battery_voltage;
+}
+
+uint32_t Get_Four_S_Voltage() {
+	return adc_values.four_s_battery_voltage;
+}
+

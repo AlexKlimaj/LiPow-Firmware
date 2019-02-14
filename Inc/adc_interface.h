@@ -42,6 +42,11 @@ extern "C" {
 #define CELL_FOUR_ADC_SCALAR 		(uint32_t)( 421 )
 #define CELL_FOUR_MIN_ADC_READING 	20
 
+#define CELL_MAX_VOLTAGE			(uint32_t)( 5 * BATTERY_ADC_MULTIPLIER )
+#define TWO_S_MAX_VOLTAGE			(uint32_t)( 10 * BATTERY_ADC_MULTIPLIER )
+#define THREE_S_MAX_VOLTAGE			(uint32_t)( 15 * BATTERY_ADC_MULTIPLIER )
+#define FOUR_S_MAX_VOLTAGE			(uint32_t)( 20 * BATTERY_ADC_MULTIPLIER )
+
 void vCreateADCTask( uint16_t usStackSize, unsigned portBASE_TYPE uxPriority );
 
 uint32_t Get_Battery_Voltage(void);
@@ -54,7 +59,13 @@ uint32_t Get_Cell_Three_Voltage(void);
 
 uint32_t Get_Cell_Four_Voltage(void);
 
-uint32_t Get_MCU_Temperature(void);
+uint32_t Get_Two_S_Voltage(void);
+
+uint32_t Get_Three_S_Voltage(void);
+
+uint32_t Get_Four_S_Voltage(void);
+
+int32_t Get_MCU_Temperature(void);
 
 #ifdef __cplusplus
 }

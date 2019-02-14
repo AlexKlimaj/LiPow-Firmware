@@ -110,7 +110,7 @@ standard names. */
 
 /* USER CODE BEGIN Defines */   	      
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
-#define configCOMMAND_INT_MAX_OUTPUT_SIZE 400
+#define configCOMMAND_INT_MAX_OUTPUT_SIZE 800
 #define configUSE_STATS_FORMATTING_FUNCTIONS 1
 #define configUSE_TASK_NOTIFICATIONS 1
 
@@ -118,11 +118,9 @@ standard names. */
 #define ADC_TASK_PRIORITY				( tskIDLE_PRIORITY + 3 )
 #define	LED_TASK_PRIORITY				( tskIDLE_PRIORITY + 2 )
 #define UART_CLI_TASK_PRIORITY			( tskIDLE_PRIORITY + 1 )
-#define BATTERY_TASK_PRIORITY			( tskIDLE_PRIORITY + 3 )
 
 #define vcliSTACK_SIZE					( configMINIMAL_STACK_SIZE * 2 )
 #define vRead_ADC_STACK_SIZE			( configMINIMAL_STACK_SIZE * 2 )
-#define vBattery_State_STACK_SIZE		( configMINIMAL_STACK_SIZE )
 
 /* USER CODE END Defines */ 
 
