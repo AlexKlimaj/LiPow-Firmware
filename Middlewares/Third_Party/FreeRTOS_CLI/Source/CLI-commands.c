@@ -153,7 +153,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 
 static BaseType_t prvTaskStatsCommand( char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString )
 {
-const char *const pcHeader = "     State   Priority  Stack    #\r\n************************************************\r\n";
+const char *const pcHeader = "State   Priority  Stack    #\r\n************************************************\r\n";
 BaseType_t xSpacePadding;
 
 	/* Remove compile time warnings about unused parameters, and check the
