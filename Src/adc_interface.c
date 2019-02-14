@@ -205,6 +205,7 @@ uint8_t Set_MCU_Temperature(uint32_t adc_reading) {
 void vRead_ADC(void *pvParameters) {
 	// calibrate ADC
 	while (HAL_ADCEx_Calibration_Start(&hadc1) != HAL_OK);
+	vTaskDelay(100 / portTICK_PERIOD_MS);
 
 	adc_sum_count = 0;
 
