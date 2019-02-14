@@ -14,6 +14,7 @@ extern "C" {
 
 #include "stm32g0xx_hal.h"
 #include "FreeRTOS.h"
+#include "main.h"
 
 #define VOLTAGE_CONNECTED_THRESHOLD		(uint32_t)( 0.5 * BATTERY_ADC_MULTIPLIER )
 
@@ -24,6 +25,7 @@ extern "C" {
 #define TWO_S_BITMASK			0b0011
 #define ONE_S_BITMASK			0b0001
 
+#define NO_ERROR				(uint8_t)0
 #define CELL_CONNECTION_ERROR 	(uint8_t)1
 #define CELL_VOLTAGE_ERROR		(uint8_t)2
 #define XT60_VOLTAGE_ERROR		(uint8_t)3
