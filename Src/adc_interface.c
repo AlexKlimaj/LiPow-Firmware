@@ -17,10 +17,7 @@ extern ADC_HandleTypeDef hadc1;
 /* Private typedef -----------------------------------------------------------*/
 struct Adc {
 	uint32_t bat_voltage;
-	uint32_t cell_1_voltage;
-	uint32_t cell_2_voltage;
-	uint32_t cell_3_voltage;
-	uint32_t cell_4_voltage;
+	uint32_t cell_voltage[4];
 	int32_t temperature;
 	uint32_t two_s_battery_voltage;
 	uint32_t three_s_battery_voltage;
@@ -36,10 +33,7 @@ static volatile uint32_t adc_sum_count;
 
 /* Private function prototypes -----------------------------------------------*/
 uint8_t Set_Battery_Voltage(uint32_t adc_reading);
-uint8_t Set_Cell_One_Voltage(uint32_t adc_reading);
-uint8_t Set_Cell_Two_Voltage(uint32_t adc_reading);
-uint8_t Set_Cell_Three_Voltage(uint32_t adc_reading);
-uint8_t Set_Cell_Four_Voltage(uint32_t adc_reading);
+uint8_t Set_Cell_Voltage(uint8_t cell_number, uint32_t adc_reading);
 uint8_t Set_MCU_Temperature(uint32_t adc_reading);
 void vRead_ADC(void *pvParameters);
 
@@ -82,132 +76,98 @@ uint8_t Set_Battery_Voltage(uint32_t adc_reading) {
 }
 
 /**
- * @brief Gets cell 1 voltage that was read in from the ADC
+ * @brief Gets cell X voltage that was read in from the ADC
+ * @param  cell_number: Cell number 0-3 to get voltage
  * @retval Cell 1 voltage in volts * BATTERY_ADC_MULTIPLIER
  */
-uint32_t Get_Cell_One_Voltage(void) {
-	return adc_values.cell_1_voltage;
+uint32_t Get_Cell_Voltage(uint8_t cell_number) {
+	if (cell_number > 3) {
+		return UINT32_MAX;
+	}
+	return adc_values.cell_voltage[cell_number];
 }
 
 /**
  * @brief  Sets the cell 1 voltage that was read in from the ADC
+ * @param  cell_number: Cell number 0-3 to set voltage
  * @param  adc_reading: Raw reading from ADC
  * @retval uint8_t 1 if successful, 0 if error
  */
-uint8_t Set_Cell_One_Voltage(uint32_t adc_reading) {
-	if ((adc_reading < CELL_ONE_MIN_ADC_READING) || (adc_reading > 4095)) {
-		adc_values.cell_1_voltage = 0;
+uint8_t Set_Cell_Voltage(uint8_t cell_number, uint32_t adc_reading) {
+
+	if (cell_number > 3) {
 		return 0;
 	}
 
-	adc_values.cell_1_voltage = (adc_reading * CELL_ONE_ADC_SCALAR) + CELL_ONE_ADC_OFFSET;
-	if (adc_values.cell_1_voltage > CELL_MAX_VOLTAGE) {
-		adc_values.cell_1_voltage = 0;
+	if (cell_number == 0) {
+		if ((adc_reading < CELL_ONE_MIN_ADC_READING) || (adc_reading > 4095)) {
+			adc_values.cell_voltage[0] = 0;
+			return 0;
+		}
+
+		adc_values.cell_voltage[0] = (adc_reading * CELL_ONE_ADC_SCALAR) + CELL_ONE_ADC_OFFSET;
+		if (adc_values.cell_voltage[0] > CELL_MAX_VOLTAGE) {
+			adc_values.cell_voltage[0] = 0;
+		}
 	}
 
-	return 1;
-}
+	if (cell_number == 1) {
+		if ((adc_reading < CELL_TWO_MIN_ADC_READING) || (adc_reading > 4095)) {
+			adc_values.cell_voltage[1] = 0;
+			adc_values.two_s_battery_voltage = 0;
+			return 0;
+		}
 
-/**
- * @brief Gets cell 2 voltage that was read in from the ADC
- * @retval Cell 2 voltage in volts * BATTERY_ADC_MULTIPLIER
- */
-uint32_t Get_Cell_Two_Voltage(void) {
-	return adc_values.cell_2_voltage;
-}
+		adc_values.two_s_battery_voltage = ((adc_reading * CELL_TWO_ADC_SCALAR) + CELL_TWO_ADC_OFFSET);
+		if (adc_values.two_s_battery_voltage > TWO_S_MAX_VOLTAGE) {
+			adc_values.two_s_battery_voltage = 0;
+		}
 
-/**
- * @brief  Sets the cell 2 voltage that was read in from the ADC
- * @param  adc_reading: Raw reading from ADC
- * @retval uint8_t 1 if successful, 0 if error
- */
-uint8_t Set_Cell_Two_Voltage(uint32_t adc_reading) {
-	if ((adc_reading < CELL_TWO_MIN_ADC_READING) || (adc_reading > 4095)) {
-		adc_values.cell_2_voltage = 0;
-		adc_values.two_s_battery_voltage = 0;
-		return 0;
+		if ( adc_values.two_s_battery_voltage > adc_values.cell_voltage[0] ) {
+			adc_values.cell_voltage[1] = adc_values.two_s_battery_voltage - adc_values.cell_voltage[0];
+		}
+		else {
+			adc_values.cell_voltage[1] = 0;
+		}
 	}
 
-	adc_values.two_s_battery_voltage = ((adc_reading * CELL_TWO_ADC_SCALAR) + CELL_TWO_ADC_OFFSET);
-	if (adc_values.two_s_battery_voltage > TWO_S_MAX_VOLTAGE) {
-		adc_values.two_s_battery_voltage = 0;
+	if (cell_number == 2) {
+		if ((adc_reading < CELL_THREE_MIN_ADC_READING) || (adc_reading > 4095)) {
+			adc_values.cell_voltage[2] = 0;
+			return 0;
+		}
+
+		adc_values.three_s_battery_voltage = ((adc_reading * CELL_THREE_ADC_SCALAR) + CELL_THREE_ADC_OFFSET);
+		if (adc_values.three_s_battery_voltage > THREE_S_MAX_VOLTAGE) {
+			adc_values.three_s_battery_voltage = 0;
+		}
+
+		if ( adc_values.three_s_battery_voltage > adc_values.two_s_battery_voltage ) {
+			adc_values.cell_voltage[2] = adc_values.three_s_battery_voltage - adc_values.two_s_battery_voltage;
+		}
+		else {
+			adc_values.cell_voltage[2] = 0;
+		}
 	}
 
-	if ( adc_values.two_s_battery_voltage > adc_values.cell_1_voltage ) {
-		adc_values.cell_2_voltage = adc_values.two_s_battery_voltage - adc_values.cell_1_voltage;
+	if (cell_number == 3) {
+		if ((adc_reading < CELL_FOUR_MIN_ADC_READING) || (adc_reading > 4095)) {
+			adc_values.cell_voltage[3] = 0;
+			return 0;
+		}
+
+		adc_values.four_s_battery_voltage = ((adc_reading * CELL_FOUR_ADC_SCALAR) + CELL_FOUR_ADC_OFFSET);
+		if (adc_values.four_s_battery_voltage > FOUR_S_MAX_VOLTAGE) {
+			adc_values.four_s_battery_voltage = 0;
+		}
+
+		if ( adc_values.four_s_battery_voltage > adc_values.three_s_battery_voltage ) {
+			adc_values.cell_voltage[3] = adc_values.four_s_battery_voltage - adc_values.three_s_battery_voltage;
+		}
+		else {
+			adc_values.cell_voltage[3] = 0;
+		}
 	}
-	else {
-		adc_values.cell_2_voltage = 0;
-	}
-
-	return 1;
-}
-
-/**
- * @brief Gets cell 3 voltage that was read in from the ADC
- * @retval Cell 3 voltage in volts * BATTERY_ADC_MULTIPLIER
- */
-uint32_t Get_Cell_Three_Voltage(void) {
-	return adc_values.cell_3_voltage;
-}
-
-/**
- * @brief  Sets the cell 3 voltage that was read in from the ADC
- * @param  adc_reading: Raw reading from ADC
- * @retval uint8_t 1 if successful, 0 if error
- */
-uint8_t Set_Cell_Three_Voltage(uint32_t adc_reading) {
-	if ((adc_reading < CELL_THREE_MIN_ADC_READING) || (adc_reading > 4095)) {
-		adc_values.cell_3_voltage = 0;
-		return 0;
-	}
-
-	adc_values.three_s_battery_voltage = ((adc_reading * CELL_THREE_ADC_SCALAR) + CELL_THREE_ADC_OFFSET);
-	if (adc_values.three_s_battery_voltage > THREE_S_MAX_VOLTAGE) {
-		adc_values.three_s_battery_voltage = 0;
-	}
-
-	if ( adc_values.three_s_battery_voltage > adc_values.two_s_battery_voltage ) {
-		adc_values.cell_3_voltage = adc_values.three_s_battery_voltage - adc_values.two_s_battery_voltage;
-	}
-	else {
-		adc_values.cell_3_voltage = 0;
-	}
-
-	return 1;
-}
-
-/**
- * @brief Gets cell 4 voltage that was read in from the ADC
- * @retval Cell 4 voltage in volts * BATTERY_ADC_MULTIPLIER
- */
-uint32_t Get_Cell_Four_Voltage(void) {
-	return adc_values.cell_4_voltage;
-}
-
-/**
- * @brief  Sets the cell 4 voltage that was read in from the ADC
- * @param  adc_reading: Raw reading from ADC
- * @retval uint8_t 1 if successful, 0 if error
- */
-uint8_t Set_Cell_Four_Voltage(uint32_t adc_reading) {
-	if ((adc_reading < CELL_FOUR_MIN_ADC_READING) || (adc_reading > 4095)) {
-		adc_values.cell_4_voltage = 0;
-		return 0;
-	}
-
-	adc_values.four_s_battery_voltage = ((adc_reading * CELL_FOUR_ADC_SCALAR) + CELL_FOUR_ADC_OFFSET);
-	if (adc_values.four_s_battery_voltage > FOUR_S_MAX_VOLTAGE) {
-		adc_values.four_s_battery_voltage = 0;
-	}
-
-	if ( adc_values.four_s_battery_voltage > adc_values.three_s_battery_voltage ) {
-		adc_values.cell_4_voltage = adc_values.four_s_battery_voltage - adc_values.three_s_battery_voltage;
-	}
-	else {
-		adc_values.cell_4_voltage = 0;
-	}
-
 
 	return 1;
 }
@@ -252,13 +212,15 @@ void vRead_ADC(void *pvParameters) {
 		thread_notification = ulTaskNotifyTake(pdTRUE, xMaxBlockTime);
 
 		if (thread_notification) {
+
 			/* A notification was received. */
 			Set_Battery_Voltage(adc_filtered_output[0]);
-			Set_Cell_One_Voltage(adc_filtered_output[1]);
-			Set_Cell_Two_Voltage(adc_filtered_output[2]);
-			Set_Cell_Three_Voltage(adc_filtered_output[3]);
-			Set_Cell_Four_Voltage(adc_filtered_output[4]);
 
+			for (int i = 0; i < 4; i++) {
+				Set_Cell_Voltage(i, adc_filtered_output[i+1]);
+			}
+
+			/* Determines battery connection state and performs balancing */
 			Battery_Connection_State();
 
 			//printf("adc 4 value = %d\r\n", adc_filtered_output[4]);

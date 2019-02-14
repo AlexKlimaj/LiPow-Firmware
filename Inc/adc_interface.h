@@ -51,13 +51,7 @@ void vCreateADCTask( uint16_t usStackSize, unsigned portBASE_TYPE uxPriority );
 
 uint32_t Get_Battery_Voltage(void);
 
-uint32_t Get_Cell_One_Voltage(void);
-
-uint32_t Get_Cell_Two_Voltage(void);
-
-uint32_t Get_Cell_Three_Voltage(void);
-
-uint32_t Get_Cell_Four_Voltage(void);
+uint32_t Get_Cell_Voltage(uint8_t cell_number);
 
 uint32_t Get_Two_S_Voltage(void);
 

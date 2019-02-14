@@ -112,10 +112,11 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 	configASSERT(pcWriteBuffer);
 
 	float battery_voltage_float = ((float)Get_Battery_Voltage()/BATTERY_ADC_MULTIPLIER);
-	float cell_one_voltage_float = ((float)Get_Cell_One_Voltage()/BATTERY_ADC_MULTIPLIER);
-	float cell_two_voltage_float = ((float)Get_Cell_Two_Voltage()/BATTERY_ADC_MULTIPLIER);
-	float cell_three_voltage_float = ((float)Get_Cell_Three_Voltage()/BATTERY_ADC_MULTIPLIER);
-	float cell_four_voltage_float = ((float)Get_Cell_Four_Voltage()/BATTERY_ADC_MULTIPLIER);
+
+	float cell_voltage_float[4];
+	for (int i = 0; i < 4; i++) {
+		cell_voltage_float[i] = ((float)Get_Cell_Voltage(i)/BATTERY_ADC_MULTIPLIER);
+	}
 
 	/* Generate a table of stats. */
 	sprintf(pcWriteBuffer,
@@ -133,10 +134,10 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			"Charging State            %u\r\n"
 			"Battery Error State       %u\r\n",
 			battery_voltage_float,
-			cell_one_voltage_float,
-			cell_two_voltage_float,
-			cell_three_voltage_float,
-			cell_four_voltage_float,
+			cell_voltage_float[0],
+			cell_voltage_float[1],
+			cell_voltage_float[2],
+			cell_voltage_float[3],
 			Get_MCU_Temperature(),
 			Get_XT60_Connection_State(),
 			Get_Balance_Connection_State(),
