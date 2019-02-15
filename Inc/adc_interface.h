@@ -61,6 +61,8 @@ uint32_t Get_Four_S_Voltage(void);
 
 int32_t Get_MCU_Temperature(void);
 
+uint32_t Get_VDDa(void);
+
 #ifdef __cplusplus
 }
 #endif
