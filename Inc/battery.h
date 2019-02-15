@@ -17,6 +17,9 @@ extern "C" {
 #include "main.h"
 
 #define VOLTAGE_CONNECTED_THRESHOLD		(uint32_t)( 0.5 * BATTERY_ADC_MULTIPLIER )
+#define CELL_DELTA_V_ENABLE_BALANCING	(uint32_t)( 0.08 * BATTERY_ADC_MULTIPLIER )
+#define CELL_BALANCING_HYSTERESIS_V		(uint32_t)( 0.02 * BATTERY_ADC_MULTIPLIER )
+#define MIN_CELL_V_FOR_BALANCING		(uint32_t)( 3.5 * BATTERY_ADC_MULTIPLIER )
 
 #define CONNETED				(uint8_t)1
 #define NOT_CONNECTED			(uint8_t)0
