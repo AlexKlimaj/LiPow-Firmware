@@ -25,7 +25,6 @@ struct Battery {
 struct Battery battery_state;
 
 static uint8_t cell_connected_bitmask = 0;
-static uint8_t cell_balance_bitmask = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 void Balance_Battery(void);
@@ -37,7 +36,7 @@ void Balancing_GPIO_Control(uint8_t cell_balancing_gpio_bitmask);
  */
 void Balance_Battery()
 {
-	if (battery_state.balance_port_connected == CONNETED) {
+	if (battery_state.balance_port_connected == CONNECTED) {
 
 		uint32_t min_cell_voltage = Get_Cell_Voltage(0);
 		uint32_t max_cell_voltage = Get_Cell_Voltage(0);
@@ -50,14 +49,18 @@ void Balance_Battery()
 			}
 		}
 
-		if ( ((max_cell_voltage - min_cell_voltage) > CELL_DELTA_V_ENABLE_BALANCING) && (min_cell_voltage > MIN_CELL_V_FOR_BALANCING) ) {
+		if ( ((max_cell_voltage - min_cell_voltage) > CELL_DELTA_V_ENABLE_BALANCING) && (min_cell_voltage > MIN_CELL_V_FOR_BALANCING) && (battery_state.balancing_enabled == 0) ) {
 			battery_state.balancing_enabled = 1;
+		}
+		else if ( (((max_cell_voltage - min_cell_voltage) < (CELL_DELTA_V_ENABLE_BALANCING - CELL_BALANCING_HYSTERESIS_V)) && (battery_state.balancing_enabled == 1)) || (min_cell_voltage < MIN_CELL_V_FOR_BALANCING) ) {
+			battery_state.balancing_enabled = 0;
+		}
 
+		if (battery_state.balancing_enabled == 1) {
+
+			uint8_t cell_balance_bitmask = 0;
 			for(int i = 1; i < battery_state.number_of_cells; i++) {
-				if ( ((Get_Cell_Voltage(i) - min_cell_voltage) > (CELL_DELTA_V_ENABLE_BALANCING - CELL_BALANCING_HYSTERESIS_V)) && (cell_balance_bitmask != 0) ) {
-					cell_balance_bitmask |= (1<<i);
-				}
-				else if ( (Get_Cell_Voltage(i) - min_cell_voltage) > CELL_DELTA_V_ENABLE_BALANCING) {
+				if ( (Get_Cell_Voltage(i) - min_cell_voltage) > (CELL_DELTA_V_ENABLE_BALANCING - CELL_BALANCING_HYSTERESIS_V)) {
 					cell_balance_bitmask |= (1<<i);
 				}
 				else {
@@ -68,7 +71,6 @@ void Balance_Battery()
 		}
 		else {
 			Balancing_GPIO_Control(0);
-			battery_state.balancing_enabled = 0;
 		}
 	}
 	else {
@@ -142,7 +144,7 @@ void Balance_Connection_State()
 	}
 
 	if ( battery_state.number_of_cells > 1 ) {
-		battery_state.balance_port_connected = CONNETED;
+		battery_state.balance_port_connected = CONNECTED;
 	}
 	else {
 		battery_state.balance_port_connected = NOT_CONNECTED;
@@ -155,7 +157,7 @@ void Balance_Connection_State()
 void Battery_Connection_State()
 {
 	if ( Get_Battery_Voltage() > VOLTAGE_CONNECTED_THRESHOLD ) {
-		battery_state.xt60_connected = CONNETED;
+		battery_state.xt60_connected = CONNECTED;
 	}
 	else {
 		battery_state.xt60_connected = NOT_CONNECTED;
@@ -203,7 +205,7 @@ void Balancing_GPIO_Control(uint8_t cell_balancing_gpio_bitmask)
 
 /**
  * @brief Returns the balance connection state
- * @retval uint8_t CONNETED or NOT_CONNECTED
+ * @retval uint8_t CONNECTED or NOT_CONNECTED
  */
 uint8_t Get_Balance_Connection_State()
 {
@@ -248,7 +250,7 @@ uint8_t Get_Number_Of_Cells()
 
 /**
  * @brief Returns the XT60 connection state
- * @retval uint8_t CONNETED or NOT_CONNECTED
+ * @retval uint8_t CONNECTED or NOT_CONNECTED
  */
 uint8_t Get_XT60_Connection_State()
 {
