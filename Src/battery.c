@@ -36,7 +36,7 @@ void Balancing_GPIO_Control(uint8_t cell_balancing_gpio_bitmask);
  */
 void Balance_Battery()
 {
-	if (battery_state.balance_port_connected == CONNECTED) {
+	if ( (battery_state.balance_port_connected == CONNECTED) && (battery_state.battery_error_state == 0) ) {
 
 		uint32_t min_cell_voltage = Get_Cell_Voltage(0);
 		uint32_t max_cell_voltage = Get_Cell_Voltage(0);
@@ -49,7 +49,7 @@ void Balance_Battery()
 			}
 		}
 
-		if ( ((max_cell_voltage - min_cell_voltage) > CELL_DELTA_V_ENABLE_BALANCING) && (min_cell_voltage > MIN_CELL_V_FOR_BALANCING) && (battery_state.balancing_enabled == 0) ) {
+		if ( ((max_cell_voltage - min_cell_voltage) > CELL_DELTA_V_ENABLE_BALANCING) && (min_cell_voltage > MIN_CELL_V_FOR_BALANCING) && (battery_state.balancing_enabled == 0)) {
 			battery_state.balancing_enabled = 1;
 		}
 		else if ( (((max_cell_voltage - min_cell_voltage) < (CELL_DELTA_V_ENABLE_BALANCING - CELL_BALANCING_HYSTERESIS_V)) && (battery_state.balancing_enabled == 1)) || (min_cell_voltage < MIN_CELL_V_FOR_BALANCING) ) {
@@ -112,35 +112,36 @@ void Balance_Connection_State()
 	if ( cell_connected_bitmask & (1<<3) ) {
 		if ( (cell_connected_bitmask & THREE_S_BITMASK) == THREE_S_BITMASK ) {
 			battery_state.number_of_cells = 4;
-			battery_state.battery_error_state = 0;
+			battery_state.battery_error_state &= ~CELL_CONNECTION_ERROR;
 		}
 		else {
 			battery_state.number_of_cells = 0;
-			battery_state.battery_error_state = CELL_CONNECTION_ERROR;
+			battery_state.battery_error_state |= CELL_CONNECTION_ERROR;
 		}
 	}
 	else if ( cell_connected_bitmask & (1<<2) ) {
 		if ( (cell_connected_bitmask & TWO_S_BITMASK) ==  TWO_S_BITMASK ) {
 			battery_state.number_of_cells = 3;
-			battery_state.battery_error_state = 0;
+			battery_state.battery_error_state &= ~CELL_CONNECTION_ERROR;
 		}
 		else {
 			battery_state.number_of_cells = 0;
-			battery_state.battery_error_state = CELL_CONNECTION_ERROR;
+			battery_state.battery_error_state |= CELL_CONNECTION_ERROR;
 		}
 	}
 	else if ( cell_connected_bitmask & (1<<1) ) {
 		if ( (cell_connected_bitmask & ONE_S_BITMASK) == ONE_S_BITMASK ) {
 			battery_state.number_of_cells = 2;
-			battery_state.battery_error_state = 0;
+			battery_state.battery_error_state &= ~CELL_CONNECTION_ERROR;
 		}
 		else {
 			battery_state.number_of_cells = 0;
-			battery_state.battery_error_state = CELL_CONNECTION_ERROR;
+			battery_state.battery_error_state |= CELL_CONNECTION_ERROR;
 		}
 	}
 	else {
 		battery_state.number_of_cells = 0;
+		battery_state.battery_error_state &= ~CELL_CONNECTION_ERROR;
 	}
 
 	if ( battery_state.number_of_cells > 1 ) {
@@ -148,6 +149,13 @@ void Balance_Connection_State()
 	}
 	else {
 		battery_state.balance_port_connected = NOT_CONNECTED;
+	}
+
+	if (Get_MCU_Temperature() > MAX_MCU_TEMP_C_FOR_OPERATION) {
+		battery_state.battery_error_state |= MCU_OVER_TEMP;
+	}
+	else if ( ((battery_state.battery_error_state & MCU_OVER_TEMP) == MCU_OVER_TEMP) && (Get_MCU_Temperature() < MCU_TEMP_C_RECOVERY) ) {
+		battery_state.battery_error_state &= ~MCU_OVER_TEMP;
 	}
 }
 

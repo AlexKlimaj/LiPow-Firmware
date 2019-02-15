@@ -118,6 +118,8 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 		cell_voltage_float[i] = ((float)Get_Cell_Voltage(i)/BATTERY_ADC_MULTIPLIER);
 	}
 
+	float vdda_float = (float)Get_VDDa()/BATTERY_ADC_MULTIPLIER;
+
 	/* Generate a table of stats. */
 	sprintf(pcWriteBuffer,
 			"Variable                  Value\r\n************************************************\r\n"
@@ -127,6 +129,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			"Cell Three Voltage (V)    %f\r\n"
 			"Cell Four Voltage (V)     %f\r\n"
 			"MCU Temperature (C)       %d\r\n"
+			"VDDa (V)                  %f\r\n"
 			"XT60 Connected            %u\r\n"
 			"Balance Connection State  %u\r\n"
 			"Number of Cells           %u\r\n"
@@ -139,6 +142,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			cell_voltage_float[2],
 			cell_voltage_float[3],
 			Get_MCU_Temperature(),
+			vdda_float,
 			Get_XT60_Connection_State(),
 			Get_Balance_Connection_State(),
 			Get_Number_Of_Cells(),

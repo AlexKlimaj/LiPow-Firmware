@@ -285,7 +285,7 @@ static void MX_ADC1_Init(void) {
 	hadc1.Init.LowPowerAutoWait = DISABLE;
 	hadc1.Init.LowPowerAutoPowerOff = DISABLE;
 	hadc1.Init.ContinuousConvMode = ENABLE;
-	hadc1.Init.NbrOfConversion = 6;
+	hadc1.Init.NbrOfConversion = 7;
 	hadc1.Init.DiscontinuousConvMode = DISABLE;
 	hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
 	hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
@@ -338,6 +338,13 @@ static void MX_ADC1_Init(void) {
 	 */
 	sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
 	sConfig.Rank = ADC_REGULAR_RANK_6;
+	if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
+		Error_Handler();
+	}
+	/**Configure Regular Channel
+	 */
+	sConfig.Channel = ADC_CHANNEL_VREFINT;
+	sConfig.Rank = ADC_REGULAR_RANK_7;
 	if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
 		Error_Handler();
 	}
@@ -547,7 +554,7 @@ void vLED_Blinky(void *pvParameters) {
 
 	for (;;) {
 
-		if ( (Get_Charging_State() == 0) && (Get_Balance_Connection_State() == 0) && (Get_Balance_Connection_State() != CONNECTED) ) {
+		if ( (Get_Charging_State() == 0) && (Get_Balance_Connection_State() == 0) && (Get_Balance_Connection_State() != CONNECTED) && (Get_Battery_Error_State() == 0)) {
 			switch (count) {
 			case 0:
 				HAL_GPIO_WritePin(Red_LED_GPIO_Port, Red_LED_Pin, GPIO_PIN_SET);
@@ -571,6 +578,19 @@ void vLED_Blinky(void *pvParameters) {
 			else {
 				count++;
 			}
+		}
+		else if (Get_Battery_Error_State() != 0) {
+			HAL_GPIO_WritePin(Red_LED_GPIO_Port, Red_LED_Pin, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(Green_LED_GPIO_Port, Green_LED_Pin, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(Blue_LED_GPIO_Port, Blue_LED_Pin, GPIO_PIN_SET);
+
+			for (int i = 0; i < (Get_Battery_Error_State()); i++) {
+				vTaskDelay(200 / portTICK_PERIOD_MS);
+				HAL_GPIO_WritePin(Red_LED_GPIO_Port, Red_LED_Pin, GPIO_PIN_RESET);
+				vTaskDelay(200 / portTICK_PERIOD_MS);
+				HAL_GPIO_WritePin(Red_LED_GPIO_Port, Red_LED_Pin, GPIO_PIN_SET);
+			}
+			vTaskDelay(xDelay * 4);
 		}
 		else {
 			if (Get_Balancing_State() == 1) {

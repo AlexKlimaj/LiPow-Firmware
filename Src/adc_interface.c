@@ -18,6 +18,8 @@ extern ADC_HandleTypeDef hadc1;
 struct Adc {
 	uint32_t bat_voltage;
 	uint32_t cell_voltage[4];
+	uint32_t vrefint;
+	uint32_t vdda;
 	int32_t temperature;
 	uint32_t two_s_battery_voltage;
 	uint32_t three_s_battery_voltage;
@@ -27,14 +29,16 @@ struct Adc {
 /* Private variables ---------------------------------------------------------*/
 TaskHandle_t adcTaskHandle = NULL;
 struct Adc adc_values;
-uint32_t adc_buffer[6];
-static volatile uint32_t adc_buffer_filtered[6], adc_filtered_output[6];
+uint32_t adc_buffer[7];
+static volatile uint32_t adc_buffer_filtered[7], adc_filtered_output[7];
 static volatile uint32_t adc_sum_count;
+static volatile uint16_t vrefint_cal;
 
 /* Private function prototypes -----------------------------------------------*/
 uint8_t Set_Battery_Voltage(uint32_t adc_reading);
 uint8_t Set_Cell_Voltage(uint8_t cell_number, uint32_t adc_reading);
 uint8_t Set_MCU_Temperature(uint32_t adc_reading);
+uint8_t Set_VDDa(uint32_t adc_reading);
 void vRead_ADC(void *pvParameters);
 
 /**
@@ -189,15 +193,39 @@ uint8_t Set_MCU_Temperature(uint32_t adc_reading) {
 	if ((adc_reading < 0) || (adc_reading > 4095)) {
 		return 0;
 	} else {
-		adc_values.temperature = adc_reading;
-		return 1;
+		adc_values.vrefint = __HAL_ADC_CALC_VREFANALOG_VOLTAGE(adc_filtered_output[6], ADC_RESOLUTION_12B);
+		adc_values.temperature = __HAL_ADC_CALC_TEMPERATURE(adc_values.vrefint, adc_reading, ADC_RESOLUTION_12B);
 	}
+	return 1;
+}
+
+/**
+ * @brief Gets the value of VDDa read in from the ADC
+ * @retval VDDa in volts * BATTERY_ADC_MULTIPLIER
+ */
+uint32_t Get_VDDa() {
+	return adc_values.vdda;
+}
+
+/**
+ * @brief  Sets the value of VDDa read in from the ADC
+ * @param  adc_reading: Raw reading from ADC
+ * @retval uint8_t 1 if successful, 0 if error
+ */
+uint8_t Set_VDDa(uint32_t adc_reading) {
+	if ((adc_reading < 0) || (adc_reading > 4095)) {
+		return 0;
+	} else {
+		adc_values.vdda = 3 * ((vrefint_cal * BATTERY_ADC_MULTIPLIER) / adc_reading);
+	}
+	return 1;
 }
 
 void vRead_ADC(void *pvParameters) {
 	// calibrate ADC
 	while (HAL_ADCEx_Calibration_Start(&hadc1) != HAL_OK);
 	vTaskDelay(100 / portTICK_PERIOD_MS);
+	vrefint_cal = (uint32_t)(*VREFINT_CAL_ADDR); // VREFINT calibration value
 
 	adc_sum_count = 0;
 
@@ -205,7 +233,7 @@ void vRead_ADC(void *pvParameters) {
 	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(500);
 
 	// Start the DMA ADC
-	HAL_ADC_Start_DMA(&hadc1, adc_buffer, 6);
+	HAL_ADC_Start_DMA(&hadc1, adc_buffer, hadc1.Init.NbrOfConversion);
 
 	for (;;) {
 		/* Wait to be notified of an interrupt. */
@@ -219,6 +247,10 @@ void vRead_ADC(void *pvParameters) {
 			for (int i = 0; i < 4; i++) {
 				Set_Cell_Voltage(i, adc_filtered_output[i+1]);
 			}
+
+			Set_MCU_Temperature(adc_filtered_output[5]);
+
+			Set_VDDa(adc_filtered_output[6]);
 
 			/* Determines battery connection state and performs balancing */
 			Battery_Connection_State();

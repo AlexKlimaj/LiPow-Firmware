@@ -17,9 +17,12 @@ extern "C" {
 #include "main.h"
 
 #define VOLTAGE_CONNECTED_THRESHOLD		(uint32_t)( 0.5 * BATTERY_ADC_MULTIPLIER )
-#define CELL_DELTA_V_ENABLE_BALANCING	(uint32_t)( 0.08 * BATTERY_ADC_MULTIPLIER )
-#define CELL_BALANCING_HYSTERESIS_V		(uint32_t)( 0.04 * BATTERY_ADC_MULTIPLIER )
+#define CELL_DELTA_V_ENABLE_BALANCING	(uint32_t)( 0.09 * BATTERY_ADC_MULTIPLIER )
+#define CELL_BALANCING_HYSTERESIS_V		(uint32_t)( 0.03 * BATTERY_ADC_MULTIPLIER )
 #define MIN_CELL_V_FOR_BALANCING		(uint32_t)( 3.0 * BATTERY_ADC_MULTIPLIER )
+
+#define MAX_MCU_TEMP_C_FOR_OPERATION	75
+#define MCU_TEMP_C_RECOVERY				65
 
 #define CONNECTED				(uint8_t)1
 #define NOT_CONNECTED			(uint8_t)0
@@ -28,10 +31,11 @@ extern "C" {
 #define TWO_S_BITMASK			0b0011
 #define ONE_S_BITMASK			0b0001
 
-#define NO_ERROR				(uint8_t)0
-#define CELL_CONNECTION_ERROR 	(uint8_t)1
-#define CELL_VOLTAGE_ERROR		(uint8_t)2
-#define XT60_VOLTAGE_ERROR		(uint8_t)3
+#define NO_ERROR				0b0000
+#define CELL_CONNECTION_ERROR 	0b0001
+#define CELL_VOLTAGE_ERROR		0b0010
+#define XT60_VOLTAGE_ERROR		0b0011
+#define MCU_OVER_TEMP			0b0100
 
 void Battery_Connection_State();
 
