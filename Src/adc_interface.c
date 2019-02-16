@@ -27,7 +27,6 @@ struct Adc {
 };
 
 /* Private variables ---------------------------------------------------------*/
-TaskHandle_t adcTaskHandle = NULL;
 struct Adc adc_values;
 uint32_t adc_buffer[7];
 static volatile uint32_t adc_buffer_filtered[7], adc_filtered_output[7];
@@ -39,21 +38,6 @@ uint8_t Set_Battery_Voltage(uint32_t adc_reading);
 uint8_t Set_Cell_Voltage(uint8_t cell_number, uint32_t adc_reading);
 uint8_t Set_MCU_Temperature(uint32_t adc_reading);
 uint8_t Set_VDDa(uint32_t adc_reading);
-void vRead_ADC(void *pvParameters);
-
-/**
- * @brief Creates the adc task
- */
-void vCreateADCTask( uint16_t usStackSize, unsigned portBASE_TYPE uxPriority )
-{
-	/* Create the task, storing the handle. */
-	xTaskCreate(vRead_ADC, /* Function that implements the task. */
-		(const char* const ) "read_adc", /* Text name for the task. */
-		usStackSize, /* Stack size in words, not bytes. */
-		0, /* Parameter passed into the task. */
-		uxPriority, /* Priority at which the task is created. */
-		&adcTaskHandle); /* Used to pass out the created task's handle. */
-}
 
 /**
  * @brief Gets the battery voltage that was read in from the ADC
@@ -221,7 +205,7 @@ uint8_t Set_VDDa(uint32_t adc_reading) {
 	return 1;
 }
 
-void vRead_ADC(void *pvParameters) {
+void vRead_ADC(void const *pvParameters) {
 	// calibrate ADC
 	while (HAL_ADCEx_Calibration_Start(&hadc1) != HAL_OK);
 	vTaskDelay(100 / portTICK_PERIOD_MS);

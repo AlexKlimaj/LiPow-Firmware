@@ -122,7 +122,7 @@ standard names. */
 
 #define vcliSTACK_SIZE					( configMINIMAL_STACK_SIZE * 3 )
 #define vRead_ADC_STACK_SIZE			( configMINIMAL_STACK_SIZE * 3 )
-#define vRegulator_ADC_STACK_SIZE		( configMINIMAL_STACK_SIZE * 3 )
+#define vRegulator_STACK_SIZE		( configMINIMAL_STACK_SIZE * 3 )
 
 /* USER CODE END Defines */ 
 

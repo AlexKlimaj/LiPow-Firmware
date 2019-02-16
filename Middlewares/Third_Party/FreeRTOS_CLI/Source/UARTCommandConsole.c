@@ -52,12 +52,6 @@ static volatile uint8_t sUart_tx_ready = 0;
 
 /*-----------------------------------------------------------*/
 
-/*
- * The task that implements the command console processing.
- */
-static void prvUARTCommandConsoleTask(void *pvParameters);
-void vUARTCommandConsoleStart(uint16_t usStackSize, UBaseType_t uxPriority);
-
 /*-----------------------------------------------------------*/
 
 /* Const messages output by the command console. */
@@ -66,31 +60,12 @@ static const char * const pcWelcomeMessage =
 static const char * const pcEndOfOutputMessage = "\r\n[Press ENTER to execute the previous command again]\r\n>";
 static const char * const pcNewLine = "\r\n";
 
-/* Used to guard access to the UART in case messages are sent to the UART from
- more than one task. */
-static SemaphoreHandle_t xTxMutex = NULL;
-
 /* The handle to the UART port, which is not used by all ports. */
 extern UART_HandleTypeDef huart1;
 
 /*-----------------------------------------------------------*/
 
-void vUARTCommandConsoleStart(uint16_t usStackSize, UBaseType_t uxPriority) {
-	/* Create the semaphore used to access the UART Tx. */
-	xTxMutex = xSemaphoreCreateMutex();
-	configASSERT(xTxMutex);
-
-	/* Create that task that handles the console itself. */
-	xTaskCreate(prvUARTCommandConsoleTask, /* The task that implements the command console. */
-	"CLI", /* Text name assigned to the task.  This is just to assist debugging.  The kernel does not use this name itself. */
-	usStackSize, /* The size of the stack allocated to the task. */
-	NULL, /* The parameter is not used, so NULL is passed. */
-	uxPriority, /* The priority allocated to the task. */
-	NULL); /* A handle is not required, so just pass NULL. */
-}
-/*-----------------------------------------------------------*/
-
-static void prvUARTCommandConsoleTask(void *pvParameters) {
+void prvUARTCommandConsoleTask(void const *pvParameters) {
 	signed char cRxedChar = '\0';
 	uint8_t ucInputIndex = 0;
 	char *pcOutputString;
@@ -182,7 +157,7 @@ static void prvUARTCommandConsoleTask(void *pvParameters) {
 /*-----------------------------------------------------------*/
 
 void UART_Transfer(uint8_t *pData, uint16_t Size) {
-	if ( xSemaphoreTake( xTxMutex, cmdMAX_MUTEX_WAIT ) == pdPASS) {
+	if ( xSemaphoreTake( xTxMutex_CLI, cmdMAX_MUTEX_WAIT ) == pdPASS) {
 		//Set the flag to not ready
 		sUart_tx_ready = 0;
 		while (HAL_UART_Transmit_DMA(&huart1, pData, Size) != HAL_OK)
@@ -190,7 +165,7 @@ void UART_Transfer(uint8_t *pData, uint16_t Size) {
 		// Wait for the transfer to finish
 		while (sUart_tx_ready != 1)
 			;
-		xSemaphoreGive(xTxMutex);
+		xSemaphoreGive(xTxMutex_CLI);
 	}
 }
 /*-----------------------------------------------------------*/

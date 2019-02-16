@@ -29,14 +29,19 @@
 #define UART_COMMAND_CONSOLE_H
 
 #include "stm32g0xx_hal.h"
+#include "cmsis_os.h"
 
 /*
- * Create the task that implements a command console using the UART
- * port driver for input and output.
+ * The task that implements the command console processing.
  */
-void vUARTCommandConsoleStart( uint16_t usStackSize, unsigned portBASE_TYPE uxPriority );
+void prvUARTCommandConsoleTask(void const *pvParameters);
 
 void UART_Transfer(uint8_t *pData, uint16_t Size);
+
+/* Used to guard access to the UART in case messages are sent to the UART from
+ more than one task. */
+extern SemaphoreHandle_t xTxMutex_CLI;
+osThreadId CLITaskHandle;
 
 #endif /* UART_COMMAND_CONSOLE_H */
 

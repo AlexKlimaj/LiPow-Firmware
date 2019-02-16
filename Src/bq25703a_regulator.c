@@ -10,11 +10,6 @@
 #include "battery.h"
 #include "error.h"
 
-/* FreeRTOS includes. */
-#include "FreeRTOS.h"
-#include "task.h"
-#include "semphr.h"
-
 extern I2C_HandleTypeDef hi2c1;
 
 /* Private typedef -----------------------------------------------------------*/
@@ -31,24 +26,19 @@ struct Regulator {
 /* Private variables ---------------------------------------------------------*/
 struct Regulator regulator;
 
-/* Used to guard access to the I2C in case messages are sent to the UART from
- more than one task. */
-static SemaphoreHandle_t xTxMutex = NULL;
-
 /* The maximum time to wait for the mutex that guards the UART to become
  available. */
 #define cmdMAX_MUTEX_WAIT	pdMS_TO_TICKS( 300 )
 
 /* Private function prototypes -----------------------------------------------*/
 void I2C_Transfer(uint8_t *pData, uint16_t size);
-void vRegulator(void *pvParameters);
 
 /**
  * @brief Performs an I2C transfer
  */
 void I2C_Transfer(uint8_t *pData, uint16_t size) {
 
-	if ( xSemaphoreTake( xTxMutex, cmdMAX_MUTEX_WAIT ) == pdPASS) {
+	if ( xSemaphoreTake( xTxMutex_Regulator, cmdMAX_MUTEX_WAIT ) == pdPASS) {
 		do
 		{
 			TickType_t xtimeout_start = xTaskGetTickCount();
@@ -66,12 +56,12 @@ void I2C_Transfer(uint8_t *pData, uint16_t size) {
 		    }
 		}
 		while(HAL_I2C_GetError(&hi2c1) == HAL_I2C_ERROR_AF);
-		xSemaphoreGive(xTxMutex);
+		xSemaphoreGive(xTxMutex_Regulator);
 	}
 }
 
 void I2C_Receive(uint8_t *pData, uint16_t size) {
-	if ( xSemaphoreTake( xTxMutex, cmdMAX_MUTEX_WAIT ) == pdPASS) {
+	if ( xSemaphoreTake( xTxMutex_Regulator, cmdMAX_MUTEX_WAIT ) == pdPASS) {
 		do
 		{
 			TickType_t xtimeout_start = xTaskGetTickCount();
@@ -89,30 +79,11 @@ void I2C_Receive(uint8_t *pData, uint16_t size) {
 			}
 		}
 		while(HAL_I2C_GetError(&hi2c1) == HAL_I2C_ERROR_AF);
-		xSemaphoreGive(xTxMutex);
+		xSemaphoreGive(xTxMutex_Regulator);
 	}
 }
 
-/**
- * @brief Creates the regulator task
- */
-void vCreateRegulatorTask( uint16_t usStackSize, unsigned portBASE_TYPE uxPriority )
-{
-	/* Create the semaphore used to access the I2C TX. */
-	xTxMutex = xSemaphoreCreateMutex();
-	configASSERT(xTxMutex);
-
-	/* Create the task, storing the handle. */
-	xTaskCreate(vRegulator, /* Function that implements the task. */
-		(const char* const ) "regulator", /* Text name for the task. */
-		usStackSize, /* Stack size in words, not bytes. */
-		0, /* Parameter passed into the task. */
-		uxPriority, /* Priority at which the task is created. */
-		0); /* Used to pass out the created task's handle. */
-}
-
-
-void vRegulator(void *pvParameters) {
+void vRegulator(void const *pvParameters) {
 
 	TickType_t xDelay = 500 / portTICK_PERIOD_MS;
 

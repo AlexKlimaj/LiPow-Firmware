@@ -50,17 +50,18 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "cmsis_os.h"
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+// Application level
+#include "UARTCommandConsole.h"
 #include "adc_interface.h"
 #include "battery.h"
+#include "bq25703a_regulator.h"
+
+// System
 #include "printf.h"
 #include "stm32g0xx_hal_tim.h"
-#include "UARTCommandConsole.h"
-#include "bq25703a_regulator.h"
 #include "error.h"
 
 /* USER CODE END Includes */
@@ -95,6 +96,11 @@ DMA_HandleTypeDef hdma_usart1_tx;
 DMA_HandleTypeDef hdma_usart1_rx;
 
 osThreadId defaultTaskHandle;
+osThreadId blinkyTaskHandle;
+
+SemaphoreHandle_t xTxMutex_CLI;
+SemaphoreHandle_t xTxMutex_Regulator;
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -111,7 +117,7 @@ void StartDefaultTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
 
-void vLED_Blinky(void *pvParameters);
+void vLED_Blinky(void const *pvParameters);
 
 /*
  * Register commands that can be used with FreeRTOS+CLI through the UDP socket.
@@ -160,31 +166,15 @@ int main(void)
   MX_TIM7_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
-	/* Create the task, storing the handle. */
-	xTaskCreate(vLED_Blinky, /* Function that implements the task. */
-	(const char* const ) "blink_led", /* Text name for the task. */
-	configMINIMAL_STACK_SIZE, /* Stack size in words, not bytes. */
-	0, /* Parameter passed into the task. */
-	LED_TASK_PRIORITY, /* Priority at which the task is created. */
-	0); /* Used to pass out the created task's handle. */
-
-	/* Start the adc task */
-	vCreateADCTask(vRead_ADC_STACK_SIZE, ADC_TASK_PRIORITY);
-
-	/* Start the Command Line Interface on UART1 */
-	vUARTCommandConsoleStart(vcliSTACK_SIZE, UART_CLI_TASK_PRIORITY);
-
-	/* Start the Regulator I2C Communication Task */
-	vCreateRegulatorTask(vRegulator_ADC_STACK_SIZE, REGULATOR_TASK_PRIORITY);
-
-	/* Register commands with the FreeRTOS+CLI command interpreter. */
-	vRegisterCLICommands();
-
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
 	/* add mutexes, ... */
+	xTxMutex_Regulator = xSemaphoreCreateMutex();
+	configASSERT(xTxMutex_Regulator);
+	/* Create the semaphore used to access the UART Tx. */
+	xTxMutex_CLI = xSemaphoreCreateMutex();
+	configASSERT(xTxMutex_CLI);
   /* USER CODE END RTOS_MUTEX */
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
@@ -201,7 +191,24 @@ int main(void)
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
-	/* add threads, ... */
+	osThreadDef(blink_led, vLED_Blinky, LED_TASK_PRIORITY, 0, configMINIMAL_STACK_SIZE);
+	blinkyTaskHandle = osThreadCreate(osThread(blink_led), NULL);
+
+	/* Start the adc task */
+	osThreadDef(read_adc, vRead_ADC, ADC_TASK_PRIORITY, 0, vRead_ADC_STACK_SIZE);
+	adcTaskHandle = osThreadCreate(osThread(read_adc), NULL);
+
+	/* Start the task that manages the regulator*/
+	osThreadDef(regulator, vRegulator, REGULATOR_TASK_PRIORITY, 0, vRegulator_STACK_SIZE);
+	regulatorTaskHandle = osThreadCreate(osThread(regulator), NULL);
+
+	/* Start the Command Line Interface on UART1 */
+	osThreadDef(CLI, prvUARTCommandConsoleTask, UART_CLI_TASK_PRIORITY, 0, vcliSTACK_SIZE);
+	CLITaskHandle = osThreadCreate(osThread(CLI), NULL);
+
+	/* Register commands with the FreeRTOS+CLI command interpreter. */
+	vRegisterCLICommands();
+
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
@@ -584,7 +591,7 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-void vLED_Blinky(void *pvParameters) {
+void vLED_Blinky(void const *pvParameters) {
 	TickType_t xDelay = 500 / portTICK_PERIOD_MS;
 
 	uint8_t count = 0;
