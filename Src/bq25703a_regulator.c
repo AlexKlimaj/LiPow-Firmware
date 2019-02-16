@@ -130,9 +130,11 @@ void vRegulator(void *pvParameters) {
 
 	if ( (device_id == BQ26703A_DEVICE_ID) && (manufacturer_id == BQ26703A_MANUFACTURER_ID) ) {
 		regulator.connected = CONNECTED;
+		Clear_Error_State(REGULATOR_COMMUNICATION_ERROR);
 	}
 	else {
 		regulator.connected = NOT_CONNECTED;
+		Set_Error_State(REGULATOR_COMMUNICATION_ERROR);
 	}
 
 	for (;;) {
