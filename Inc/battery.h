@@ -24,18 +24,9 @@ extern "C" {
 #define MAX_MCU_TEMP_C_FOR_OPERATION	75
 #define MCU_TEMP_C_RECOVERY				65
 
-#define CONNECTED				(uint8_t)1
-#define NOT_CONNECTED			(uint8_t)0
-
 #define THREE_S_BITMASK 		0b0111
 #define TWO_S_BITMASK			0b0011
 #define ONE_S_BITMASK			0b0001
-
-#define NO_ERROR				0b0000
-#define CELL_CONNECTION_ERROR 	0b0001
-#define CELL_VOLTAGE_ERROR		0b0010
-#define XT60_VOLTAGE_ERROR		0b0011
-#define MCU_OVER_TEMP			0b0100
 
 void Battery_Connection_State();
 
@@ -48,7 +39,5 @@ uint8_t Get_Number_Of_Cells(void);
 uint8_t Get_Balancing_State(void);
 
 uint8_t Get_Charging_State(void);
-
-uint8_t Get_Battery_Error_State(void);
 
 #endif /* BATTERY_H_ */

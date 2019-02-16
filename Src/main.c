@@ -61,6 +61,7 @@
 #include "stm32g0xx_hal_tim.h"
 #include "UARTCommandConsole.h"
 #include "bq25703a_regulator.h"
+#include "error.h"
 
 /* USER CODE END Includes */
 
@@ -590,7 +591,7 @@ void vLED_Blinky(void *pvParameters) {
 
 	for (;;) {
 
-		if ( (Get_Charging_State() == 0) && (Get_Balance_Connection_State() == 0) && (Get_Balance_Connection_State() != CONNECTED) && (Get_Battery_Error_State() == 0)) {
+		if ( (Get_Charging_State() == 0) && (Get_Balance_Connection_State() == 0) && (Get_Balance_Connection_State() != CONNECTED) && (Get_Error_State() == 0)) {
 			switch (count) {
 			case 0:
 				HAL_GPIO_WritePin(Red_LED_GPIO_Port, Red_LED_Pin, GPIO_PIN_SET);
@@ -615,12 +616,12 @@ void vLED_Blinky(void *pvParameters) {
 				count++;
 			}
 		}
-		else if (Get_Battery_Error_State() != 0) {
+		else if (Get_Error_State() != 0) {
 			HAL_GPIO_WritePin(Red_LED_GPIO_Port, Red_LED_Pin, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(Green_LED_GPIO_Port, Green_LED_Pin, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(Blue_LED_GPIO_Port, Blue_LED_Pin, GPIO_PIN_SET);
 
-			for (int i = 0; i < (Get_Battery_Error_State()); i++) {
+			for (int i = 0; i < (Get_Error_State()); i++) {
 				vTaskDelay(200 / portTICK_PERIOD_MS);
 				HAL_GPIO_WritePin(Red_LED_GPIO_Port, Red_LED_Pin, GPIO_PIN_RESET);
 				vTaskDelay(200 / portTICK_PERIOD_MS);

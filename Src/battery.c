@@ -10,6 +10,7 @@
 
 #include "adc_interface.h"
 #include "task.h"
+#include "error.h"
 
 /* Private typedef -----------------------------------------------------------*/
 struct Battery {
@@ -18,11 +19,10 @@ struct Battery {
 	uint8_t number_of_cells;
 	uint8_t balancing_enabled;
 	uint8_t charging_enabled;
-	uint8_t battery_error_state;
 };
 
 /* Private variables ---------------------------------------------------------*/
-struct Battery battery_state;
+volatile struct Battery battery_state;
 
 static uint8_t cell_connected_bitmask = 0;
 
@@ -37,7 +37,7 @@ void MCU_Temperature_Safety_Check(void);
  */
 void Balance_Battery()
 {
-	if ( (battery_state.balance_port_connected == CONNECTED) && (battery_state.battery_error_state == 0) ) {
+	if ( (battery_state.balance_port_connected == CONNECTED) && (Get_Error_State() == 0) ) {
 
 		uint32_t min_cell_voltage = Get_Cell_Voltage(0);
 		uint32_t max_cell_voltage = Get_Cell_Voltage(0);
@@ -113,36 +113,36 @@ void Balance_Connection_State()
 	if ( cell_connected_bitmask & (1<<3) ) {
 		if ( (cell_connected_bitmask & THREE_S_BITMASK) == THREE_S_BITMASK ) {
 			battery_state.number_of_cells = 4;
-			battery_state.battery_error_state &= ~CELL_CONNECTION_ERROR;
+			Clear_Error_State(CELL_CONNECTION_ERROR);
 		}
 		else {
 			battery_state.number_of_cells = 0;
-			battery_state.battery_error_state |= CELL_CONNECTION_ERROR;
+			Set_Error_State(CELL_CONNECTION_ERROR);
 		}
 	}
 	else if ( cell_connected_bitmask & (1<<2) ) {
 		if ( (cell_connected_bitmask & TWO_S_BITMASK) ==  TWO_S_BITMASK ) {
 			battery_state.number_of_cells = 3;
-			battery_state.battery_error_state &= ~CELL_CONNECTION_ERROR;
+			Clear_Error_State(CELL_CONNECTION_ERROR);
 		}
 		else {
 			battery_state.number_of_cells = 0;
-			battery_state.battery_error_state |= CELL_CONNECTION_ERROR;
+			Set_Error_State(CELL_CONNECTION_ERROR);
 		}
 	}
 	else if ( cell_connected_bitmask & (1<<1) ) {
 		if ( (cell_connected_bitmask & ONE_S_BITMASK) == ONE_S_BITMASK ) {
 			battery_state.number_of_cells = 2;
-			battery_state.battery_error_state &= ~CELL_CONNECTION_ERROR;
+			Clear_Error_State(CELL_CONNECTION_ERROR);
 		}
 		else {
 			battery_state.number_of_cells = 0;
-			battery_state.battery_error_state |= CELL_CONNECTION_ERROR;
+			Set_Error_State(CELL_CONNECTION_ERROR);
 		}
 	}
 	else {
 		battery_state.number_of_cells = 0;
-		battery_state.battery_error_state &= ~CELL_CONNECTION_ERROR;
+		Clear_Error_State(CELL_CONNECTION_ERROR);
 	}
 
 	if ( battery_state.number_of_cells > 1 ) {
@@ -212,10 +212,10 @@ void Balancing_GPIO_Control(uint8_t cell_balancing_gpio_bitmask)
  */
 void MCU_Temperature_Safety_Check() {
 	if (Get_MCU_Temperature() > MAX_MCU_TEMP_C_FOR_OPERATION) {
-		battery_state.battery_error_state |= MCU_OVER_TEMP;
+		Set_Error_State(MCU_OVER_TEMP);
 	}
-	else if ( ((battery_state.battery_error_state & MCU_OVER_TEMP) == MCU_OVER_TEMP) && (Get_MCU_Temperature() < MCU_TEMP_C_RECOVERY) ) {
-		battery_state.battery_error_state &= ~MCU_OVER_TEMP;
+	else if ( ((Get_Error_State() & MCU_OVER_TEMP) == MCU_OVER_TEMP) && (Get_MCU_Temperature() < MCU_TEMP_C_RECOVERY) ) {
+		Clear_Error_State(MCU_OVER_TEMP);
 	}
 }
 
@@ -235,15 +235,6 @@ uint8_t Get_Balance_Connection_State()
 uint8_t Get_Balancing_State()
 {
 	return battery_state.balancing_enabled;
-}
-
-/**
- * @brief Returns the error state
- * @retval uint8_t NO_ERROR if no error. Other errors are defined in battery.h
- */
-uint8_t Get_Battery_Error_State()
-{
-	return battery_state.battery_error_state;
 }
 
 /**

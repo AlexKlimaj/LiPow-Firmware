@@ -15,6 +15,8 @@ extern "C" {
 #include "stm32g0xx_hal.h"
 #include "FreeRTOS.h"
 
+#define I2C_TIMEOUT					(500 / portTICK_PERIOD_MS)
+
 #define BQ26703A_I2C_ADDRESS		0xD6
 #define BQ26703A_MANUFACTURER_ID	0x40
 #define BQ26703A_DEVICE_ID			0x78
