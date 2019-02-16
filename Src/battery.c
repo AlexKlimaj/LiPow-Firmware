@@ -30,6 +30,7 @@ static uint8_t cell_connected_bitmask = 0;
 void Balance_Battery(void);
 void Balance_Connection_State(void);
 void Balancing_GPIO_Control(uint8_t cell_balancing_gpio_bitmask);
+void MCU_Temperature_Safety_Check(void);
 
 /**
  * @brief Based on ADC readings, determine if balancing is needed, if so, balance battery
@@ -150,13 +151,6 @@ void Balance_Connection_State()
 	else {
 		battery_state.balance_port_connected = NOT_CONNECTED;
 	}
-
-	if (Get_MCU_Temperature() > MAX_MCU_TEMP_C_FOR_OPERATION) {
-		battery_state.battery_error_state |= MCU_OVER_TEMP;
-	}
-	else if ( ((battery_state.battery_error_state & MCU_OVER_TEMP) == MCU_OVER_TEMP) && (Get_MCU_Temperature() < MCU_TEMP_C_RECOVERY) ) {
-		battery_state.battery_error_state &= ~MCU_OVER_TEMP;
-	}
 }
 
 /**
@@ -172,6 +166,8 @@ void Battery_Connection_State()
 	}
 
 	Balance_Connection_State();
+
+	MCU_Temperature_Safety_Check();
 
 	Balance_Battery();
 }
@@ -208,6 +204,18 @@ void Balancing_GPIO_Control(uint8_t cell_balancing_gpio_bitmask)
 	}
 	else {
 		HAL_GPIO_WritePin(CELL_1S_DIS_EN_GPIO_Port, CELL_1S_DIS_EN_Pin, GPIO_PIN_RESET);
+	}
+}
+
+/**
+ * @brief Checks if the MCU temperature is unsafe and sets battery error flag if so. Clears flag if temperature falls below recovery threshold.
+ */
+void MCU_Temperature_Safety_Check() {
+	if (Get_MCU_Temperature() > MAX_MCU_TEMP_C_FOR_OPERATION) {
+		battery_state.battery_error_state |= MCU_OVER_TEMP;
+	}
+	else if ( ((battery_state.battery_error_state & MCU_OVER_TEMP) == MCU_OVER_TEMP) && (Get_MCU_Temperature() < MCU_TEMP_C_RECOVERY) ) {
+		battery_state.battery_error_state &= ~MCU_OVER_TEMP;
 	}
 }
 
