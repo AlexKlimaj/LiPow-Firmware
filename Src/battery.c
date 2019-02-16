@@ -29,20 +29,6 @@ uint8_t cell_connected_bitmask = 0;
 /* Private function prototypes -----------------------------------------------*/
 void vBattery_Connection_State(void *pvParameters);
 
-/**
- * @brief Creates the battery task
- */
-void vCreateBatteryTask( uint16_t usStackSize, unsigned portBASE_TYPE uxPriority )
-{
-	/* Create the task, storing the handle. */
-	xTaskCreate(vBattery_Connection_State, /* Function that implements the task. */
-		(const char* const ) "battery connection", /* Text name for the task. */
-		usStackSize, /* Stack size in words, not bytes. */
-		0, /* Parameter passed into the task. */
-		uxPriority, /* Priority at which the task is created. */
-		0); /* Used to pass out the created task's handle. */
-}
-
 uint8_t Get_XT60_Connection_State(void)
 {
 	return battery_state.xt60_connected;

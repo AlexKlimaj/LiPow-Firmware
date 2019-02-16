@@ -40,21 +40,8 @@ uint8_t Set_Cell_Two_Voltage(uint32_t adc_reading);
 uint8_t Set_Cell_Three_Voltage(uint32_t adc_reading);
 uint8_t Set_Cell_Four_Voltage(uint32_t adc_reading);
 uint8_t Set_MCU_Temperature(uint32_t adc_reading);
-void vRead_ADC(void *pvParameters);
 
-/**
- * @brief Creates the adc task
- */
-void vCreateADCTask( uint16_t usStackSize, unsigned portBASE_TYPE uxPriority )
-{
-	/* Create the task, storing the handle. */
-	xTaskCreate(vRead_ADC, /* Function that implements the task. */
-		(const char* const ) "read_adc", /* Text name for the task. */
-		usStackSize, /* Stack size in words, not bytes. */
-		0, /* Parameter passed into the task. */
-		uxPriority, /* Priority at which the task is created. */
-		&adcTaskHandle); /* Used to pass out the created task's handle. */
-}
+void vRead_ADC(void *pvParameters);
 
 /**
  * @brief Gets the battery voltage that was read in from the ADC

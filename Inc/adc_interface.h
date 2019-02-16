@@ -42,8 +42,6 @@ extern "C" {
 #define CELL_FOUR_ADC_SCALAR 		(uint32_t)( 421 )
 #define CELL_FOUR_MIN_ADC_READING 	20
 
-void vCreateADCTask( uint16_t usStackSize, unsigned portBASE_TYPE uxPriority );
-
 uint32_t Get_Battery_Voltage(void);
 
 uint32_t Get_Cell_One_Voltage(void);
@@ -55,6 +53,8 @@ uint32_t Get_Cell_Three_Voltage(void);
 uint32_t Get_Cell_Four_Voltage(void);
 
 uint32_t Get_MCU_Temperature(void);
+
+void vRead_ADC(void *pvParameters);
 
 #ifdef __cplusplus
 }

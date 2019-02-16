@@ -91,6 +91,9 @@ DMA_HandleTypeDef hdma_usart1_tx;
 DMA_HandleTypeDef hdma_usart1_rx;
 
 osThreadId defaultTaskHandle;
+osThreadId blinkyTaskHandle;
+osThreadId adcTaskHandle;
+osThreadId batteryTaskHandle;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -155,27 +158,6 @@ int main(void) {
 	MX_TIM7_Init();
 	MX_USART1_UART_Init();
 	/* USER CODE BEGIN 2 */
-
-	/* Create the task, storing the handle. */
-	xTaskCreate(vLED_Blinky, /* Function that implements the task. */
-	(const char* const ) "blink_led", /* Text name for the task. */
-	configMINIMAL_STACK_SIZE, /* Stack size in words, not bytes. */
-	0, /* Parameter passed into the task. */
-	LED_TASK_PRIORITY, /* Priority at which the task is created. */
-	0); /* Used to pass out the created task's handle. */
-
-	/* Start the adc task */
-	vCreateADCTask(vRead_ADC_STACK_SIZE, ADC_TASK_PRIORITY);
-
-	/* Start the battery task */
-	vCreateBatteryTask(vBattery_State_STACK_SIZE, BATTERY_TASK_PRIORITY);
-
-	/* Start the Command Line Interface on UART1 */
-	vUARTCommandConsoleStart(vcliSTACK_SIZE, UART_CLI_TASK_PRIORITY);
-
-	/* Register commands with the FreeRTOS+CLI command interpreter. */
-	vRegisterCLICommands();
-
 	/* USER CODE END 2 */
 
 	/* USER CODE BEGIN RTOS_MUTEX */
@@ -196,7 +178,24 @@ int main(void) {
 	defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
 	/* USER CODE BEGIN RTOS_THREADS */
-	/* add threads, ... */
+
+	/* Start the led blinky task */
+	osThreadDef(blink_led, vLED_Blinky, LED_TASK_PRIORITY, 0, configMINIMAL_STACK_SIZE);
+	blinkyTaskHandle = osThreadCreate(osThread(blink_led), NULL);
+
+	/* Start the adc task */
+	osThreadDef(read_adc, vRead_ADC, ADC_TASK_PRIORITY, 0, vRead_ADC_STACK_SIZE);
+	adcTaskHandle = osThreadCreate(osThread(read_adc), NULL);
+
+	osThreadDef(battery_connection, vBattery_Connection_State, BATTERY_TASK_PRIORITY, 0, vBattery_State_STACK_SIZE);
+	batteryTaskHandle = osThreadCreate(osThread(battery_connection), NULL);
+
+	/* Start the Command Line Interface on UART1 */
+	vUARTCommandConsoleStart(vcliSTACK_SIZE, UART_CLI_TASK_PRIORITY);
+
+	/* Register commands with the FreeRTOS+CLI command interpreter. */
+	vRegisterCLICommands();
+
 	/* USER CODE END RTOS_THREADS */
 
 	/* USER CODE BEGIN RTOS_QUEUES */
