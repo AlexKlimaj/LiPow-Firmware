@@ -8,6 +8,8 @@
 
 #include "bq25703a_regulator.h"
 #include "battery.h"
+#include "error.h"
+
 /* FreeRTOS includes. */
 #include "FreeRTOS.h"
 #include "task.h"
@@ -49,8 +51,9 @@ void I2C_Transfer(uint8_t *pData, uint16_t size) {
 	if ( xSemaphoreTake( xTxMutex, cmdMAX_MUTEX_WAIT ) == pdPASS) {
 		do
 		{
-			while (HAL_I2C_Master_Transmit_DMA(&hi2c1, (uint16_t)BQ26703A_I2C_ADDRESS, pData, size) != HAL_OK);
-		    while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY);
+			TickType_t xtimeout_start = xTaskGetTickCount();
+			while ((HAL_I2C_Master_Transmit_DMA(&hi2c1, (uint16_t)BQ26703A_I2C_ADDRESS, pData, size) != HAL_OK) && (((xTaskGetTickCount()-xtimeout_start)/portTICK_PERIOD_MS) < I2C_TIMEOUT));
+		    while ((HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY) && (((xTaskGetTickCount()-xtimeout_start)/portTICK_PERIOD_MS) < I2C_TIMEOUT));
 		}
 		while(HAL_I2C_GetError(&hi2c1) == HAL_I2C_ERROR_AF);
 		xSemaphoreGive(xTxMutex);
@@ -61,8 +64,9 @@ void I2C_Receive(uint8_t *pData, uint16_t size) {
 	if ( xSemaphoreTake( xTxMutex, cmdMAX_MUTEX_WAIT ) == pdPASS) {
 		do
 		{
-			while(HAL_I2C_Master_Receive_DMA(&hi2c1, (uint16_t)BQ26703A_I2C_ADDRESS, pData, size) != HAL_OK);
-			while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY);
+			TickType_t xtimeout_start = xTaskGetTickCount();
+			while ((HAL_I2C_Master_Receive_DMA(&hi2c1, (uint16_t)BQ26703A_I2C_ADDRESS, pData, size) != HAL_OK) && (((xTaskGetTickCount()-xtimeout_start)/portTICK_PERIOD_MS) < I2C_TIMEOUT));
+			while ((HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY) && (((xTaskGetTickCount()-xtimeout_start)/portTICK_PERIOD_MS) < I2C_TIMEOUT));
 		}
 		while(HAL_I2C_GetError(&hi2c1) == HAL_I2C_ERROR_AF);
 		xSemaphoreGive(xTxMutex);

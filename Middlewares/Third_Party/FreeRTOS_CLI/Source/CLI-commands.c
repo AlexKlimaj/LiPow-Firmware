@@ -37,6 +37,7 @@
 
 #include "adc_interface.h"
 #include "battery.h"
+#include "error.h"
 #include "UARTCommandConsole.h"
 
 /*
@@ -148,7 +149,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			Get_Number_Of_Cells(),
 			Get_Balancing_State(),
 			Get_Charging_State(),
-			Get_Battery_Error_State());
+			Get_Error_State());
 
 	/* There is no more data to return after this single string, so return
 	 pdFALSE. */
