@@ -38,6 +38,12 @@ void prvUARTCommandConsoleTask(void const *pvParameters);
 
 void UART_Transfer(uint8_t *pData, uint16_t Size);
 
+/*
+ * Register commands that can be used with FreeRTOS+CLI through the UDP socket.
+ * The commands are defined in CLI-commands.c.
+ */
+void vRegisterCLICommands(void);
+
 /* Used to guard access to the UART in case messages are sent to the UART from
  more than one task. */
 extern SemaphoreHandle_t xTxMutex_CLI;

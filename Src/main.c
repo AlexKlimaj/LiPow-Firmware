@@ -119,12 +119,6 @@ void StartDefaultTask(void const * argument);
 
 void vLED_Blinky(void const *pvParameters);
 
-/*
- * Register commands that can be used with FreeRTOS+CLI through the UDP socket.
- * The commands are defined in CLI-commands.c.
- */
-extern void vRegisterCLICommands(void);
-
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -169,10 +163,9 @@ int main(void)
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
-	/* add mutexes, ... */
 	xTxMutex_Regulator = xSemaphoreCreateMutex();
 	configASSERT(xTxMutex_Regulator);
-	/* Create the semaphore used to access the UART Tx. */
+
 	xTxMutex_CLI = xSemaphoreCreateMutex();
 	configASSERT(xTxMutex_CLI);
   /* USER CODE END RTOS_MUTEX */
