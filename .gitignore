@@ -53,3 +53,6 @@ dkms.conf
 
 # Folders
 Debug/
+
+# Environment specific
+.settings/language.settings.xml
