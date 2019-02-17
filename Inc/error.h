@@ -20,6 +20,7 @@
 #define XT60_VOLTAGE_ERROR				0b000100
 #define MCU_OVER_TEMP					0b001000
 #define REGULATOR_COMMUNICATION_ERROR	0b010000
+#define VOLTAGE_INPUT_ERROR				0b100000
 
 uint32_t Get_Error_State(void);
 
