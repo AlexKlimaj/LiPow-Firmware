@@ -14,6 +14,7 @@ extern "C" {
 
 #include "stm32g0xx_hal.h"
 #include "FreeRTOS.h"
+#include "cmsis_os.h"
 
 // Calculate the voltages based on the following data:
 // https://docs.google.com/spreadsheets/d/1uXEK7AOaoLDN3ATuCtUCRYjI7-zBhgmvHDWbn-7-k90/edit?usp=sharing
@@ -47,7 +48,7 @@ extern "C" {
 #define THREE_S_MAX_VOLTAGE			(uint32_t)( 15 * BATTERY_ADC_MULTIPLIER )
 #define FOUR_S_MAX_VOLTAGE			(uint32_t)( 20 * BATTERY_ADC_MULTIPLIER )
 
-void vCreateADCTask( uint16_t usStackSize, unsigned portBASE_TYPE uxPriority );
+void vRead_ADC(void const *pvParameters);
 
 uint32_t Get_Battery_Voltage(void);
 
@@ -62,6 +63,8 @@ uint32_t Get_Four_S_Voltage(void);
 int32_t Get_MCU_Temperature(void);
 
 uint32_t Get_VDDa(void);
+
+osThreadId adcTaskHandle;
 
 #ifdef __cplusplus
 }

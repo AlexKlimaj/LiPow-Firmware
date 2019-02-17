@@ -14,6 +14,10 @@ extern "C" {
 
 #include "stm32g0xx_hal.h"
 #include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
+#include "cmsis_os.h"
+
 
 #define I2C_TIMEOUT					(500 / portTICK_PERIOD_MS)
 
@@ -24,6 +28,11 @@ extern "C" {
 #define MANUFACTURER_ID_ADDR		0x2E
 #define DEVICE_ID_ADDR				0x2F
 
-void vCreateRegulatorTask(uint16_t usStackSize, unsigned portBASE_TYPE uxPriority);
+void vRegulator(void const *pvParameters);
+
+/* Used to guard access to the I2C in case messages are sent to the UART from
+ more than one task. */
+extern SemaphoreHandle_t xTxMutex_Regulator;
+osThreadId regulatorTaskHandle;
 
 #endif /* BQ25703A_REGULATOR_H_ */

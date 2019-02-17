@@ -6,10 +6,10 @@
  */
 
 
+#include "main.h"
 #include "battery.h"
 
 #include "adc_interface.h"
-#include "task.h"
 #include "error.h"
 
 /* Private typedef -----------------------------------------------------------*/
