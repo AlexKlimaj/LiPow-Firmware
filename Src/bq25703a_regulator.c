@@ -228,7 +228,7 @@ void Read_Charge_Status() {
  */
 void Regulator_Set_ADC_Option() {
 
-	uint8_t ADC_lsb_3A = 0b01110111;
+	uint8_t ADC_lsb_3A = ADC_ENABLED_BITMASK;
 
 	I2C_Write_Register(ADC_OPTION_ADDR, (uint8_t *) &ADC_lsb_3A);
 }
@@ -239,7 +239,7 @@ void Regulator_Set_ADC_Option() {
 void Regulator_Read_ADC() {
 	TickType_t xDelay = 80 / portTICK_PERIOD_MS;
 
-	uint8_t ADC_msb_3B = 0b01100000;
+	uint8_t ADC_msb_3B = ADC_START_CONVERSION_MASK;
 
 	I2C_Write_Register((ADC_OPTION_ADDR+1), (uint8_t *) &ADC_msb_3B);
 
@@ -252,22 +252,22 @@ void Regulator_Read_ADC() {
 	uint8_t temp = 0;
 
 	I2C_Read_Register(VBAT_ADC_ADDR, (uint8_t *) &temp, 1);
-	regulator.vbat_voltage = temp * VBAT_ADC_LSB;
+	regulator.vbat_voltage = (temp * VBAT_ADC_SCALE) + VBAT_ADC_OFFSET;
 
 	I2C_Read_Register(VSYS_ADC_ADDR, (uint8_t *) &temp, 1);
-	regulator.vsys_voltage = temp * VSYS_ADC_LSB;
+	regulator.vsys_voltage = (temp * VSYS_ADC_SCALE) + VSYS_ADC_OFFSET;
 
 	I2C_Read_Register(ICHG_ADC_ADDR, (uint8_t *) &temp, 1);
-	regulator.charge_current = temp * ICHG_ADC_LSB;
+	regulator.charge_current = temp * ICHG_ADC_SCALE;
 
 	I2C_Read_Register(IIN_ADC_ADDR, (uint8_t *) &temp, 1);
-	regulator.input_current = temp * IIN_ADC_LSB;
+	regulator.input_current = temp * IIN_ADC_SCALE;
 
 	I2C_Read_Register(PSYS_ADC_ADDR, (uint8_t *) &temp, 1);
-	regulator.psys_voltage = temp * PSYS_ADC_LSB;
+	regulator.psys_voltage = temp * PSYS_ADC_SCALE;
 
 	I2C_Read_Register(VBUS_ADC_ADDR, (uint8_t *) &temp, 1);
-	regulator.vbus_voltage = temp * VBUS_ADC_LSB;
+	regulator.vbus_voltage = (temp * VBUS_ADC_SCALE) + VBUS_ADC_OFFSET;
 }
 
 /**

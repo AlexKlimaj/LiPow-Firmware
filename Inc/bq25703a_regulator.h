@@ -46,14 +46,23 @@ extern "C" {
 #define EN_OOA						0b1
 
 #define CHARGING_ENABLED_MASK		0b00000100
+#define ADC_ENABLED_BITMASK			0b01110111
+#define ADC_START_CONVERSION_MASK	0b01100000
 
-#define VBUS_ADC_LSB				(uint32_t)(0.100 * BATTERY_ADC_MULTIPLIER)
-#define PSYS_ADC_LSB				(uint32_t)(0.012 * BATTERY_ADC_MULTIPLIER)
-#define VSYS_ADC_LSB				(uint32_t)(0.064 * BATTERY_ADC_MULTIPLIER)
-#define VBAT_ADC_LSB				(uint32_t)(0.064 * BATTERY_ADC_MULTIPLIER)
-#define ICHG_ADC_LSB				(uint32_t)(0.064 * BATTERY_ADC_MULTIPLIER)
-#define IDCHG_ADC_LSB				(uint32_t)(0.256 * BATTERY_ADC_MULTIPLIER)
-#define IIN_ADC_LSB					(uint32_t)(0.050 * BATTERY_ADC_MULTIPLIER)
+#define VBUS_ADC_SCALE				(uint32_t)( 0.064 * BATTERY_ADC_MULTIPLIER )
+#define VBUS_ADC_OFFSET				(uint32_t)( 3.2 * BATTERY_ADC_MULTIPLIER )
+
+#define PSYS_ADC_SCALE				(uint32_t)( 0.012 * BATTERY_ADC_MULTIPLIER )
+
+#define VSYS_ADC_SCALE				(uint32_t)(0.064 * BATTERY_ADC_MULTIPLIER)
+#define VSYS_ADC_OFFSET				(uint32_t)(2.88 * BATTERY_ADC_MULTIPLIER)
+
+#define VBAT_ADC_SCALE				(uint32_t)(0.064 * BATTERY_ADC_MULTIPLIER)
+#define VBAT_ADC_OFFSET				(uint32_t)(2.88 * BATTERY_ADC_MULTIPLIER)
+
+#define ICHG_ADC_SCALE				(uint32_t)(0.064 * BATTERY_ADC_MULTIPLIER)
+
+#define IIN_ADC_SCALE				(uint32_t)(0.050 * BATTERY_ADC_MULTIPLIER)
 
 uint8_t Get_Regulator_Connection_State(void);
 uint8_t Get_Regulator_Charging_State(void);
