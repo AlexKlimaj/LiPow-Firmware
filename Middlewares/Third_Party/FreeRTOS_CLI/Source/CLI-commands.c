@@ -137,8 +137,10 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			"Balance Connection State    %u\r\n"
 			"Number of Cells             %u\r\n"
 			"Balancing State             %u\r\n"
-			"Charging State              %u\r\n"
 			"Regulator Connection State  %d\r\n"
+			"Charging State              %u\r\n"
+			"Vbus Voltage                %f\r\n"
+			"Psys Voltage                %f\r\n"
 			"Battery Error State         %u\r\n",
 			battery_voltage_float,
 			cell_voltage_float[0],
@@ -151,8 +153,10 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			Get_Balance_Connection_State(),
 			Get_Number_Of_Cells(),
 			Get_Balancing_State(),
-			Get_Charging_State(),
 			Get_Regulator_Connection_State(),
+			Get_Regulator_Charging_State(),
+			((float)Get_VBUS_ADC_Reading()/BATTERY_ADC_MULTIPLIER),
+			((float)Get_PSYS_ADC_Reading()/BATTERY_ADC_MULTIPLIER),
 			Get_Error_State());
 
 	/* There is no more data to return after this single string, so return

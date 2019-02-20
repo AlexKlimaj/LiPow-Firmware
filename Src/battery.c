@@ -170,6 +170,15 @@ void Battery_Connection_State()
 	MCU_Temperature_Safety_Check();
 
 	Balance_Battery();
+
+	if ((battery_state.xt60_connected == CONNECTED) && (battery_state.balance_port_connected = CONNECTED)){
+		if (Get_Battery_Voltage() < (battery_state.number_of_cells * MAX_CELL_VOLTAGE_TO_ENABLE_CHARGING)) {
+			battery_state.charging_enabled = 1;
+		}
+		else {
+			battery_state.charging_enabled = 0;
+		}
+	}
 }
 
 /**

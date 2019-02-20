@@ -50,6 +50,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -96,12 +98,13 @@ DMA_HandleTypeDef hdma_usart1_tx;
 DMA_HandleTypeDef hdma_usart1_rx;
 
 osThreadId defaultTaskHandle;
+/* USER CODE BEGIN PV */
+
+osThreadId defaultTaskHandle;
 osThreadId blinkyTaskHandle;
 
 SemaphoreHandle_t xTxMutex_CLI;
 SemaphoreHandle_t xTxMutex_Regulator;
-
-/* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
 
@@ -394,7 +397,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.Timing = 0x00303D5B;
+  hi2c1.Init.Timing = 0x0010061A;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -637,7 +640,7 @@ void vLED_Blinky(void const *pvParameters) {
 				HAL_GPIO_WritePin(Blue_LED_GPIO_Port, Blue_LED_Pin, GPIO_PIN_SET);
 			}
 
-			if (Get_Charging_State() == 1) {
+			if (Get_Regulator_Charging_State() == 1) {
 				HAL_GPIO_WritePin(Red_LED_GPIO_Port, Red_LED_Pin, GPIO_PIN_RESET);
 				HAL_GPIO_WritePin(Green_LED_GPIO_Port, Green_LED_Pin, GPIO_PIN_SET);
 			}

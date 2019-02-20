@@ -18,12 +18,16 @@ extern I2C_HandleTypeDef hi2c1;
 /* Private typedef -----------------------------------------------------------*/
 struct Regulator {
 	uint8_t connected;
-	uint8_t status;
-	uint32_t input_current;
-	uint32_t output_current;
+	uint8_t charging_status;
 	uint16_t max_charge_voltage;
 	uint8_t input_current_limit;
 	uint16_t min_input_voltage_limit;
+	uint32_t psys_voltage;
+	uint32_t vbus_voltage;
+	uint32_t vbat_voltage;
+	uint32_t vsys_voltage;
+	uint32_t charge_current;
+	uint32_t input_current;
 };
 
 /* Private variables ---------------------------------------------------------*/
@@ -36,15 +40,18 @@ struct Regulator regulator;
 /* Private function prototypes -----------------------------------------------*/
 void I2C_Transfer(uint8_t *pData, uint16_t size);
 void I2C_Receive(uint8_t *pData, uint16_t size);
+void I2C_Write_Register(uint8_t addr_to_write, uint8_t *pData);
+void I2C_Write_Two_Byte_Register(uint8_t addr_to_write, uint8_t lsb_data, uint8_t msb_data);
+void I2C_Read_Register(uint8_t addr_to_read, uint8_t *pData, uint16_t size);
 uint8_t Query_Regulator_Connection(void);
 uint8_t Read_Charge_Okay(void);
+void Read_Charge_Status(void);
+void Regulator_Set_ADC_Option(void);
+void Regulator_Read_ADC(void);
 void Regulator_HI_Z(uint8_t hi_z_en);
 void Regulator_OTG_EN(uint8_t otg_en);
 void Regulator_Set_Charge_Option_0(void);
 void Set_Charge_Voltage(uint8_t number_of_cells);
-void I2C_Write_Register(uint8_t addr_to_write, uint8_t *pData);
-void I2C_Write_Two_Byte_Register(uint8_t addr_to_write, uint8_t lsb_data, uint8_t msb_data);
-void I2C_Read_Register(uint8_t addr_to_read, uint8_t *pData);
 
 /**
  * @brief Returns whether the regulator is connected over I2C
@@ -52,6 +59,30 @@ void I2C_Read_Register(uint8_t addr_to_read, uint8_t *pData);
  */
 uint8_t Get_Regulator_Connection_State() {
 	return regulator.connected;
+}
+
+/**
+ * @brief Returns whether the regulator is charging
+ * @retval uint8_t 1 if charging, 0 if not charging
+ */
+uint8_t Get_Regulator_Charging_State() {
+	return regulator.charging_status;
+}
+
+/**
+ * @brief Gets VBUS voltage that was read in from the ADC on the regulator
+ * @retval VBUS voltage in volts * BATTERY_ADC_MULTIPLIER
+ */
+uint32_t Get_VBUS_ADC_Reading() {
+	return regulator.vbus_voltage;
+}
+
+/**
+ * @brief Gets PSYS voltage that was read in from the ADC on the regulator
+ * @retval PSYS voltage in volts * BATTERY_ADC_MULTIPLIER
+ */
+uint32_t Get_PSYS_ADC_Reading() {
+	return regulator.psys_voltage;
 }
 
 /**
@@ -112,17 +143,52 @@ void I2C_Receive(uint8_t *pData, uint16_t size) {
 }
 
 /**
+ * @brief Automatically performs two I2C writes to write a register on the regulator
+ * @param pData Pointer to data to be transferred
+ */
+void I2C_Write_Register(uint8_t addr_to_write, uint8_t *pData) {
+	uint8_t data[2];
+	data[0] = addr_to_write;
+	data[1] = *pData;
+	I2C_Transfer(data, 2);
+}
+
+/**
+ * @brief Automatically performs three I2C writes to write a two byte register on the regulator
+ * @param lsb_data Pointer to least significant byte of data to be transferred
+ * @param msb_data Pointer to most significant byte of data to be transferred
+ */
+void I2C_Write_Two_Byte_Register(uint8_t addr_to_write, uint8_t lsb_data, uint8_t msb_data) {
+
+	uint8_t data[3];
+	data[0] = addr_to_write;
+	data[1] = lsb_data;
+	data[2] = msb_data;
+
+	I2C_Transfer(data, 3);
+}
+
+/**
+ * @brief Automatically performs one I2C write and an I2C read to get the value of a register
+ * @param pData Pointer to where to store data
+ */
+void I2C_Read_Register(uint8_t addr_to_read, uint8_t *pData, uint16_t size) {
+		I2C_Transfer((uint8_t *)&addr_to_read, 1);
+		I2C_Receive(pData, size);
+}
+
+/**
  * @brief Checks if the regulator is connected over I2C
  * @retval uint8_t CONNECTED or NOT_CONNECTED
  */
 uint8_t Query_Regulator_Connection() {
 	/* Get the manufacturer id */
 	uint8_t manufacturer_id;
-	I2C_Read_Register(MANUFACTURER_ID_ADDR, (uint8_t *) &manufacturer_id);
+	I2C_Read_Register(MANUFACTURER_ID_ADDR, (uint8_t *) &manufacturer_id, 1);
 
 	/* Get the device id */
 	uint8_t device_id;
-	I2C_Read_Register(DEVICE_ID_ADDR, (uint8_t *) &device_id);
+	I2C_Read_Register(DEVICE_ID_ADDR, (uint8_t *) &device_id, 1);
 
 	if ( (device_id == BQ26703A_DEVICE_ID) && (manufacturer_id == BQ26703A_MANUFACTURER_ID) ) {
 		Clear_Error_State(REGULATOR_COMMUNICATION_ERROR);
@@ -140,6 +206,68 @@ uint8_t Query_Regulator_Connection() {
  */
 uint8_t Read_Charge_Okay() {
 	return HAL_GPIO_ReadPin(CHRG_OK_GPIO_Port, CHRG_OK_Pin);
+}
+
+/**
+ * @brief Reads ChargeStatus register and sets status
+ */
+void Read_Charge_Status() {
+	uint8_t data[2];
+	I2C_Read_Register(CHARGE_STATUS_ADDR, data, 2);
+
+	if (data[1] & CHARGING_ENABLED_MASK) {
+		regulator.charging_status = 1;
+	}
+	else {
+		regulator.charging_status = 0;
+	}
+}
+
+/**
+ * @brief Sets the Regulators ADC settings
+ */
+void Regulator_Set_ADC_Option() {
+
+	uint8_t ADC_lsb_3A = 0b01110111;
+
+	I2C_Write_Register(ADC_OPTION_ADDR, (uint8_t *) &ADC_lsb_3A);
+}
+
+/**
+ * @brief Initiates and reads a single ADC conversion on the regulator
+ */
+void Regulator_Read_ADC() {
+	TickType_t xDelay = 80 / portTICK_PERIOD_MS;
+
+	uint8_t ADC_msb_3B = 0b01100000;
+
+	I2C_Write_Register((ADC_OPTION_ADDR+1), (uint8_t *) &ADC_msb_3B);
+
+	/* Wait for the conversion to finish */
+	while (ADC_msb_3B & (1<<6)) {
+		vTaskDelay(xDelay);
+		I2C_Read_Register((ADC_OPTION_ADDR+1), (uint8_t *) &ADC_msb_3B, 1);
+	}
+
+	uint8_t temp = 0;
+
+	I2C_Read_Register(VBAT_ADC_ADDR, (uint8_t *) &temp, 1);
+	regulator.vbat_voltage = temp * VBAT_ADC_LSB;
+
+	I2C_Read_Register(VSYS_ADC_ADDR, (uint8_t *) &temp, 1);
+	regulator.vsys_voltage = temp * VSYS_ADC_LSB;
+
+	I2C_Read_Register(ICHG_ADC_ADDR, (uint8_t *) &temp, 1);
+	regulator.charge_current = temp * ICHG_ADC_LSB;
+
+	I2C_Read_Register(IIN_ADC_ADDR, (uint8_t *) &temp, 1);
+	regulator.input_current = temp * IIN_ADC_LSB;
+
+	I2C_Read_Register(PSYS_ADC_ADDR, (uint8_t *) &temp, 1);
+	regulator.psys_voltage = temp * PSYS_ADC_LSB;
+
+	I2C_Read_Register(VBUS_ADC_ADDR, (uint8_t *) &temp, 1);
+	regulator.vbus_voltage = temp * VBUS_ADC_LSB;
 }
 
 /**
@@ -173,11 +301,10 @@ void Regulator_OTG_EN(uint8_t otg_en) {
  */
 void Regulator_Set_Charge_Option_0() {
 
-	uint8_t charge_option_0_register_1_value = 0b01100110;
+	uint8_t charge_option_0_register_1_value = 0b00100110;
 	uint8_t charge_option_0_register_2_value = 0b00001110;
 
-	I2C_Write_Register(CHARGE_OPTION_0_ADDR_1, (uint8_t *) &charge_option_0_register_1_value);
-	I2C_Write_Register(CHARGE_OPTION_0_ADDR_2, (uint8_t *) &charge_option_0_register_2_value);
+	I2C_Write_Two_Byte_Register(CHARGE_OPTION_0_ADDR, charge_option_0_register_2_value, charge_option_0_register_1_value);
 
 	return;
 }
@@ -250,58 +377,6 @@ void Set_Charge_Voltage(uint8_t number_of_cells) {
 }
 
 /**
- * @brief Automatically performs two I2C writes to write a register on the regulator
- * @param pData Pointer to data to be transferred
- */
-void I2C_Write_Register(uint8_t addr_to_write, uint8_t *pData) {
-		I2C_Transfer((uint8_t *)&addr_to_write, 1);
-		I2C_Transfer(pData, 1);
-}
-
-/**
- * @brief Automatically performs three I2C writes to write a two byte register on the regulator
- * @param lsb_data Pointer to least significant byte of data to be transferred
- * @param msb_data Pointer to most significant byte of data to be transferred
- */
-void I2C_Write_Two_Byte_Register(uint8_t addr_to_write, uint8_t lsb_data, uint8_t msb_data) {
-
-		uint8_t data[3];
-		data[0] = addr_to_write;
-		data[1] = lsb_data;
-		data[2] = msb_data;
-
-		if ( xSemaphoreTake( xTxMutex_Regulator, cmdMAX_MUTEX_WAIT ) == pdPASS) {
-			do
-			{
-				TickType_t xtimeout_start = xTaskGetTickCount();
-				while (HAL_I2C_Master_Transmit_DMA(&hi2c1, (uint16_t)BQ26703A_I2C_ADDRESS, (uint8_t *)data, 3) != HAL_OK) {
-					if (((xTaskGetTickCount()-xtimeout_start)/portTICK_PERIOD_MS) > I2C_TIMEOUT) {
-						Set_Error_State(REGULATOR_COMMUNICATION_ERROR);
-						break;
-					}
-				}
-			    while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY) {
-					if (((xTaskGetTickCount()-xtimeout_start)/portTICK_PERIOD_MS) > I2C_TIMEOUT) {
-						Set_Error_State(REGULATOR_COMMUNICATION_ERROR);
-						break;
-					}
-			    }
-			}
-			while(HAL_I2C_GetError(&hi2c1) == HAL_I2C_ERROR_AF);
-			xSemaphoreGive(xTxMutex_Regulator);
-		}
-}
-
-/**
- * @brief Automatically performs one I2C write and an I2C read to get the value of a register
- * @param pData Pointer to where to store data
- */
-void I2C_Read_Register(uint8_t addr_to_read, uint8_t *pData) {
-		I2C_Transfer((uint8_t *)&addr_to_read, 1);
-		I2C_Receive(pData, 1);
-}
-
-/**
  * @brief Main regulator task
  */
 void vRegulator(void const *pvParameters) {
@@ -320,9 +395,8 @@ void vRegulator(void const *pvParameters) {
 	/* Set Charge Option 0 */
 	Regulator_Set_Charge_Option_0();
 
-	Set_Charge_Voltage(4);
-	Set_Charge_Current(5);
-	Regulator_HI_Z(0);
+	/* Setup the ADC on the Regulator */
+	Regulator_Set_ADC_Option();
 
 	for (;;) {
 
@@ -337,6 +411,16 @@ void vRegulator(void const *pvParameters) {
 			regulator.connected = 0;
 		}
 
+		Set_Charge_Voltage(4);
+		Set_Charge_Current(10);
+		Regulator_HI_Z(0);
+
+		Read_Charge_Status();
+		Regulator_Read_ADC();
+
+		if (regulator.charging_status) {
+
+		}
 
 		vTaskDelay(xDelay);
 	}

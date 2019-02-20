@@ -59,11 +59,11 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32g0xx_hal.h"
-#include "cmsis_os.h"
-
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+#include "cmsis_os.h"
 
 /* USER CODE END Includes */
 

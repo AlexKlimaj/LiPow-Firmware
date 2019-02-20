@@ -17,6 +17,7 @@ extern "C" {
 #include "task.h"
 #include "semphr.h"
 #include "cmsis_os.h"
+#include "adc_interface.h"
 
 
 #define I2C_TIMEOUT					(500 / portTICK_PERIOD_MS)
@@ -29,14 +30,35 @@ extern "C" {
 #define DEVICE_ID_ADDR				0x2F
 #define MAX_CHARGE_VOLTAGE_ADDR		0x04
 #define CHARGE_CURRENT_ADDR			0x02
-#define CHARGE_OPTION_0_ADDR_1		0x01
-#define CHARGE_OPTION_0_ADDR_2		0x00
+#define CHARGE_OPTION_0_ADDR		0x00
 #define MINIMUM_SYSTEM_VOLTAGE_ADDR	0x0D
+#define CHARGE_STATUS_ADDR			0x20
+#define ADC_OPTION_ADDR				0x3A
+#define VBUS_ADC_ADDR				0x27
+#define PSYS_ADC_ADDR				0x26
+#define VSYS_ADC_ADDR				0x2D
+#define VBAT_ADC_ADDR				0x2C
+#define ICHG_ADC_ADDR				0x29
+#define IDCHG_ADC_ADDR				0x28
+#define IIN_ADC_ADDR				0x2B
 
 #define EN_LWPWR					0b0
 #define EN_OOA						0b1
 
+#define CHARGING_ENABLED_MASK		0b00000100
+
+#define VBUS_ADC_LSB				(uint32_t)(0.100 * BATTERY_ADC_MULTIPLIER)
+#define PSYS_ADC_LSB				(uint32_t)(0.012 * BATTERY_ADC_MULTIPLIER)
+#define VSYS_ADC_LSB				(uint32_t)(0.064 * BATTERY_ADC_MULTIPLIER)
+#define VBAT_ADC_LSB				(uint32_t)(0.064 * BATTERY_ADC_MULTIPLIER)
+#define ICHG_ADC_LSB				(uint32_t)(0.064 * BATTERY_ADC_MULTIPLIER)
+#define IDCHG_ADC_LSB				(uint32_t)(0.256 * BATTERY_ADC_MULTIPLIER)
+#define IIN_ADC_LSB					(uint32_t)(0.050 * BATTERY_ADC_MULTIPLIER)
+
 uint8_t Get_Regulator_Connection_State(void);
+uint8_t Get_Regulator_Charging_State(void);
+uint32_t Get_VBUS_ADC_Reading(void);
+uint32_t Get_PSYS_ADC_Reading(void);
 void vRegulator(void const *pvParameters);
 
 /* Used to guard access to the I2C in case messages are sent to the UART from
