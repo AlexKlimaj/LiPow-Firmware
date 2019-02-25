@@ -592,6 +592,12 @@ void vLED_Blinky(void const *pvParameters) {
 
 	uint8_t count = 0;
 
+	HAL_GPIO_WritePin(Red_LED_GPIO_Port, Red_LED_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(Green_LED_GPIO_Port, Green_LED_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(Blue_LED_GPIO_Port, Blue_LED_Pin, GPIO_PIN_RESET);
+
+	vTaskDelay(xDelay*4);
+
 	for (;;) {
 
 		if ( (Get_Charging_State() == 0) && (Get_Balance_Connection_State() == 0) && (Get_Balance_Connection_State() != CONNECTED) && (Get_Error_State() == 0)) {
