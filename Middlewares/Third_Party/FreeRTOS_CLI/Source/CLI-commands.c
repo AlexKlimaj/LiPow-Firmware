@@ -141,6 +141,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			"Charging State              %u\r\n"
 			"Vbus Voltage                %f\r\n"
 			"Psys Voltage                %f\r\n"
+			"Input Current               %f\r\n"
 			"Battery Error State         %u\r\n",
 			battery_voltage_float,
 			cell_voltage_float[0],
@@ -157,6 +158,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			Get_Regulator_Charging_State(),
 			((float)Get_VBUS_ADC_Reading()/BATTERY_ADC_MULTIPLIER),
 			((float)Get_PSYS_ADC_Reading()/BATTERY_ADC_MULTIPLIER),
+			((float)Get_Input_Current_ADC_Reading()/BATTERY_ADC_MULTIPLIER),
 			Get_Error_State());
 
 	/* There is no more data to return after this single string, so return

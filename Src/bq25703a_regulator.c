@@ -86,6 +86,14 @@ uint32_t Get_PSYS_ADC_Reading() {
 }
 
 /**
+ * @brief Gets Input Current that was read in from the ADC on the regulator
+ * @retval Input Current in amps * BATTERY_ADC_MULTIPLIER
+ */
+uint32_t Get_Input_Current_ADC_Reading() {
+	return regulator.input_current;
+}
+
+/**
  * @brief Performs an I2C transfer
  * @param pData Pointer to location of data to transfer
  * @param size Size of data to be transferred
