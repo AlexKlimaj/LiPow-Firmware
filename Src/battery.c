@@ -171,8 +171,11 @@ void Battery_Connection_State()
 
 	Balance_Battery();
 
-	if ((battery_state.xt60_connected == CONNECTED) && (battery_state.balance_port_connected = CONNECTED)){
-		if (Get_Battery_Voltage() < (battery_state.number_of_cells * MAX_CELL_VOLTAGE_TO_ENABLE_CHARGING)) {
+	if ((battery_state.xt60_connected == CONNECTED) && (battery_state.balance_port_connected == CONNECTED)){
+		if ((Get_Battery_Voltage() < (battery_state.number_of_cells * MAX_CELL_VOLTAGE_TO_ENABLE_CHARGING)) && (battery_state.charging_enabled == 0)) {
+			battery_state.charging_enabled = 1;
+		}
+		else if ((Get_Battery_Voltage() < (battery_state.number_of_cells * CELL_CHARGING_HYSTERESIS_V)) && (battery_state.charging_enabled == 1)) {
 			battery_state.charging_enabled = 1;
 		}
 		else {

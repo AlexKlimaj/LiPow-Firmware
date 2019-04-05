@@ -146,6 +146,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			"XT60 Connected               %u\r\n"
 			"Balance Connection State     %u\r\n"
 			"Number of Cells              %u\r\n"
+			"Battery Requires Charging    %u\r\n"
 			"Balancing State              %u\r\n"
 			"Regulator Connection State   %d\r\n"
 			"Charging State               %u\r\n"
@@ -166,6 +167,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			Get_XT60_Connection_State(),
 			Get_Balance_Connection_State(),
 			Get_Number_Of_Cells(),
+			Get_Charging_State(),
 			Get_Balancing_State(),
 			Get_Regulator_Connection_State(),
 			Get_Regulator_Charging_State(),

@@ -22,7 +22,6 @@ struct Regulator {
 	uint16_t max_charge_voltage;
 	uint8_t input_current_limit;
 	uint16_t min_input_voltage_limit;
-	uint32_t psys_voltage;
 	uint32_t vbus_voltage;
 	uint32_t vbat_voltage;
 	uint32_t vsys_voltage;
@@ -75,14 +74,6 @@ uint8_t Get_Regulator_Charging_State() {
  */
 uint32_t Get_VBUS_ADC_Reading() {
 	return regulator.vbus_voltage;
-}
-
-/**
- * @brief Gets PSYS voltage that was read in from the ADC on the regulator
- * @retval PSYS voltage in volts * BATTERY_ADC_MULTIPLIER
- */
-uint32_t Get_PSYS_ADC_Reading() {
-	return regulator.psys_voltage;
 }
 
 /**
@@ -279,9 +270,6 @@ void Regulator_Read_ADC() {
 	I2C_Read_Register(IIN_ADC_ADDR, (uint8_t *) &temp, 1);
 	regulator.input_current = temp * IIN_ADC_SCALE;
 
-	I2C_Read_Register(PSYS_ADC_ADDR, (uint8_t *) &temp, 1);
-	regulator.psys_voltage = temp * PSYS_ADC_SCALE;
-
 	I2C_Read_Register(VBUS_ADC_ADDR, (uint8_t *) &temp, 1);
 	regulator.vbus_voltage = (temp * VBUS_ADC_SCALE) + VBUS_ADC_OFFSET;
 }
@@ -427,15 +415,24 @@ void vRegulator(void const *pvParameters) {
 			regulator.connected = 0;
 		}
 
-		Set_Charge_Voltage(2);
-		Set_Charge_Current(15);
-		Regulator_HI_Z(0);
+		if ((Get_Charging_State() == 1) && (Get_Error_State() == 0)) {
+			Set_Charge_Voltage(Get_Number_Of_Cells());
+			Set_Charge_Current(30); //Hardcoded for now. Will need to be determined with an algorithm once USB PD is implemented
+			Regulator_HI_Z(0);
+		}
+		else {
+			Regulator_HI_Z(1);
+			Set_Charge_Voltage(0);
+			Set_Charge_Current(0);
+		}
 
 		Read_Charge_Status();
 		Regulator_Read_ADC();
 
-		if (regulator.charging_status) {
-
+		if (((regulator.charging_status == 1) && (Get_Charging_State() == 0)) || (Get_Error_State() != 0)) {
+			Regulator_HI_Z(1);
+			Set_Charge_Voltage(0);
+			Set_Charge_Current(0);
 		}
 
 		vTaskDelay(xDelay);

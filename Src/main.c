@@ -600,7 +600,7 @@ void vLED_Blinky(void const *pvParameters) {
 
 	for (;;) {
 
-		if ( (Get_Charging_State() == 0) && (Get_Balance_Connection_State() == 0) && (Get_Balance_Connection_State() != CONNECTED) && (Get_Error_State() == 0)) {
+		if ( (Get_Balance_Connection_State() != CONNECTED) && (Get_Error_State() == 0)) {
 			switch (count) {
 			case 0:
 				HAL_GPIO_WritePin(Red_LED_GPIO_Port, Red_LED_Pin, GPIO_PIN_SET);
@@ -648,11 +648,16 @@ void vLED_Blinky(void const *pvParameters) {
 
 			if (Get_Regulator_Charging_State() == 1) {
 				HAL_GPIO_WritePin(Red_LED_GPIO_Port, Red_LED_Pin, GPIO_PIN_RESET);
-				HAL_GPIO_WritePin(Green_LED_GPIO_Port, Green_LED_Pin, GPIO_PIN_SET);
 			}
 			else {
 				HAL_GPIO_WritePin(Red_LED_GPIO_Port, Red_LED_Pin, GPIO_PIN_SET);
+			}
+
+			if ((Get_Regulator_Charging_State() == 0) && (Get_Balancing_State() == 0)) {
 				HAL_GPIO_WritePin(Green_LED_GPIO_Port, Green_LED_Pin, GPIO_PIN_RESET);
+			}
+			else {
+				HAL_GPIO_WritePin(Green_LED_GPIO_Port, Green_LED_Pin, GPIO_PIN_SET);
 			}
 		}
 
