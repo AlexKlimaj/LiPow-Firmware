@@ -113,8 +113,6 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 	(void) xWriteBufferLen;
 	configASSERT(pcWriteBuffer);
 
-	float battery_voltage_float = ((float)Get_Battery_Voltage()/BATTERY_ADC_MULTIPLIER);
-
 	float cell_voltage_float[4];
 	for (int i = 0; i < 4; i++) {
 		cell_voltage_float[i] = ((float)Get_Cell_Voltage(i)/BATTERY_ADC_MULTIPLIER);
@@ -122,28 +120,43 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 
 	float vdda_float = (float)Get_VDDa()/BATTERY_ADC_MULTIPLIER;
 
+	float battery_voltage = ((float)Get_Battery_Voltage()/BATTERY_ADC_MULTIPLIER);
+	float charge_current = ((float)Get_Charge_Current_ADC_Reading()/BATTERY_ADC_MULTIPLIER);
+	float output_power = battery_voltage * charge_current;
+
+	float vbus_voltage = ((float)Get_VBUS_ADC_Reading()/BATTERY_ADC_MULTIPLIER);
+	float input_current = ((float)Get_Input_Current_ADC_Reading()/BATTERY_ADC_MULTIPLIER);
+	float input_power = vbus_voltage * input_current;
+
+	float efficiency = output_power/input_power;
+
 	/* Generate a table of stats. */
 	sprintf(pcWriteBuffer,
 			"Variable                    Value\r\n"
 			"************************************************\r\n"
-			"Battery Voltage (V)         %f\r\n"
-			"Cell One Voltage (V)        %f\r\n"
-			"Cell Two Voltage (V)        %f\r\n"
-			"Cell Three Voltage (V)      %f\r\n"
-			"Cell Four Voltage (V)       %f\r\n"
-			"MCU Temperature (C)         %d\r\n"
-			"VDDa (V)                    %f\r\n"
-			"XT60 Connected              %u\r\n"
-			"Balance Connection State    %u\r\n"
-			"Number of Cells             %u\r\n"
-			"Balancing State             %u\r\n"
-			"Regulator Connection State  %d\r\n"
-			"Charging State              %u\r\n"
-			"Vbus Voltage                %f\r\n"
-			"Psys Voltage                %f\r\n"
-			"Input Current               %f\r\n"
-			"Battery Error State         %u\r\n",
-			battery_voltage_float,
+			"Battery Voltage (V)          %.2f\r\n"
+			"Charging Current (A)         %.2f\r\n"
+			"Charging Power (W)           %.2f\r\n"
+			"Cell One Voltage (V)         %.2f\r\n"
+			"Cell Two Voltage (V)         %.2f\r\n"
+			"Cell Three Voltage (V)       %.2f\r\n"
+			"Cell Four Voltage (V)        %.2f\r\n"
+			"MCU Temperature (C)          %d\r\n"
+			"VDDa (V)                     %.2f\r\n"
+			"XT60 Connected               %u\r\n"
+			"Balance Connection State     %u\r\n"
+			"Number of Cells              %u\r\n"
+			"Balancing State              %u\r\n"
+			"Regulator Connection State   %d\r\n"
+			"Charging State               %u\r\n"
+			"Vbus Voltage (V)             %.2f\r\n"
+			"Input Current (A)            %.2f\r\n"
+			"Input Power (W)              %.2f\r\n"
+			"Efficiency (OutputW/InputW)  %.3f\r\n"
+			"Battery Error State          %u\r\n",
+			battery_voltage,
+			charge_current,
+			output_power,
 			cell_voltage_float[0],
 			cell_voltage_float[1],
 			cell_voltage_float[2],
@@ -156,9 +169,10 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			Get_Balancing_State(),
 			Get_Regulator_Connection_State(),
 			Get_Regulator_Charging_State(),
-			((float)Get_VBUS_ADC_Reading()/BATTERY_ADC_MULTIPLIER),
-			((float)Get_PSYS_ADC_Reading()/BATTERY_ADC_MULTIPLIER),
-			((float)Get_Input_Current_ADC_Reading()/BATTERY_ADC_MULTIPLIER),
+			vbus_voltage,
+			input_current,
+			input_power,
+			efficiency,
 			Get_Error_State());
 
 	/* There is no more data to return after this single string, so return

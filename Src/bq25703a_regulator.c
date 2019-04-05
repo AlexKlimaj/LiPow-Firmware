@@ -94,6 +94,14 @@ uint32_t Get_Input_Current_ADC_Reading() {
 }
 
 /**
+ * @brief Gets Charge Current that was read in from the ADC on the regulator
+ * @retval Charge Current in amps * BATTERY_ADC_MULTIPLIER
+ */
+uint32_t Get_Charge_Current_ADC_Reading() {
+	return regulator.charge_current;
+}
+
+/**
  * @brief Performs an I2C transfer
  * @param pData Pointer to location of data to transfer
  * @param size Size of data to be transferred
@@ -419,8 +427,8 @@ void vRegulator(void const *pvParameters) {
 			regulator.connected = 0;
 		}
 
-		Set_Charge_Voltage(4);
-		Set_Charge_Current(10);
+		Set_Charge_Voltage(2);
+		Set_Charge_Current(15);
 		Regulator_HI_Z(0);
 
 		Read_Charge_Status();
