@@ -415,10 +415,19 @@ void vRegulator(void const *pvParameters) {
 			regulator.connected = 0;
 		}
 
-		if ((Get_Charging_State() == 1) && (Get_Error_State() == 0)) {
-			Set_Charge_Voltage(Get_Number_Of_Cells());
-			Set_Charge_Current(30); //Hardcoded for now. Will need to be determined with an algorithm once USB PD is implemented
-			Regulator_HI_Z(0);
+		if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0)) {
+
+			if (regulator.charging_status == 0) {
+				Set_Charge_Voltage(Get_Number_Of_Cells());
+				Set_Charge_Current(20); //Hardcoded for now. Will need to be determined with an algorithm once USB PD is implemented
+				vTaskDelay(xDelay*4);
+				Regulator_HI_Z(0);
+			}
+			else {
+				Set_Charge_Voltage(Get_Number_Of_Cells());
+				Set_Charge_Current(50); //Hardcoded for now. Will need to be determined with an algorithm once USB PD is implemented
+			}
+
 		}
 		else {
 			Regulator_HI_Z(1);
@@ -428,12 +437,6 @@ void vRegulator(void const *pvParameters) {
 
 		Read_Charge_Status();
 		Regulator_Read_ADC();
-
-		if (((regulator.charging_status == 1) && (Get_Charging_State() == 0)) || (Get_Error_State() != 0)) {
-			Regulator_HI_Z(1);
-			Set_Charge_Voltage(0);
-			Set_Charge_Current(0);
-		}
 
 		vTaskDelay(xDelay);
 	}

@@ -18,7 +18,7 @@ struct Battery {
 	uint8_t balance_port_connected;
 	uint8_t number_of_cells;
 	uint8_t balancing_enabled;
-	uint8_t charging_enabled;
+	uint8_t requires_charging;
 };
 
 /* Private variables ---------------------------------------------------------*/
@@ -172,15 +172,15 @@ void Battery_Connection_State()
 	Balance_Battery();
 
 	if ((battery_state.xt60_connected == CONNECTED) && (battery_state.balance_port_connected == CONNECTED)){
-		if ((Get_Battery_Voltage() < (battery_state.number_of_cells * MAX_CELL_VOLTAGE_TO_ENABLE_CHARGING)) && (battery_state.charging_enabled == 0)) {
-			battery_state.charging_enabled = 1;
-		}
-		else if ((Get_Battery_Voltage() < (battery_state.number_of_cells * CELL_CHARGING_HYSTERESIS_V)) && (battery_state.charging_enabled == 1)) {
-			battery_state.charging_enabled = 1;
+		if (Get_Battery_Voltage() < (battery_state.number_of_cells * CELL_VOLTAGE_TO_ENABLE_CHARGING)) {
+			battery_state.requires_charging = 1;
 		}
 		else {
-			battery_state.charging_enabled = 0;
+			battery_state.requires_charging = 0;
 		}
+	}
+	else {
+		battery_state.requires_charging = 0;
 	}
 }
 
@@ -251,11 +251,11 @@ uint8_t Get_Balancing_State()
 
 /**
  * @brief Returns the state of charging
- * @retval uint8_t 1 if charging enabled or 0 if not enabled
+ * @retval uint8_t 1 if charging is required or 0 if not required
  */
-uint8_t Get_Charging_State()
+uint8_t Get_Requires_Charging_State()
 {
-	return battery_state.charging_enabled;
+	return battery_state.requires_charging;
 }
 
 /**
