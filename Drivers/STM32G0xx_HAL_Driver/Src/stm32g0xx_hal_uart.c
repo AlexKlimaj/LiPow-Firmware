@@ -195,9 +195,6 @@
 /** @addtogroup UART_Private_Functions
   * @{
   */
-#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-void UART_InitCallbacksToDefault(UART_HandleTypeDef *huart);
-#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 static void UART_EndTxTransfer(UART_HandleTypeDef *huart);
 static void UART_EndRxTransfer(UART_HandleTypeDef *huart);
 static void UART_DMATransmitCplt(DMA_HandleTypeDef *hdma);

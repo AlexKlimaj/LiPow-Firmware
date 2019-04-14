@@ -419,13 +419,13 @@ void vRegulator(void const *pvParameters) {
 
 			if (regulator.charging_status == 0) {
 				Set_Charge_Voltage(Get_Number_Of_Cells());
-				Set_Charge_Current(20); //Hardcoded for now. Will need to be determined with an algorithm once USB PD is implemented
+				Set_Charge_Current(1); //Hardcoded for now. Will need to be determined with an algorithm once USB PD is implemented
 				vTaskDelay(xDelay*4);
 				Regulator_HI_Z(0);
 			}
 			else {
 				Set_Charge_Voltage(Get_Number_Of_Cells());
-				Set_Charge_Current(50); //Hardcoded for now. Will need to be determined with an algorithm once USB PD is implemented
+				Set_Charge_Current(3); //Hardcoded for now. Will need to be determined with an algorithm once USB PD is implemented
 			}
 
 		}

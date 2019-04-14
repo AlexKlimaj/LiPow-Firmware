@@ -113,6 +113,19 @@ typedef struct
 } FLASH_OBProgramInitTypeDef;
 
 /**
+* @brief  FLASH handle Structure definition
+*/
+typedef struct
+{
+  HAL_LockTypeDef   Lock;              /* FLASH locking object */
+  uint32_t          ErrorCode;         /* FLASH error code */
+  uint32_t          ProcedureOnGoing;  /* Internal variable to indicate which procedure is ongoing or not in IT context */
+  uint32_t          Address;           /* Internal variable to save address selected for program in IT context */
+  uint32_t          Page;              /* Internal variable to define the current page which is erasing in IT context */
+  uint32_t          NbPagesToErase;    /* Internal variable to save the remaining pages to erase in IT context */
+} FLASH_ProcessTypeDef;
+
+/**
   * @}
   */
 
@@ -227,9 +240,8 @@ typedef struct
 /** @defgroup FLASH_Type_Program FLASH Program Type
   * @{
   */
-#define FLASH_TYPEPROGRAM_DOUBLEWORD    FLASH_CR_PG     /*!< Program a double-word (64-bit) at a specified address.*/
-#define FLASH_TYPEPROGRAM_FAST          FLASH_CR_FSTPG  /*!< Fast program a 32 row double-word (64-bit) at a specified address.
-                                                             And another 32 row double-word (64-bit) will be programmed */
+#define FLASH_TYPEPROGRAM_DOUBLEWORD    FLASH_CR_PG     /*!< Program a double-word (64-bit) at a specified address */
+#define FLASH_TYPEPROGRAM_FAST          FLASH_CR_FSTPG  /*!< Fast program a 32 row double-word (64-bit) at a specified address */
 /**
   * @}
   */
@@ -250,7 +262,7 @@ typedef struct
 #if defined(STM32G071xx) || defined(STM32G081xx)
 #define OPTIONBYTE_ALL                  (OPTIONBYTE_WRP  | OPTIONBYTE_RDP | OPTIONBYTE_USER | \
                                         OPTIONBYTE_PCROP | OPTIONBYTE_SEC)                   /*!< All option byte configuration */
-#elif defined (STM32G070xx)
+#elif defined STM32G070xx
 #define OPTIONBYTE_ALL                  (OPTIONBYTE_WRP  | OPTIONBYTE_RDP | OPTIONBYTE_USER) /*!< All option byte configuration */
 #endif
 /**
@@ -309,7 +321,7 @@ typedef struct
                                          OB_USER_IWDG_STOP        | OB_USER_IWDG_STDBY | OB_USER_WWDG_SW   | \
                                          OB_USER_RAM_PARITY_CHECK | OB_USER_nBOOT_SEL  | OB_USER_nBOOT1    | \
                                          OB_USER_nBOOT0           | OB_USER_NRST_MODE  | OB_USER_INPUT_RESET_HOLDER)   /*!< all option bits */
-#elif defined (STM32G070xx)
+#elif defined STM32G070xx
 #define OB_USER_ALL                     (                                                OB_USER_nRST_STOP | \
                                          OB_USER_nRST_STDBY                            | OB_USER_IWDG_SW   | \
                                          OB_USER_IWDG_STOP        | OB_USER_IWDG_STDBY | OB_USER_WWDG_SW   | \
@@ -579,10 +591,10 @@ typedef struct
   * @brief  Enable the specified FLASH interrupt.
   * @param  __INTERRUPT__ FLASH interrupt
   *         This parameter can be any combination of the following values:
-  *     @arg FLASH_IT_EOP: End of FLASH Operation Interrupt
-  *     @arg FLASH_IT_OPERR: Error Interrupt
-  *     @arg FLASH_IT_RDERR: PCROP Read Error Interrupt(*)
-  *     @arg FLASH_IT_ECCC: ECC Correction Interrupt
+  *     @arg @ref FLASH_IT_EOP End of FLASH Operation Interrupt
+  *     @arg @ref FLASH_IT_OPERR Error Interrupt
+  *     @arg @ref FLASH_IT_RDERR PCROP Read Error Interrupt(*)
+  *     @arg @ref FLASH_IT_ECCC ECC Correction Interrupt
   * @note (*) availability depends on devices
   * @retval none
   */
@@ -594,10 +606,10 @@ typedef struct
   * @brief  Disable the specified FLASH interrupt.
   * @param  __INTERRUPT__ FLASH interrupt
   *         This parameter can be any combination of the following values:
-  *     @arg FLASH_IT_EOP: End of FLASH Operation Interrupt
-  *     @arg FLASH_IT_OPERR: Error Interrupt
-  *     @arg FLASH_IT_RDERR: PCROP Read Error Interrupt(*)
-  *     @arg FLASH_IT_ECCC: ECC Correction Interrupt
+  *     @arg @ref FLASH_IT_EOP End of FLASH Operation Interrupt
+  *     @arg @ref FLASH_IT_OPERR Error Interrupt
+  *     @arg @ref FLASH_IT_RDERR PCROP Read Error Interrupt(*)
+  *     @arg @ref FLASH_IT_ECCC ECC Correction Interrupt
   * @note (*) availability depends on devices
   * @retval none
   */
@@ -609,21 +621,21 @@ typedef struct
   * @brief  Check whether the specified FLASH flag is set or not.
   * @param  __FLAG__ specifies the FLASH flag to check.
   *   This parameter can be one of the following values:
-  *     @arg FLASH_FLAG_EOP: FLASH End of Operation flag
-  *     @arg FLASH_FLAG_OPERR: FLASH Operation error flag
-  *     @arg FLASH_FLAG_PROGERR: FLASH Programming error flag
-  *     @arg FLASH_FLAG_WRPERR: FLASH Write protection error flag
-  *     @arg FLASH_FLAG_PGAERR: FLASH Programming alignment error flag
-  *     @arg FLASH_FLAG_SIZERR: FLASH Size error flag
-  *     @arg FLASH_FLAG_PGSERR: FLASH Programming sequence error flag
-  *     @arg FLASH_FLAG_MISERR: FLASH Fast programming data miss error flag
-  *     @arg FLASH_FLAG_FASTERR: FLASH Fast programming error flag
-  *     @arg FLASH_FLAG_RDERR: FLASH PCROP read  error flag(*)
-  *     @arg FLASH_FLAG_OPTVERR: FLASH Option validity error flag
-  *     @arg FLASH_FLAG_BSY: FLASH write/erase operations in progress flag
-  *     @arg FLASH_FLAG_CFGBSY: FLASH configuration is busy : program or erase setting are used.
-  *     @arg FLASH_FLAG_ECCC: FLASH one ECC error has been detected and corrected
-  *     @arg FLASH_FLAG_ECCD: FLASH two ECC errors have been detected
+  *     @arg @ref FLASH_FLAG_EOP FLASH End of Operation flag
+  *     @arg @ref FLASH_FLAG_OPERR FLASH Operation error flag
+  *     @arg @ref FLASH_FLAG_PROGERR FLASH Programming error flag
+  *     @arg @ref FLASH_FLAG_WRPERR FLASH Write protection error flag
+  *     @arg @ref FLASH_FLAG_PGAERR FLASH Programming alignment error flag
+  *     @arg @ref FLASH_FLAG_SIZERR FLASH Size error flag
+  *     @arg @ref FLASH_FLAG_PGSERR FLASH Programming sequence error flag
+  *     @arg @ref FLASH_FLAG_MISERR FLASH Fast programming data miss error flag
+  *     @arg @ref FLASH_FLAG_FASTERR FLASH Fast programming error flag
+  *     @arg @ref FLASH_FLAG_RDERR FLASH PCROP read  error flag(*)
+  *     @arg @ref FLASH_FLAG_OPTVERR FLASH Option validity error flag
+  *     @arg @ref FLASH_FLAG_BSY FLASH write/erase operations in progress flag
+  *     @arg @ref FLASH_FLAG_CFGBSY FLASH configuration is busy : program or erase setting are used.
+  *     @arg @ref FLASH_FLAG_ECCC FLASH one ECC error has been detected and corrected
+  *     @arg @ref FLASH_FLAG_ECCD FLASH two ECC errors have been detected
   * @note (*) availability depends on devices
   * @retval The new state of FLASH_FLAG (SET or RESET).
   */
@@ -635,20 +647,20 @@ typedef struct
   * @brief  Clear the FLASHs pending flags.
   * @param  __FLAG__ specifies the FLASH flags to clear.
   *   This parameter can be any combination of the following values:
-  *     @arg FLASH_FLAG_EOP: FLASH End of Operation flag
-  *     @arg FLASH_FLAG_OPERR: FLASH Operation error flag
-  *     @arg FLASH_FLAG_PROGERR: FLASH Programming error flag
-  *     @arg FLASH_FLAG_WRPERR: FLASH Write protection error flag
-  *     @arg FLASH_FLAG_PGAERR: FLASH Programming alignment error flag
-  *     @arg FLASH_FLAG_SIZERR: FLASH Size error flag
-  *     @arg FLASH_FLAG_PGSERR: FLASH Programming sequence error flag
-  *     @arg FLASH_FLAG_MISERR: FLASH Fast programming data miss error flag
-  *     @arg FLASH_FLAG_FASTERR: FLASH Fast programming error flag
-  *     @arg FLASH_FLAG_RDERR: FLASH PCROP read  error flag
-  *     @arg FLASH_FLAG_OPTVERR: FLASH Option validity error flag
-  *     @arg FLASH_FLAG_ECCC: FLASH one ECC error has been detected and corrected
-  *     @arg FLASH_FLAG_ECCD: FLASH two ECC errors have been detected
-  *     @arg FLASH_FLAG_ALL_ERRORS: FLASH All errors flags
+  *     @arg @ref FLASH_FLAG_EOP FLASH End of Operation flag
+  *     @arg @ref FLASH_FLAG_OPERR FLASH Operation error flag
+  *     @arg @ref FLASH_FLAG_PROGERR FLASH Programming error flag
+  *     @arg @ref FLASH_FLAG_WRPERR FLASH Write protection error flag
+  *     @arg @ref FLASH_FLAG_PGAERR FLASH Programming alignment error flag
+  *     @arg @ref FLASH_FLAG_SIZERR FLASH Size error flag
+  *     @arg @ref FLASH_FLAG_PGSERR FLASH Programming sequence error flag
+  *     @arg @ref FLASH_FLAG_MISERR FLASH Fast programming data miss error flag
+  *     @arg @ref FLASH_FLAG_FASTERR FLASH Fast programming error flag
+  *     @arg @ref FLASH_FLAG_RDERR FLASH PCROP read  error flag
+  *     @arg @ref FLASH_FLAG_OPTVERR FLASH Option validity error flag
+  *     @arg @ref FLASH_FLAG_ECCC FLASH one ECC error has been detected and corrected
+  *     @arg @ref FLASH_FLAG_ECCD FLASH two ECC errors have been detected
+  *     @arg @ref FLASH_FLAG_ALL_ERRORS FLASH All errors flags
   * @retval None
   */
 #define __HAL_FLASH_CLEAR_FLAG(__FLAG__)        do { if(((__FLAG__) & (FLASH_FLAG_ECCC | FLASH_FLAG_ECCD)) != 0U) { SET_BIT(FLASH->ECCR, ((__FLAG__) & (FLASH_FLAG_ECCC | FLASH_FLAG_ECCD))); }\
@@ -660,6 +672,14 @@ typedef struct
 
 /* Include FLASH HAL Extended module */
 #include "stm32g0xx_hal_flash_ex.h"
+/* Exported variables --------------------------------------------------------*/
+/** @defgroup FLASH_Exported_Variables FLASH Exported Variables
+  * @{
+  */
+extern FLASH_ProcessTypeDef pFlash;
+/**
+  * @}
+  */
 
 /* Exported functions --------------------------------------------------------*/
 /** @addtogroup FLASH_Exported_Functions
@@ -709,19 +729,7 @@ uint32_t HAL_FLASH_GetError(void);
 /** @defgroup FLASH_Private_types FLASH Private Types
   * @{
   */
-/**
-* @brief  FLASH handle Structure definition
-*/
-typedef struct
-{
-  HAL_LockTypeDef   Lock;              /* FLASH locking object */
-  uint32_t          ErrorCode;         /* FLASH error code */
-  uint32_t          ProcedureOnGoing;  /* Internal variable to indicate which procedure is ongoing or not in IT context */
-  uint32_t          Address;           /* Internal variable to save address selected for program in IT context */
-  uint32_t          Page;              /* Internal variable to define the current page which is erasing in IT context */
-  uint32_t          NbPagesToErase;    /* Internal variable to save the remaining pages to erase in IT context */
-} FLASH_ProcessTypeDef;
-
+HAL_StatusTypeDef  FLASH_WaitForLastOperation(uint32_t Timeout);
 /**
   * @}
   */

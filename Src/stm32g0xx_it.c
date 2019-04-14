@@ -90,7 +90,7 @@ extern TIM_HandleTypeDef htim2;
 /* USER CODE END EV */
 
 /******************************************************************************/
-/*           Cortex Processor Interruption and Exception Handlers          */ 
+/*           Cortex-M0+ Processor Interruption and Exception Handlers          */ 
 /******************************************************************************/
 /**
   * @brief This function handles Non maskable interrupt.
@@ -126,6 +126,19 @@ void HardFault_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32g0xx.s).                    */
 /******************************************************************************/
+
+/**
+  * @brief This function handles UCPD1 and UCPD2 interrupts / UCPD1 and UCPD2 wake-up interrupts through EXTI lines 32 and 33.
+  */
+void UCPD1_2_IRQHandler(void)
+{
+  /* USER CODE BEGIN UCPD1_2_IRQn 0 */
+
+  /* USER CODE END UCPD1_2_IRQn 0 */
+  /* USER CODE BEGIN UCPD1_2_IRQn 1 */
+
+  /* USER CODE END UCPD1_2_IRQn 1 */
+}
 
 /**
   * @brief This function handles DMA1 channel 1 interrupt.

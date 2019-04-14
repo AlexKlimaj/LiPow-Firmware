@@ -74,9 +74,6 @@
 /** @defgroup UARTEx_Private_Functions UARTEx Private Functions
   * @{
   */
-#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-extern void UART_InitCallbacksToDefault(UART_HandleTypeDef *huart);
-#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 static void UARTEx_Wakeup_AddressConfig(UART_HandleTypeDef *huart, UART_WakeUpTypeDef WakeUpSelection);
 static void UARTEx_SetNbDataToProcess(UART_HandleTypeDef *huart);
 /**

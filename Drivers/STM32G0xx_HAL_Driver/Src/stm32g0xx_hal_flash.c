@@ -108,7 +108,6 @@
 /**
   * @brief  Variable used for Program/Erase sectors under interruption
   */
-extern FLASH_ProcessTypeDef pFlash;
 FLASH_ProcessTypeDef pFlash  = {.Lock = HAL_UNLOCKED, \
                                 .ErrorCode = HAL_FLASH_ERROR_NONE, \
                                 .ProcedureOnGoing = FLASH_TYPENONE, \
@@ -123,8 +122,6 @@ FLASH_ProcessTypeDef pFlash  = {.Lock = HAL_UNLOCKED, \
 /** @defgroup FLASH_Private_Functions FLASH Private Functions
  * @{
  */
-HAL_StatusTypeDef    FLASH_WaitForLastOperation(uint32_t Timeout);
-extern void          FLASH_PageErase(uint32_t Page);
 static void          FLASH_Program_DoubleWord(uint32_t Address, uint64_t Data);
 static void          FLASH_Program_Fast(uint32_t Address, uint32_t DataAddress);
 /**
@@ -662,8 +659,14 @@ static void FLASH_Program_DoubleWord(uint32_t Address, uint64_t Data)
   /* Set PG bit */
   SET_BIT(FLASH->CR, FLASH_CR_PG);
 
-  /* Program the double word */
+  /* Program first word */ 
   *(uint32_t *)Address = (uint32_t)Data;
+
+  /* Barrier to ensure programming is performed in 2 steps, in right order
+    (independently of compiler optimization behavior) */
+  __ISB();
+
+  /* Program second word */  
   *(uint32_t *)(Address + 4u) = (uint32_t)(Data >> 32u);
 }
 

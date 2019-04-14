@@ -514,7 +514,7 @@ __weak void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
   UNUSED(GPIO_Pin);
 
   /* NOTE: This function should not be modified, when the callback is needed,
-           the HAL_GPIO_EXTI_Callback could be implemented in the user file
+           the HAL_GPIO_EXTI_Rising_Callback could be implemented in the user file
    */
 }
 
@@ -529,7 +529,7 @@ __weak void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
   UNUSED(GPIO_Pin);
 
   /* NOTE: This function should not be modified, when the callback is needed,
-           the HAL_GPIO_EXTI_Callback could be implemented in the user file
+           the HAL_GPIO_EXTI_Falling_Callback could be implemented in the user file
    */
 }
 

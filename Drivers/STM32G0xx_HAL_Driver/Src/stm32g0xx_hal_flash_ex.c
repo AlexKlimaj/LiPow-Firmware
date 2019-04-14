@@ -77,7 +77,7 @@
   */
 
 /** @defgroup FLASHEx FLASHEx
-  * @brief FALSH Extended HAL module driver
+  * @brief FLASH Extended HAL module driver
   * @{
   */
 
@@ -87,20 +87,10 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-/** @defgroup FLASHEx_Private_Variables FLASHEx Private Variables
- * @{
- */
-extern FLASH_ProcessTypeDef pFlash;
-/**
-  * @}
-  */
-
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup FLASHEx_Private_Functions FLASHEx Private Functions
  * @{
  */
-extern HAL_StatusTypeDef  FLASH_WaitForLastOperation(uint32_t Timeout);
-void                      FLASH_PageErase(uint32_t Page);
 static void               FLASH_MassErase(void);
 void                      FLASH_FlushCaches(void);
 static void               FLASH_OB_WRPConfig(uint32_t WRPArea, uint32_t WRPStartOffset, uint32_t WRDPEndOffset);

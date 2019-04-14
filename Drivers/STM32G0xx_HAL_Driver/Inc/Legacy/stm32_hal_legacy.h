@@ -970,6 +970,7 @@
 #if defined(STM32F3)
 #define IS_TIM_HALL_INTERFACE_INSTANCE   IS_TIM_HALL_SENSOR_INTERFACE_INSTANCE
 #endif
+
 /**
   * @}
   */
@@ -1249,7 +1250,7 @@
 
 #define HAL_I2CFastModePlusConfig(SYSCFG_I2CFastModePlus, cmd) (((cmd)==ENABLE)? HAL_I2CEx_EnableFastModePlus(SYSCFG_I2CFastModePlus): HAL_I2CEx_DisableFastModePlus(SYSCFG_I2CFastModePlus))
 
-#if defined(STM32H7) || defined(STM32G0)
+#if defined(STM32H7) || defined(STM32WB) || defined(STM32G0) || defined(STM32F4) || defined(STM32F7)
 #define HAL_I2C_Master_Sequential_Transmit_IT  HAL_I2C_Master_Seq_Transmit_IT
 #define HAL_I2C_Master_Sequential_Receive_IT   HAL_I2C_Master_Seq_Receive_IT
 #define HAL_I2C_Slave_Sequential_Transmit_IT   HAL_I2C_Slave_Seq_Transmit_IT
@@ -1258,7 +1259,18 @@
 #define HAL_I2C_Master_Sequential_Receive_DMA  HAL_I2C_Master_Seq_Receive_DMA
 #define HAL_I2C_Slave_Sequential_Transmit_DMA  HAL_I2C_Slave_Seq_Transmit_DMA
 #define HAL_I2C_Slave_Sequential_Receive_DMA   HAL_I2C_Slave_Seq_Receive_DMA
-#endif /* STM32H7 || STM32G0 */
+#endif /* STM32H7 || STM32WB  || STM32G0 || STM32F4 || STM32F7 */
+
+#if defined(STM32F4)
+#define HAL_FMPI2C_Master_Sequential_Transmit_IT  HAL_FMPI2C_Master_Seq_Transmit_IT
+#define HAL_FMPI2C_Master_Sequential_Receive_IT   HAL_FMPI2C_Master_Seq_Receive_IT
+#define HAL_FMPI2C_Slave_Sequential_Transmit_IT   HAL_FMPI2C_Slave_Seq_Transmit_IT
+#define HAL_FMPI2C_Slave_Sequential_Receive_IT    HAL_FMPI2C_Slave_Seq_Receive_IT
+#define HAL_FMPI2C_Master_Sequential_Transmit_DMA HAL_FMPI2C_Master_Seq_Transmit_DMA
+#define HAL_FMPI2C_Master_Sequential_Receive_DMA  HAL_FMPI2C_Master_Seq_Receive_DMA
+#define HAL_FMPI2C_Slave_Sequential_Transmit_DMA  HAL_FMPI2C_Slave_Seq_Transmit_DMA
+#define HAL_FMPI2C_Slave_Sequential_Receive_DMA   HAL_FMPI2C_Slave_Seq_Receive_DMA
+#endif /* STM32F4 */
  /**
   * @}
   */
@@ -1338,14 +1350,14 @@
 #define HAL_TIM_DMAError                                TIM_DMAError
 #define HAL_TIM_DMACaptureCplt                          TIM_DMACaptureCplt
 #define HAL_TIMEx_DMACommutationCplt                    TIMEx_DMACommutationCplt
-#if defined(STM32H7) || defined(STM32G0) || defined(STM32F7) || defined(STM32F4)
+#if defined(STM32H7) || defined(STM32G0) || defined(STM32F7) || defined(STM32F4) || defined(STM32L0)
 #define HAL_TIM_SlaveConfigSynchronization              HAL_TIM_SlaveConfigSynchro
 #define HAL_TIM_SlaveConfigSynchronization_IT           HAL_TIM_SlaveConfigSynchro_IT
 #define HAL_TIMEx_CommutationCallback                   HAL_TIMEx_CommutCallback
 #define HAL_TIMEx_ConfigCommutationEvent                HAL_TIMEx_ConfigCommutEvent
 #define HAL_TIMEx_ConfigCommutationEvent_IT             HAL_TIMEx_ConfigCommutEvent_IT
 #define HAL_TIMEx_ConfigCommutationEvent_DMA            HAL_TIMEx_ConfigCommutEvent_DMA
-#endif /* STM32H7 || STM32G0 || STM32F7 || STM32F4 */
+#endif /* STM32H7 || STM32G0 || STM32F7 || STM32F4  || STM32L0 */
 /**
   * @}
   */
@@ -2234,6 +2246,20 @@
 #define __QSPI_FORCE_RESET __HAL_RCC_QSPI_FORCE_RESET
 #define __QSPI_RELEASE_RESET __HAL_RCC_QSPI_RELEASE_RESET
 
+#if defined(STM32WB)
+#define __HAL_RCC_QSPI_CLK_DISABLE            __HAL_RCC_QUADSPI_CLK_DISABLE
+#define __HAL_RCC_QSPI_CLK_ENABLE             __HAL_RCC_QUADSPI_CLK_ENABLE
+#define __HAL_RCC_QSPI_CLK_SLEEP_DISABLE      __HAL_RCC_QUADSPI_CLK_SLEEP_DISABLE
+#define __HAL_RCC_QSPI_CLK_SLEEP_ENABLE       __HAL_RCC_QUADSPI_CLK_SLEEP_ENABLE
+#define __HAL_RCC_QSPI_FORCE_RESET            __HAL_RCC_QUADSPI_FORCE_RESET
+#define __HAL_RCC_QSPI_RELEASE_RESET          __HAL_RCC_QUADSPI_RELEASE_RESET
+#define __HAL_RCC_QSPI_IS_CLK_ENABLED         __HAL_RCC_QUADSPI_IS_CLK_ENABLED
+#define __HAL_RCC_QSPI_IS_CLK_DISABLED        __HAL_RCC_QUADSPI_IS_CLK_DISABLED
+#define __HAL_RCC_QSPI_IS_CLK_SLEEP_ENABLED   __HAL_RCC_QUADSPI_IS_CLK_SLEEP_ENABLED
+#define __HAL_RCC_QSPI_IS_CLK_SLEEP_DISABLED  __HAL_RCC_QUADSPI_IS_CLK_SLEEP_DISABLED
+#define QSPI_IRQHandler QUADSPI_IRQHandler
+#endif /* __HAL_RCC_QUADSPI_CLK_ENABLE */
+
 #define __RNG_CLK_DISABLE __HAL_RCC_RNG_CLK_DISABLE
 #define __RNG_CLK_ENABLE __HAL_RCC_RNG_CLK_ENABLE
 #define __RNG_CLK_SLEEP_DISABLE __HAL_RCC_RNG_CLK_SLEEP_DISABLE
@@ -2904,7 +2930,7 @@
 
 #if defined(STM32L4)
 #define RCC_RTCCLKSOURCE_NO_CLK     RCC_RTCCLKSOURCE_NONE
-#elif defined(STM32G0)
+#elif defined(STM32WB) || defined(STM32G0)
 #else
 #define RCC_RTCCLKSOURCE_NONE       RCC_RTCCLKSOURCE_NO_CLK
 #endif
@@ -3032,7 +3058,7 @@
 /** @defgroup HAL_RTC_Aliased_Macros HAL RTC Aliased Macros maintained for legacy purpose
   * @{
   */
-#if defined (STM32G0) || defined (STM32L412xx) || defined (STM32L422xx) || defined (STM32L4P5xx) || defined (STM32L4Q5xx)
+#if defined (STM32G0) || defined (STM32L412xx) || defined (STM32L422xx)
 #else
 #define __HAL_RTC_CLEAR_FLAG                      __HAL_RTC_EXTI_CLEAR_FLAG
 #endif

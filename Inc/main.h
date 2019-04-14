@@ -59,6 +59,17 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32g0xx_hal.h"
+#include "stm32g0xx_ll_ucpd.h"
+#include "stm32g0xx_ll_bus.h"
+#include "stm32g0xx_ll_cortex.h"
+#include "stm32g0xx_ll_rcc.h"
+#include "stm32g0xx_ll_system.h"
+#include "stm32g0xx_ll_utils.h"
+#include "stm32g0xx_ll_pwr.h"
+#include "stm32g0xx_ll_gpio.h"
+#include "stm32g0xx_ll_dma.h"
+
+#include "stm32g0xx_ll_exti.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -114,6 +125,10 @@ void Error_Handler(void);
 #define ILIM_HIZ_GPIO_Port GPIOB
 #define CHRG_OK_Pin GPIO_PIN_12
 #define CHRG_OK_GPIO_Port GPIOB
+#define EN_CC1_Pin GPIO_PIN_13
+#define EN_CC1_GPIO_Port GPIOB
+#define EN_CC2_Pin GPIO_PIN_14
+#define EN_CC2_GPIO_Port GPIOB
 #define CELL_1S_DIS_EN_Pin GPIO_PIN_4
 #define CELL_1S_DIS_EN_GPIO_Port GPIOB
 #define CELL_2S_DIS_EN_Pin GPIO_PIN_5

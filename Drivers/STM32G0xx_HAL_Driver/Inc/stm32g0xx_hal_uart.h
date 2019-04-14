@@ -1589,7 +1589,9 @@ uint32_t              HAL_UART_GetError(UART_HandleTypeDef *huart);
 /** @addtogroup UART_Private_Functions UART Private Functions
   * @{
   */
-
+#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
+void UART_InitCallbacksToDefault(UART_HandleTypeDef *huart);
+#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 HAL_StatusTypeDef UART_SetConfig(UART_HandleTypeDef *huart);
 HAL_StatusTypeDef UART_CheckIdleState(UART_HandleTypeDef *huart);
 HAL_StatusTypeDef UART_WaitOnFlagUntilTimeout(UART_HandleTypeDef *huart, uint32_t Flag, FlagStatus Status, uint32_t Tickstart, uint32_t Timeout);

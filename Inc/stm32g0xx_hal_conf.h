@@ -72,6 +72,7 @@ extern "C" {
 /* #define HAL_USART_MODULE_ENABLED   */
 /* #define HAL_WWDG_MODULE_ENABLED   */
 #define HAL_GPIO_MODULE_ENABLED
+#define HAL_EXTI_MODULE_ENABLED
 #define HAL_DMA_MODULE_ENABLED
 #define HAL_RCC_MODULE_ENABLED
 #define HAL_FLASH_MODULE_ENABLED
@@ -187,7 +188,7 @@ in voltage and temperature.*/
 
 /* Includes ------------------------------------------------------------------*/
 /**
-  * @brief Include modules header file
+  * @brief Include module's header file
   */
 
 #ifdef HAL_RCC_MODULE_ENABLED
