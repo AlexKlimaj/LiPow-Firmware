@@ -51,6 +51,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "usbpd.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -166,6 +167,8 @@ int main(void)
   MX_UCPD2_Init();
   /* USER CODE BEGIN 2 */
   /* USER CODE END 2 */
+  /* USBPD initialisation ---------------------------------*/
+  MX_USBPD_Init();
 
   /* USER CODE BEGIN RTOS_MUTEX */
 	xTxMutex_Regulator = xSemaphoreCreateMutex();
