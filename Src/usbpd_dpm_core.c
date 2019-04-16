@@ -143,7 +143,7 @@ static const USBPD_PE_Callbacks dpmCallbacks =
 #endif /* USBPD_PORT_COUNT == 2 */
 
   /* Initialise the TRACE */
-  USBPD_TRACE_Init();
+  //USBPD_TRACE_Init();
 
   /* CAD SET UP : Port 0 */
   CHECK_CAD_FUNCTION_CALL(USBPD_CAD_Init(USBPD_PORT_0, (USBPD_CAD_Callbacks *)&CAD_cbs, (USBPD_SettingsTypeDef *)&DPM_Settings[USBPD_PORT_0], &DPM_Params[USBPD_PORT_0]));
@@ -299,7 +299,7 @@ void USBPD_TRACE_TX_Task(void const *argument)
 {
   for(;;)
   {
-    (void)USBPD_TRACE_TX_Process();
+    //(void)USBPD_TRACE_TX_Process();
     osDelay(5);
   }
 }
@@ -313,7 +313,7 @@ void USBPD_TRACE_TX_Task(void const *argument)
   */
 void USBPD_DPM_CADCallback(uint8_t PortNum, USBPD_CAD_EVENT State, CCxPin_TypeDef Cc)
 {
-  USBPD_TRACE_Add(USBPD_TRACE_CADEVENT, PortNum, (uint8_t)State, NULL, 0);
+  //USBPD_TRACE_Add(USBPD_TRACE_CADEVENT, PortNum, (uint8_t)State, NULL, 0);
 
   switch(State)
   {
