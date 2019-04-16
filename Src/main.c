@@ -196,6 +196,12 @@ int main(void)
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
+
+//	if(USBPD_OK != USBPD_DPM_InitOS())
+//	{
+//		while(1);
+//	}
+
 	osThreadDef(blink_led, vLED_Blinky, LED_TASK_PRIORITY, 0, configMINIMAL_STACK_SIZE);
 	blinkyTaskHandle = osThreadCreate(osThread(blink_led), NULL);
 
@@ -214,11 +220,6 @@ int main(void)
 	/* Register commands with the FreeRTOS+CLI command interpreter. */
 	vRegisterCLICommands();
 
-
-	if(USBPD_OK != USBPD_DPM_InitOS())
-	{
-		while(1);
-	}
   /* USER CODE END RTOS_THREADS */
 
   /* Start scheduler */

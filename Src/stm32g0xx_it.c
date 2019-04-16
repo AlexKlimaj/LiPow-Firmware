@@ -137,6 +137,9 @@ void UCPD1_2_IRQHandler(void)
   /* USER CODE END UCPD1_2_IRQn 0 */
   /* USER CODE BEGIN UCPD1_2_IRQn 1 */
 
+  extern void USBPD_PORT1_IRQHandler(void);
+  USBPD_PORT1_IRQHandler();
+
   /* USER CODE END UCPD1_2_IRQn 1 */
 }
 
