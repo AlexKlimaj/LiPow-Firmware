@@ -466,16 +466,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
       Error_Handler();
     }
 
-    pSyncConfig.SyncSignalID = HAL_DMAMUX1_SYNC_DMAMUX1_CH0_EVT;
-    pSyncConfig.SyncPolarity = HAL_DMAMUX_SYNC_NO_EVENT;
-    pSyncConfig.SyncEnable = DISABLE;
-    pSyncConfig.EventEnable = DISABLE;
-    pSyncConfig.RequestNumber = 1;
-    if (HAL_DMAEx_ConfigMuxSync(&hdma_usart1_rx, &pSyncConfig) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
     __HAL_LINKDMA(huart,hdmarx,hdma_usart1_rx);
 
     /* USART1 interrupt Init */
