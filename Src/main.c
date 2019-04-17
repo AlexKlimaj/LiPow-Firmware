@@ -224,7 +224,7 @@ int main(void)
 
   /* Start scheduler */
   osKernelStart();
-  
+
   /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
@@ -780,7 +780,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
   /* USER CODE END Callback 0 */
   if (htim->Instance == TIM2) {
+	extern void USBPD_DPM_TimerCounter(void);
+	USBPD_DPM_TimerCounter();
     HAL_IncTick();
+    osSystickHandler();
   }
   /* USER CODE BEGIN Callback 1 */
 

@@ -181,18 +181,20 @@ static const USBPD_PE_Callbacks dpmCallbacks =
   */
 USBPD_StatusTypeDef USBPD_DPM_InitOS(void)
 {
-  osThreadDef(CAD, USBPD_CAD_Task, osPriorityRealtime, 0, 300);
+  osThreadDef(CAD, USBPD_CAD_Task, osPriorityRealtime, 0, 500);
   if((DPM_Thread_Table[USBPD_THREAD_CAD] = osThreadCreate(osThread(CAD), NULL)) == NULL)
   {
     return USBPD_ERROR;
   }
   CADQueueId = osMessageCreate(osMessageQ(queueCAD), NULL);
 
-  osThreadDef(TRA_TX, USBPD_TRACE_TX_Task, osPriorityLow, 0, configMINIMAL_STACK_SIZE * 2);
-  if(NULL == osThreadCreate(osThread(TRA_TX), NULL))
-  {
-    return USBPD_ERROR;
-  }
+  #if defined(_TRACE)
+    osThreadDef(TRA_TX, USBPD_TRACE_TX_Task, osPriorityLow, 0, configMINIMAL_STACK_SIZE * 2);
+    if(NULL == osThreadCreate(osThread(TRA_TX), NULL))
+    {
+      return USBPD_ERROR;
+    }
+  #endif
 
   /* Create the queue corresponding to PE task */
   PEQueueId[0] = osMessageCreate(osMessageQ(queuePE), NULL);
@@ -302,7 +304,9 @@ void USBPD_TRACE_TX_Task(void const *argument)
 {
   for(;;)
   {
-    (void)USBPD_TRACE_TX_Process();
+    #if defined(_TRACE)
+      (void)USBPD_TRACE_TX_Process();
+    #endif
     osDelay(5);
   }
 }
