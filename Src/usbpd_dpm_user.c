@@ -73,7 +73,8 @@
   * @{
   */
 /* USER CODE BEGIN Private_Variables */
-
+extern USBPD_ParamsTypeDef DPM_Params[];
+USBPD_HandleTypeDef DPM_Ports[USBPD_PORT_COUNT];
 /* USER CODE END Private_Variables */
 /**
   * @}
@@ -266,7 +267,52 @@ void USBPD_DPM_GetDataInfo(uint8_t PortNum, USBPD_CORE_DataInfoType_TypeDef Data
 void USBPD_DPM_SetDataInfo(uint8_t PortNum, USBPD_CORE_DataInfoType_TypeDef DataId, uint8_t *Ptr, uint32_t Size)
 {
 /* USER CODE BEGIN USBPD_DPM_SetDataInfo */
+  switch(DataId)
+  {
+	/* Case requested DO position Data information :
+	*/
+  case USBPD_CORE_DATATYPE_RDO_POSITION :
+	if (Size == 4)
+	{
+	  uint8_t* temp;
+	  temp = (uint8_t*)&DPM_Ports[PortNum].DPM_RDOPosition;
+	  (void)memcpy(temp, Ptr, Size);
+	  DPM_Ports[PortNum].DPM_RDOPositionPrevious = *Ptr;
+	  temp = (uint8_t*)&DPM_Ports[PortNum].DPM_RDOPositionPrevious;
+	  (void)memcpy(temp, Ptr, Size);
+	}
+	break;
 
+
+//  case USBPD_CORE_DATATYPE_REQUEST_DO :
+//    if (Size == 4)
+//    {
+//      uint8_t* rdo;
+//      rdo = (uint8_t*)&DPM_Ports[PortNum].DPM_RcvRequestDOMsg;
+//      (void)memcpy(rdo, Ptr, Size);
+//    }
+//
+	/* Case Received Source PDO values Data information :
+	*/
+  case USBPD_CORE_DATATYPE_RCV_SRC_PDO :
+	{
+	  if (Size <= (USBPD_MAX_NB_PDO * 4))
+	  {
+		uint8_t* rdo;
+		DPM_Ports[PortNum].DPM_NumberOfRcvSRCPDO = (Size / 4);
+		/* Copy PDO data in DPM Handle field */
+		for (uint32_t index = 0; index < (Size / 4); index++)
+		{
+		  rdo = (uint8_t*)&DPM_Ports[PortNum].DPM_ListOfRcvSRCPDO[index];
+		  (void)memcpy(rdo, (Ptr + (index * 4u)), (4u * sizeof(uint8_t)));
+		}
+	  }
+	  break;
+	}
+
+  default :
+	break;
+  }
 /* USER CODE END USBPD_DPM_SetDataInfo */
 }
 
@@ -293,7 +339,65 @@ USBPD_StatusTypeDef USBPD_DPM_EvaluateRequest(uint8_t PortNum, USBPD_CORE_PDO_Ty
 void USBPD_DPM_SNK_EvaluateCapabilities(uint8_t PortNum, uint32_t *PtrRequestData, USBPD_CORE_PDO_Type_TypeDef *PtrPowerObject)
 {
 /* USER CODE BEGIN USBPD_DPM_SNK_EvaluateCapabilities */
+  USBPD_PDO_TypeDef  pdo;
+  USBPD_SNKRDO_TypeDef rdo;
+  USBPD_HandleTypeDef *pdhandle = &DPM_Ports[PortNum];
+  uint32_t size;
+  uint32_t snkpdolist[USBPD_MAX_NB_PDO];
+  USBPD_PDO_TypeDef snk_fixed_pdo;
 
+  /* Initialize RDO */
+  rdo.d32 = 0;
+
+  /* Select the first PDO to get a 5V aligned with sink PDO */
+  pdo.d32 = pdhandle->DPM_ListOfRcvSRCPDO[0];
+
+  /* Read the sink PDO */
+  USBPD_PWR_IF_GetPortPDOs(PortNum, USBPD_CORE_DATATYPE_SNK_PDO, (uint8_t*)snkpdolist, &size);
+
+  /* Initialise sinkdpo with the first PDO*/
+  snk_fixed_pdo.d32 = snkpdolist[0];
+
+  if(USBPD_CORE_PDO_TYPE_FIXED == pdo.GenericPDO.PowerObject)
+  {
+	/* Prepare the requested pdo */
+	rdo.FixedVariableRDO.ObjectPosition = 1;
+	if (snk_fixed_pdo.SNKFixedPDO.OperationalCurrentIn10mAunits > pdo.SRCFixedPDO.MaxCurrentIn10mAunits)
+	{
+	  rdo.FixedVariableRDO.OperatingCurrentIn10mAunits  = pdo.SRCFixedPDO.MaxCurrentIn10mAunits;
+	  rdo.FixedVariableRDO.MaxOperatingCurrent10mAunits = pdo.SRCFixedPDO.MaxCurrentIn10mAunits;
+	  rdo.FixedVariableRDO.CapabilityMismatch = 1;
+	}
+	else
+	{
+	  rdo.FixedVariableRDO.OperatingCurrentIn10mAunits  = snk_fixed_pdo.SNKFixedPDO.OperationalCurrentIn10mAunits;
+	  rdo.FixedVariableRDO.MaxOperatingCurrent10mAunits = snk_fixed_pdo.SNKFixedPDO.OperationalCurrentIn10mAunits;
+	  rdo.FixedVariableRDO.CapabilityMismatch = 0;
+	}
+
+	rdo.FixedVariableRDO.USBCommunicationsCapable = snk_fixed_pdo.SNKFixedPDO.USBCommunicationsCapable;
+
+#if defined(USBPD_REV30_SUPPORT) && defined(_UNCHUNKED_SUPPORT)
+	if (USBPD_SPECIFICATION_REV2 < DPM_Params[PortNum].PE_SpecRevision)
+	{
+	  rdo.FixedVariableRDO.UnchunkedExtendedMessage = DPM_Settings[PortNum].PE_PD3_Support.d.PE_UnchunkSupport;
+	  DPM_Params[PortNum].PE_UnchunkSupport   = USBPD_FALSE;
+	  /* Set unchuncked bit if supported by port partner;*/
+	  if (USBPD_TRUE == fixed_pdo.SRCFixedPDO.UnchunkedExtendedMessage)
+	  {
+		DPM_Params[PortNum].PE_UnchunkSupport   = USBPD_TRUE;
+	  }
+	}
+#endif /* USBPD_REV30_SUPPORT && _UNCHUNKED_SUPPORT */
+
+	*PtrPowerObject = USBPD_CORE_PDO_TYPE_FIXED;
+	*PtrRequestData = rdo.d32;
+	pdhandle->DPM_RequestDOMsg = rdo.d32;
+	pdhandle->DPM_RequestedVoltage = 5000;
+  }
+  else {
+	/* This case shall never occurs because any source must present a first PDO with 5V */
+  }
 /* USER CODE END USBPD_DPM_SNK_EvaluateCapabilities */
 }
 

@@ -41,7 +41,15 @@
 
 /* Exported typedef ----------------------------------------------------------*/
 /* USER CODE BEGIN Typedef */
-
+ typedef struct
+ {
+   uint32_t                      DPM_RDOPosition;                         /*!< RDO Position of requested DO in Source list of capabilities          */
+   uint32_t                      DPM_RDOPositionPrevious;                 /*!< RDO Position of requested DO in Source list of capabilities          */
+   uint32_t                      DPM_RequestedVoltage;                    /*!< Value of requested voltage                                           */
+   uint32_t                      DPM_RequestDOMsg;
+   uint32_t                      DPM_NumberOfRcvSRCPDO;
+   uint32_t                      DPM_ListOfRcvSRCPDO[8];
+ } USBPD_HandleTypeDef;
 /* USER CODE END Typedef */
 
 /* Exported define -----------------------------------------------------------*/

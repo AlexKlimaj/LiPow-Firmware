@@ -105,7 +105,7 @@ const uint32_t PORT0_PDO_ListSRC[USBPD_MAX_NB_PDO] =
 const uint32_t PORT0_PDO_ListSNK[USBPD_MAX_NB_PDO] = 
 {
   /* PDO 1 */
-        (0x00000000U),
+        (0x2201912CU),
   /* PDO 2 */
         (0x00000000U),
   /* PDO 3 */

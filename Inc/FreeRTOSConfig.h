@@ -63,7 +63,7 @@
 #define configCPU_CLOCK_HZ                       ( SystemCoreClock )
 #define configTICK_RATE_HZ                       ((TickType_t)1000)
 #define configMAX_PRIORITIES                     ( 7 )
-#define configMINIMAL_STACK_SIZE                 ((uint16_t)128)
+#define configMINIMAL_STACK_SIZE                 ((uint16_t)64)
 #define configTOTAL_HEAP_SIZE                    ((size_t)8000)
 #define configMAX_TASK_NAME_LEN                  ( 16 )
 #define configGENERATE_RUN_TIME_STATS            1
@@ -120,7 +120,7 @@ standard names. */
 #define	LED_TASK_PRIORITY				( tskIDLE_PRIORITY + 2 )
 #define UART_CLI_TASK_PRIORITY			( tskIDLE_PRIORITY + 1 )
 
-#define vcliSTACK_SIZE					( configMINIMAL_STACK_SIZE * 2 )
+#define vcliSTACK_SIZE					( configMINIMAL_STACK_SIZE * 3 )
 #define vRead_ADC_STACK_SIZE			( configMINIMAL_STACK_SIZE * 1 )
 #define vRegulator_STACK_SIZE		( configMINIMAL_STACK_SIZE * 1 )
 

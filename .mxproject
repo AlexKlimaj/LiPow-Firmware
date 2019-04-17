@@ -1,6 +1,6 @@
 [PreviousGenFiles]
 HeaderPath=P:/Electronics/Firmware/Lipow/Inc
-HeaderFiles=FreeRTOSConfig.h;stm32g0xx_it.h;stm32_assert.h;stm32g0xx_hal_conf.h;main.h;usbpd.h;usbpd_dpm_conf.h;usbpd_dpm_user.h;usbpd_pwr_user.h;usbpd_pdo_defs.h;usbpd_pwr_if.h;usbpd_vdm_user.h;usbpd_dpm_core.h;usbpd_devices_conf.h;
+HeaderFiles=FreeRTOSConfig.h;stm32g0xx_it.h;stm32_assert.h;stm32g0xx_hal_conf.h;main.h;usbpd.h;usbpd_dpm_conf.h;usbpd_dpm_user.h;usbpd_pwr_user.h;usbpd_pdo_defs.h;usbpd_pwr_if.h;usbpd_vdm_user.h;usbpd_dpm_core.h;usbpd_devices_conf.h;tracer_emb_conf.h;
 SourcePath=P:/Electronics/Firmware/Lipow/Src
 SourceFiles=app_freertos.c;stm32g0xx_it.c;stm32g0xx_hal_msp.c;stm32g0xx_hal_timebase_tim.c;main.c;usbpd.c;usbpd_dpm_user.c;usbpd_pwr_user.c;usbpd_pwr_if.c;usbpd_vdm_user.c;usbpd_dpm_core.c;
 
