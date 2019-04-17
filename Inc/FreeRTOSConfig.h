@@ -121,8 +121,8 @@ standard names. */
 #define UART_CLI_TASK_PRIORITY			( tskIDLE_PRIORITY + 1 )
 
 #define vcliSTACK_SIZE					( configMINIMAL_STACK_SIZE * 3 )
-#define vRead_ADC_STACK_SIZE			( configMINIMAL_STACK_SIZE * 1 )
-#define vRegulator_STACK_SIZE		( configMINIMAL_STACK_SIZE * 1 )
+#define vRead_ADC_STACK_SIZE			( configMINIMAL_STACK_SIZE * 2 )
+#define vRegulator_STACK_SIZE		( configMINIMAL_STACK_SIZE * 2 )
 
 /* USER CODE END Defines */ 
 
