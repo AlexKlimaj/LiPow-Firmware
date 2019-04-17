@@ -115,7 +115,6 @@ standard names. */
 #define configUSE_TASK_NOTIFICATIONS 1
 
 /* Priorities at which the tasks are created. */
-#define USBPD_TASK_PRIORITY				( tskIDLE_PRIORITY + 5 )
 #define REGULATOR_TASK_PRIORITY			( tskIDLE_PRIORITY + 4 )
 #define ADC_TASK_PRIORITY				( tskIDLE_PRIORITY + 3 )
 #define	LED_TASK_PRIORITY				( tskIDLE_PRIORITY + 2 )
@@ -123,7 +122,7 @@ standard names. */
 
 #define vcliSTACK_SIZE					( configMINIMAL_STACK_SIZE * 3 )
 #define vRead_ADC_STACK_SIZE			( configMINIMAL_STACK_SIZE * 2 )
-#define vRegulator_STACK_SIZE		( configMINIMAL_STACK_SIZE * 2 )
+#define vRegulator_STACK_SIZE			( configMINIMAL_STACK_SIZE * 2 )
 
 /* USER CODE END Defines */ 
 
