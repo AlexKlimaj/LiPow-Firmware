@@ -51,7 +51,7 @@ void PORTx_IRQHandler(uint8_t PortNum)
 
   if ((hucpd->IMR & _interrupt) != 0u)
   {
-    /* TXIS no need to enable it all the transfert are done by DMA */
+    /* TXIS no need to enable it all the transfers are done by DMA */
     if (UCPD_SR_TXMSGDISC == (_interrupt & UCPD_SR_TXMSGDISC))
     {
       /* the message has been discarded */

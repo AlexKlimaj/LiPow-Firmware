@@ -181,7 +181,7 @@ static const USBPD_PE_Callbacks dpmCallbacks =
   */
 USBPD_StatusTypeDef USBPD_DPM_InitOS(void)
 {
-  osThreadDef(CAD, USBPD_CAD_Task, osPriorityRealtime, 0, 500);
+  osThreadDef(CAD, USBPD_CAD_Task, osPriorityRealtime, 0, 300);
   if((DPM_Thread_Table[USBPD_THREAD_CAD] = osThreadCreate(osThread(CAD), NULL)) == NULL)
   {
     return USBPD_ERROR;

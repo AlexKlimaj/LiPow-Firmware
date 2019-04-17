@@ -197,11 +197,6 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
 
-//	if(USBPD_OK != USBPD_DPM_InitOS())
-//	{
-//		while(1);
-//	}
-
 	osThreadDef(blink_led, vLED_Blinky, LED_TASK_PRIORITY, 0, configMINIMAL_STACK_SIZE);
 	blinkyTaskHandle = osThreadCreate(osThread(blink_led), NULL);
 
@@ -216,6 +211,11 @@ int main(void)
 	/* Start the Command Line Interface on UART1 */
 	osThreadDef(CLI, prvUARTCommandConsoleTask, UART_CLI_TASK_PRIORITY, 0, vcliSTACK_SIZE);
 	CLITaskHandle = osThreadCreate(osThread(CLI), NULL);
+
+	if(USBPD_OK != USBPD_DPM_InitOS())
+	{
+		while(1);
+	}
 
 	/* Register commands with the FreeRTOS+CLI command interpreter. */
 	vRegisterCLICommands();
@@ -783,7 +783,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	extern void USBPD_DPM_TimerCounter(void);
 	USBPD_DPM_TimerCounter();
     HAL_IncTick();
-    osSystickHandler();
   }
   /* USER CODE BEGIN Callback 1 */
 

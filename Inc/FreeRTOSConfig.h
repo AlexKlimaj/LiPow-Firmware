@@ -115,6 +115,7 @@ standard names. */
 #define configUSE_TASK_NOTIFICATIONS 1
 
 /* Priorities at which the tasks are created. */
+#define USBPD_TASK_PRIORITY				( tskIDLE_PRIORITY + 5 )
 #define REGULATOR_TASK_PRIORITY			( tskIDLE_PRIORITY + 4 )
 #define ADC_TASK_PRIORITY				( tskIDLE_PRIORITY + 3 )
 #define	LED_TASK_PRIORITY				( tskIDLE_PRIORITY + 2 )
