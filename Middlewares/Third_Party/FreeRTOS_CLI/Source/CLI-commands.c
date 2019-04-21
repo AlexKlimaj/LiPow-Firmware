@@ -40,6 +40,7 @@
 #include "bq25703a_regulator.h"
 #include "error.h"
 #include "UARTCommandConsole.h"
+#include "usbpd.h"
 
 /*
  * Defines a command that returns a table showing the state of each task at the
@@ -176,6 +177,8 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			input_power,
 			efficiency,
 			Get_Error_State());
+
+	Get_source_capabilities();
 
 	/* There is no more data to return after this single string, so return
 	 pdFALSE. */
