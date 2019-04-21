@@ -1,13 +1,12 @@
-/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    usbpd_pwr_if.h
   * @author  MCD Application Team
   * @brief   This file contains the headers of usbpd_pw_if.h.
   ******************************************************************************
-  * @attention
+   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2018 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -17,7 +16,6 @@
   *
   ******************************************************************************
   */
-/* USER CODE END Header */
 
 #ifndef __USBPD_PW_IF_H_
 #define __USBPD_PW_IF_H_
@@ -82,6 +80,12 @@
   * @retval USBPD status
   */
 USBPD_StatusTypeDef USBPD_PWR_IF_Init(void);
+
+/**
+  * @brief  Satrt the monitoring
+  * @retval USBPD status
+  */
+USBPD_StatusTypeDef USBPD_PWR_IF_StartMonitoring(void);
 
 /**
   * @brief  Sets the required power profile
@@ -155,6 +159,7 @@ USBPD_FunctionalState USBPD_PWR_IF_VBUSIsEnabled(uint8_t PortNum);
   */
 USBPD_StatusTypeDef USBPD_PWR_IF_ReadVA(uint8_t PortNum, uint16_t *pVoltage, uint16_t *pCurrent);
 
+#if defined(_VCONN_SUPPORT)
 /**
   * @brief  Enables the VConn on the port.
   * @param  PortNum Port number
@@ -170,6 +175,7 @@ USBPD_StatusTypeDef USBPD_PWR_IF_Enable_VConn(uint8_t PortNum, CCxPin_TypeDef CC
   * @retval USBPD Status
   */
 USBPD_StatusTypeDef USBPD_PWR_IF_Disable_VConn(uint8_t PortNum, CCxPin_TypeDef CC);
+#endif /* _VCONN_SUPPORT */
 
 /**
   * @brief  Allow PDO data reading from PWR_IF storage.
@@ -208,7 +214,6 @@ void USBPD_PWR_IF_Alarm(void);
   * @retval USBPD Status
   */
 USBPD_StatusTypeDef USBPD_PWR_IF_CheckUpdateSNKPower(uint8_t PortNum);
-
 /**
   * @}
   */
@@ -232,3 +237,4 @@ USBPD_StatusTypeDef USBPD_PWR_IF_CheckUpdateSNKPower(uint8_t PortNum);
 #endif /* __USBPD_PW_IF_H_ */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

@@ -123,6 +123,7 @@ void StartDefaultTask(void const * argument);
 /* USER CODE BEGIN PFP */
 
 void vLED_Blinky(void const *pvParameters);
+void DEMO_Task(void const *argument);
 
 /* USER CODE END PFP */
 
