@@ -217,7 +217,39 @@ USBPD_StatusTypeDef USBPD_DPM_InitOS(void)
   */
 void USBPD_DPM_Run(void)
 {
-  osKernelStart();
+	#ifdef _RTOS
+	  osKernelStart();
+	#else
+	  do
+	  {
+	#if defined(USBPD_TCPM_MODULE_ENABLED)
+	#else /* !USBPD_TCPM_MODULE_ENABLED */
+		(void)USBPD_CAD_Process();
+	#endif /* USBPD_TCPM_MODULE_ENABLED */
+		if((HAL_GetTick() - DPM_Sleep_start[USBPD_PORT_0]) >  DPM_Sleep_time[USBPD_PORT_0])
+		{
+		  DPM_Sleep_time[USBPD_PORT_0] =
+	  #ifdef _DRP
+			USBPD_PE_StateMachine_DRP(USBPD_PORT_0);
+	  #elif _SRC
+			USBPD_PE_StateMachine_SRC(USBPD_PORT_0);
+	  #elif _SNK
+			USBPD_PE_StateMachine_SNK(USBPD_PORT_0);
+	  #endif /* _DRP */
+		  DPM_Sleep_start[USBPD_PORT_0] = HAL_GetTick();
+		}
+
+		USBPD_DPM_UserExecute(NULL);
+	#if defined(_TRACE) || defined(_GUI_INTERFACE)
+		(void)USBPD_TRACE_TX_Process();
+	#endif /* _TRACE || _GUI_INTERFACE */
+
+	#if defined(_SIMULATOR)
+		return;
+	#endif
+	  }
+	  while(1u == 1u);
+	#endif /* _RTOS */
 }
 
 /**

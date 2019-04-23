@@ -48,7 +48,37 @@ typedef struct
   uint32_t PE_DataSwap                                    : 1;  /*!< support data swap                                     */
   uint32_t PE_VconnSwap                                   : 1;  /*!< support VCONN swap                                    */
   uint32_t Reserved1                                      :30;  /*!< Reserved bits */
+#if defined(_GUI_INTERFACE)
+  uint32_t PWR_AccessoryDetection                         : 1; /*!< It enables or disables powered accessory detection */
+  uint32_t PWR_AccessoryTransition                        : 1; /*!< It enables or disables transition from Powered.accessory to Try.SNK */
+  USBPD_CORE_PDO_ExtPowered_TypeDef PWR_UnconstrainedPower: 1; /*!< UUT has an external power source available that is sufficient to adequately power the system while charging external devices or the UUT primary function is to charge external devices. */
+  CAD_SNK_Source_Current_Adv_Typedef PWR_RpResistorValue  : 2; /*!< RP resitor value based on @ref CAD_SNK_Source_Current_Adv_Typedef */
+  USBPD_CORE_PDO_USBCommCapable_TypeDef USB_Support       : 1; /*!< USB_Comms_Capable, is the UUT capable of enumerating as a USB host or device? */
+  uint32_t USB_Device                                     : 1; /*!< Type_C_Can_Act_As_Device, Indicates whether the UUT can communicate with USB 2.0 or USB 3.1 as a device or as the Upstream Facing Port of a hub. */
+  uint32_t USB_Host                                       : 1; /*!<  Type_C_Can_Act_As_Host, Indicates whether the UUT can communicate with USB 2.0 or USB 3.1 as a host or as the Downstream Facing Port of a hub */
+  USBPD_CORE_PDO_USBSuspendSupport_TypeDef USB_SuspendSupport: 1; /*!<  USB Suspend support values in PDO definition (Source) */
+  uint32_t CAD_tDRP                                       :7;  /*!< The period that DRP shall complete a Source to Sink and back advertisement */
+  uint32_t CAD_dcSRC_DRP                                  :7;  /*!< The percent of time that a DRP shall advertise Source during tDRP (in %) */
+  uint32_t Reserved2                                      :31;  /*!< reserved bits */
+#endif /* _GUI_INTERFACE */
 } USBPD_USER_SettingsTypeDef;
+
+#if defined(_GUI_INTERFACE)
+typedef struct
+{
+  uint16_t VBUS_Level               :16;  /*!< VBUS Level */
+  uint16_t IBUS_Level               :16;  /*!< IBUS Level */
+  /* Measurement Reporting */
+  union {
+    uint8_t MeasurementReporting;
+    struct {
+      uint8_t MeasReportValue       :7;   /*!< Enable Measure reporting every tr x 40 ms  */
+      uint8_t MeasReportActivation  :1;   /*!< Enable or Disable Measure reporting        */
+    }d;
+  }u;
+  uint8_t Reserved                  :8;   /*!< Reserved bits */
+} USBPD_USER_ParamsTypeDef;
+#endif /* _GUI_INTERFACE */
 
 typedef enum {
   DPM_USER_EVENT_TIMER,         /* TIMER EVENT */
@@ -94,6 +124,9 @@ typedef struct
   volatile uint16_t             DPM_TimerAlert;                          /*!< Timer used to monitor current and trig an ALERT                      */
   USBPD_ADO_TypeDef             DPM_SendAlert;                           /*!< Save the Alert sent to port partner                                  */
   USBPD_ADO_TypeDef             DPM_RcvAlert;                            /*!< Save the Alert received by port partner                              */
+#if defined(_GUI_INTERFACE)
+volatile uint16_t             DPM_TimerMeasReport;                       /*!< Timer used to send measurement report                                */
+#endif /* _GUI_INTERFACE */
   USBPD_DiscoveryIdentity_TypeDef VDM_DiscoCableIdentify;                /*!< VDM Cable Discovery Identify                                         */
   USBPD_DiscoveryIdentity_TypeDef   VDM_DiscoIdentify;                   /*!< VDM Discovery Identify                                               */
   USBPD_SVIDPortPartnerInfo_TypeDef VDM_SVIDPortPartner;                 /*!< VDM SVID list                                                        */

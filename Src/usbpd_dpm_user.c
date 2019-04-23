@@ -28,6 +28,9 @@
 #ifdef _TRACE
 #include "usbpd_trace.h"
 #endif /* _TRACE */
+#if defined(_GUI_INTERFACE)
+#include "gui_api.h"
+#endif
 #include "usbpd_hw_if.h"
 #include "usbpd_pwr_if.h"
 #include "string.h"
@@ -189,14 +192,59 @@ void USBPD_DPM_UserExecute(void const *argument)
   uint32_t _timing = osWaitForever;
   osMessageQId  queue = *(osMessageQId *)argument;
 
+#if defined(_GUI_INTERFACE)
+  /* Start GUI interface */
+  GUI_Start();
+#endif /* _GUI_INTERFACE */
+
   do
   {
     osEvent event = osMessageGet(queue, _timing);
     switch (((DPM_USER_EVENT)event.value.v & 0xF))
     {
+#if defined(_GUI_INTERFACE)
+    case DPM_USER_EVENT_GUI:
+      {
+      GUI_RXProcess((uint32_t)event.value.v);
+      /* Sent an event to check if measurement report has been requested */
+        osMessagePut(DPMMsgBox, DPM_USER_EVENT_TIMER, 0);
+      break;
+      }
+#endif /* _GUI_INTERFACE */
 
     case DPM_USER_EVENT_TIMER:
       {
+#if defined(_GUI_INTERFACE)
+        for(uint8_t _instance = 0; _instance < USBPD_PORT_COUNT; _instance++)
+        {
+        /* -------------------------------------------------  */
+        /* Check if timeout related to Measurement reporting  */
+        /* -------------------------------------------------  */
+        /* - Send a GUI Event only if PE is connected
+             and Measurement report has been enabled          */
+          if ((USBPD_TRUE == DPM_Params[_instance].PE_IsConnected)
+              && (1 == GUI_USER_Params[_instance].u.d.MeasReportActivation)
+                && (0 != GUI_USER_Params[_instance].u.d.MeasReportValue))
+        {
+          /* Check if timer has expired */
+            if (IS_DPM_TIMER_EXPIRED(_instance, DPM_TimerMeasReport))
+          {
+              uint32_t event_mr = DPM_USER_EVENT_GUI | (_instance << GUI_PE_PORT_NUM_Pos) | (GUI_NOTIF_MEASUREMENT << GUI_PE_NOTIF_Pos);
+            GUI_RXProcess(event_mr);
+          }
+          /* Start or Restart Measurement report timer */
+            if (!(IS_DPM_TIMER_RUNNING(_instance, DPM_TimerMeasReport)))
+          {
+              DPM_START_TIMER(_instance, DPM_TimerMeasReport, (GUI_USER_Params[_instance].u.d.MeasReportValue * GUI_NOTIF_MEASUREMENT_STEP));
+          }
+        }
+        else
+        {
+          /* Stop measurement report timer */
+            DPM_Ports[_instance].DPM_TimerMeasReport = 0;
+        }
+          }
+#endif /* _GUI_INTERFACE */
 
         /* Manage the extended capa */
         DPM_ManageExtendedCapa();
@@ -230,6 +278,12 @@ void USBPD_DPM_UserTimerCounter(uint8_t PortNum)
   {
     DPM_Ports[PortNum].DPM_TimerAlert--;
   }
+#if defined(_GUI_INTERFACE)
+  if((DPM_Ports[PortNum].DPM_TimerMeasReport & DPM_TIMER_READ_MSK) > 0)
+  {
+    DPM_Ports[PortNum].DPM_TimerMeasReport--;
+  }
+#endif /* _GUI_INTERFACE */
 }
 
 /**
@@ -244,6 +298,9 @@ void USBPD_DPM_UserCableDetection(uint8_t PortNum, USBPD_CAD_EVENT State)
   {
   case USBPD_CAD_EVENT_ATTACHED:
   case USBPD_CAD_EVENT_ATTEMC:
+#if defined(_GUI_INTERFACE)
+    GUI_FormatAndSendNotification(PortNum, GUI_NOTIF_ISCONNECTED, 0);
+#endif /* _GUI_INTERFACE */
 
     USBPD_VDM_UserReset(PortNum);
     if(USBPD_PORTPOWERROLE_SRC == DPM_Params[PortNum].PE_PowerRole)
@@ -263,6 +320,9 @@ void USBPD_DPM_UserCableDetection(uint8_t PortNum, USBPD_CAD_EVENT State)
   default :
     /* reset all values received from port partner */
     memset(&DPM_Ports[PortNum], 0, sizeof(DPM_Ports[PortNum]));
+#if defined(_GUI_INTERFACE)
+    GUI_FormatAndSendNotification(PortNum, GUI_NOTIF_ISCONNECTED | GUI_NOTIF_POWER_EVENT, 0);
+#endif /* _GUI_INTERFACE */
     USBPD_VDM_UserReset(PortNum);
     DPM_Ports[PortNum].FlagSendGetSrcCapaExtended = 0;
     if(USBPD_PORTPOWERROLE_SRC == DPM_Params[PortNum].PE_PowerRole)
@@ -390,6 +450,10 @@ void USBPD_DPM_Notification(uint8_t PortNum, USBPD_NotifyEventValue_TypeDef Even
       USBPD_SNKRDO_TypeDef rdo;
       rdo.d32 = DPM_Ports[PortNum].DPM_RequestDOMsg;
       DPM_Ports[PortNum].DPM_RDOPosition = rdo.GenericRDO.ObjectPosition;
+#if defined(_GUI_INTERFACE)
+      DPM_USER_Settings[PortNum].DPM_SNKRequestedPower.OperatingVoltageInmVunits    = DPM_Ports[PortNum].DPM_RequestedVoltage;
+        DPM_USER_Settings[PortNum].DPM_SNKRequestedPower.OperatingPowerInmWunits      = (DPM_Ports[PortNum].DPM_RequestedVoltage * DPM_USER_Settings[PortNum].DPM_SNKRequestedPower.MaxOperatingCurrentInmAunits) / 1000;
+#endif /* _GUI_INTERFACE */
     }
     break;
     /*
@@ -425,6 +489,10 @@ void USBPD_DPM_Notification(uint8_t PortNum, USBPD_NotifyEventValue_TypeDef Even
   default:
 	  break;
   }
+
+#if defined(_GUI_INTERFACE)
+  GUI_PostNotificationMessage(PortNum, EventVal);
+#endif /* _GUI_INTERFACE */
 }
 
 /**
@@ -2103,6 +2171,18 @@ static uint32_t CheckDPMTimers(void)
   /* Calculate the minimum timers to wake-up DPM tasks */
   for(uint8_t instance = 0; instance < USBPD_PORT_COUNT; instance++)
   {
+#if defined(_GUI_INTERFACE)
+    /* Check if Measurement reporting has been enabled by the GUI */
+    _current_timing = DPM_Ports[instance].DPM_TimerMeasReport & DPM_TIMER_READ_MSK;
+    if(_current_timing > 0)
+    {
+      if (_current_timing < _timing)
+      {
+        _timing = _current_timing;
+      }
+    }
+#endif /* _GUI_INTERFACE */
+
     _current_timing = DPM_Ports[instance].DPM_TimerSRCExtendedCapa & DPM_TIMER_READ_MSK;
     if(_current_timing > 0)
     {

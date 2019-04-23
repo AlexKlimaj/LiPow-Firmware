@@ -40,6 +40,7 @@
 								<option id="com.atollic.truestudio.gcc.directories.select.330946435" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../Inc"/>
 									<listOptionValue builtIn="false" value="../Utilities/TRACER_EMB"/>
+									<listOptionValue builtIn="false" value="../Utilities/GUI_INTERFACE"/>
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32G0xx/Include"/>
 									<listOptionValue builtIn="false" value="../Middlewares/ST/STM32_USBPD_Library/Core/inc"/>
@@ -61,6 +62,8 @@
 									<listOptionValue builtIn="false" value="USBPDCORE_LIB_PD3_FULL"/>
 									<listOptionValue builtIn="false" value="_SNK"/>
 									<listOptionValue builtIn="false" value="_RTOS"/>
+									<listOptionValue builtIn="false" value="_GUI_INTERFACE"/>
+									<listOptionValue builtIn="false" value="_TRACE"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1854274048" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false" value="com.atollic.truestudio.common_options.target.endianess.little" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.191909026" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32G071CB" valueType="enumerated"/>

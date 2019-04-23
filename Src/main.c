@@ -61,6 +61,7 @@
 #include "adc_interface.h"
 #include "battery.h"
 #include "bq25703a_regulator.h"
+#include "gui_api.h"
 
 // System
 #include "printf.h"
@@ -76,6 +77,14 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+/* Format of the different kind of message */
+/*   - 31-28  4 bit for the message type   */
+#define DEMO_MSG_TYPE_POS                 28u
+#define DEMO_MSG_TYPE_MSK                 (0xFu << DEMO_MSG_TYPE_POS)
+#define DEMO_MSG_MMI                      (0u   << DEMO_MSG_TYPE_POS)
+#define DEMO_MSG_CAD                      (1u   << DEMO_MSG_TYPE_POS)
+#define DEMO_MSG_PENOTIFY                 (2u   << DEMO_MSG_TYPE_POS)
 
 /* USER CODE END PD */
 
@@ -123,12 +132,24 @@ void StartDefaultTask(void const * argument);
 /* USER CODE BEGIN PFP */
 
 void vLED_Blinky(void const *pvParameters);
-void DEMO_Task(void const *argument);
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+const uint8_t HWBoardVersionName[] = "TBD";
+const uint8_t PDTypeName[] = "TBD";
+const uint8_t* BSP_GetHWBoardVersionName(void);
+const uint8_t* BSP_GetPDTypeName(void);
+const uint8_t* BSP_GetHWBoardVersionName(void)
+{
+  return HWBoardVersionName;
+}
+
+const uint8_t* BSP_GetPDTypeName(void)
+{
+  return PDTypeName;
+}
 
 /* USER CODE END 0 */
 
@@ -164,9 +185,12 @@ int main(void)
   MX_ADC1_Init();
   MX_I2C1_Init();
   MX_TIM7_Init();
-  MX_USART1_UART_Init();
   MX_UCPD2_Init();
   /* USER CODE BEGIN 2 */
+#if defined(_GUI_INTERFACE)
+  /* Initialize GUI */
+  GUI_Init(BSP_GetHWBoardVersionName, BSP_GetPDTypeName);
+#endif /* _GUI_INTERFACE */
   /* USER CODE END 2 */
   /* USBPD initialisation ---------------------------------*/
   MX_USBPD_Init();
@@ -209,17 +233,23 @@ int main(void)
 	osThreadDef(regulator, vRegulator, REGULATOR_TASK_PRIORITY, 0, vRegulator_STACK_SIZE);
 	regulatorTaskHandle = osThreadCreate(osThread(regulator), NULL);
 
+#if defined(_CLI_INTERFACE)
+	MX_USART1_UART_Init();
+	/* Initialize CLI */
 	/* Start the Command Line Interface on UART1 */
 	osThreadDef(CLI, prvUARTCommandConsoleTask, UART_CLI_TASK_PRIORITY, 0, vcliSTACK_SIZE);
 	CLITaskHandle = osThreadCreate(osThread(CLI), NULL);
 
-	if(USBPD_OK != USBPD_DPM_InitOS())
-	{
-		while(1);
-	}
-
 	/* Register commands with the FreeRTOS+CLI command interpreter. */
 	vRegisterCLICommands();
+#endif /* _CLI_INTERFACE */
+
+	/* Initialize the Device Policy Manager */
+	if( USBPD_ERROR == USBPD_DPM_InitOS())
+	{
+		/* error the OS init  */
+		while(1);
+	}
 
   /* USER CODE END RTOS_THREADS */
 
@@ -500,7 +530,7 @@ static void MX_UCPD2_Init(void)
 
   LL_DMA_SetDataTransferDirection(DMA1, LL_DMA_CHANNEL_6, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
 
-  LL_DMA_SetChannelPriorityLevel(DMA1, LL_DMA_CHANNEL_6, LL_DMA_PRIORITY_VERYHIGH);
+  LL_DMA_SetChannelPriorityLevel(DMA1, LL_DMA_CHANNEL_6, LL_DMA_PRIORITY_LOW);
 
   LL_DMA_SetMode(DMA1, LL_DMA_CHANNEL_6, LL_DMA_MODE_NORMAL);
 
@@ -517,7 +547,7 @@ static void MX_UCPD2_Init(void)
 
   LL_DMA_SetDataTransferDirection(DMA1, LL_DMA_CHANNEL_7, LL_DMA_DIRECTION_MEMORY_TO_PERIPH);
 
-  LL_DMA_SetChannelPriorityLevel(DMA1, LL_DMA_CHANNEL_7, LL_DMA_PRIORITY_VERYHIGH);
+  LL_DMA_SetChannelPriorityLevel(DMA1, LL_DMA_CHANNEL_7, LL_DMA_PRIORITY_LOW);
 
   LL_DMA_SetMode(DMA1, LL_DMA_CHANNEL_7, LL_DMA_MODE_NORMAL);
 
@@ -604,9 +634,13 @@ static void MX_DMA_Init(void)
   /* DMA1_Channel1_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 3, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+
+#if defined(_CLI_INTERFACE)
   /* DMA1_Channel2_3_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 3, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel2_3_IRQn);
+#endif /* _CLI_INTERFACE */
+
   /* DMA1_Ch4_7_DMAMUX1_OVR_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Ch4_7_DMAMUX1_OVR_IRQn, 3, 0);
   HAL_NVIC_EnableIRQ(DMA1_Ch4_7_DMAMUX1_OVR_IRQn);

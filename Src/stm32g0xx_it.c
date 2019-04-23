@@ -39,6 +39,7 @@
 #include "cmsis_os.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "tracer_emb.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -165,8 +166,16 @@ void DMA1_Channel2_3_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Channel2_3_IRQn 0 */
 
   /* USER CODE END DMA1_Channel2_3_IRQn 0 */
+#if defined(_CLI_INTERFACE)
   HAL_DMA_IRQHandler(&hdma_usart1_tx);
   HAL_DMA_IRQHandler(&hdma_usart1_rx);
+#endif /* _CLI_INTERFACE */
+
+#if defined(_GUI_INTERFACE)
+  if (TRACER_EMB_DMA_MODE == 1) {
+	  TRACER_EMB_IRQHandlerDMA();
+  }
+#endif /* _GUI_INTERFACE */
   /* USER CODE BEGIN DMA1_Channel2_3_IRQn 1 */
 
   /* USER CODE END DMA1_Channel2_3_IRQn 1 */
@@ -258,7 +267,13 @@ void USART1_IRQHandler(void)
   /* USER CODE BEGIN USART1_IRQn 0 */
 
   /* USER CODE END USART1_IRQn 0 */
+#if defined(_CLI_INTERFACE)
   HAL_UART_IRQHandler(&huart1);
+#endif /* _CLI_INTERFACE */
+
+#if defined(_GUI_INTERFACE)
+  TRACER_EMB_IRQHandlerUSART();
+#endif /* _GUI_INTERFACE */
   /* USER CODE BEGIN USART1_IRQn 1 */
 
   /* USER CODE END USART1_IRQn 1 */

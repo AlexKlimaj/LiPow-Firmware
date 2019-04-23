@@ -178,8 +178,6 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			efficiency,
 			Get_Error_State());
 
-	Get_source_capabilities();
-
 	/* There is no more data to return after this single string, so return
 	 pdFALSE. */
 	return pdFALSE;

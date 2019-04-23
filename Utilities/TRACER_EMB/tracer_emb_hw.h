@@ -1,13 +1,12 @@
-/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    usbpd.h
+  * @file    usbpd_bsp_trace.h
   * @author  MCD Application Team
-  * @brief   This file contains the device define.
+  * @brief   This file contains bsp interface control functions.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -17,47 +16,31 @@
   *
   ******************************************************************************
   */
-/* USER CODE END Header */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __usbpd_H
-#define __usbpd_H
+#ifndef HW_TRACE_H
+#define HW_TRACE_H
+
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "usbpd_core.h"
-#include "usbpd_dpm_core.h"
-#include "usbpd_dpm_user.h"
-#include "usbpd_hw_if.h"
 
-/* USER CODE BEGIN 0 */
+/* Exported functions ---------------------------------------------------------*/
 
-/* USER CODE END 0 */
-
-/* Global variables ---------------------------------------------------------*/
-
-/* USER CODE BEGIN 1 */
-/* USER CODE END 1 */
-
-/* USBPD init function */
-void MX_USBPD_Init(void);
-
-/* USER CODE BEGIN 2 */
-
-/* USER CODE END 2 */
+void  HW_TRACER_EMB_Init(void);
+void  HW_TRACER_EMB_DeInit(void);
+void  HW_TRACER_EMB_RegisterRxCallback(void (*callbackRX)(uint8_t, uint8_t));
+#if TRACER_EMB_DMA_MODE == 1UL
+void  HW_TRACER_EMB_IRQHandlerDMA(void);
+#endif
+void  HW_TRACER_EMB_IRQHandlerUSART(void);
+void  HW_TRACER_EMB_StartRX(void);
+void  HW_TRACER_EMB_SendData(uint8_t *data, uint32_t size);
 
 #ifdef __cplusplus
 }
 #endif
-#endif /*__usbpd_H */
 
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
+#endif /* HW_TRACE_H */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
