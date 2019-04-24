@@ -35,6 +35,7 @@
 #include "usbpd_pwr_if.h"
 #include "string.h"
 #include "cmsis_os.h"
+#include "printf.h"
 
 /** @addtogroup STM32_USBPD_LIBRARY
   * @{
@@ -141,16 +142,19 @@ USBPD_StatusTypeDef USBPD_DPM_UserInit(void)
   /* PWR SET UP */
   if(USBPD_OK !=  USBPD_PWR_IF_Init())
   {
+	  printf("Error Initializing USB PD PWR IF\n\r");
     return USBPD_ERROR;
   }
   if(USBPD_OK != USBPD_PWR_IF_PowerResetGlobal()) return USBPD_ERROR;
 
   if (USBPD_OK != USBPD_VDM_UserInit(USBPD_PORT_0))
   {
+	  printf("Error Initializing USB PD VDM User port 0\n\r");
     return USBPD_ERROR;
   }
   if (USBPD_OK != USBPD_VDM_UserInit(USBPD_PORT_1))
   {
+	  printf("Error Initializing USB PD VDM User port 1\n\r");
     return USBPD_ERROR;
   }
 
@@ -160,11 +164,13 @@ USBPD_StatusTypeDef USBPD_DPM_UserInit(void)
 
   if(NULL == osThreadCreate(osThread(DPM), &DPMMsgBox))
   {
+	  printf("Error Creating USB PD DPM Thread\n\r");
     return USBPD_ERROR;
   }
 
   if(USBPD_OK != USBPD_PWR_IF_StartMonitoring())
   {
+	  printf("Error Starting USB PD Monitoring\n\r");
     return USBPD_ERROR;
   }
 

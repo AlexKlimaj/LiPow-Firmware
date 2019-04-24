@@ -779,6 +779,54 @@ void vLED_Blinky(void const *pvParameters) {
 		}
 
 		vTaskDelay(xDelay);
+
+		//printf("%d\n\r", USBPD_PE_Request_HardReset(USBPD_PORT_0));
+
+		  uint8_t _str[25];
+		  uint8_t _max = DPM_Ports[USBPD_PORT_0].DPM_NumberOfRcvSRCPDO;
+		  uint8_t _start = 0;
+
+		  for(int8_t index=_start; index < _max; index++)
+		  {
+		    switch((DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[index] & USBPD_PDO_TYPE_Msk) >> USBPD_PDO_TYPE_Pos)
+		    {
+		    case USBPD_CORE_PDO_TYPE_FIXED :
+		      {
+		        uint32_t maxcurrent = ((DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[index] & USBPD_PDO_SRC_FIXED_MAX_CURRENT_Msk) >> USBPD_PDO_SRC_FIXED_MAX_CURRENT_Pos)*10;
+		        uint32_t maxvoltage = ((DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[index] & USBPD_PDO_SRC_FIXED_VOLTAGE_Msk) >> USBPD_PDO_SRC_FIXED_VOLTAGE_Pos)*50;
+		        sprintf((char*)_str, " FIXED:%2dV %2d.%dA ", (maxvoltage/1000), (maxcurrent/1000), ((maxcurrent % 1000) /100));
+		      }
+		      break;
+		    case USBPD_CORE_PDO_TYPE_BATTERY :
+		      {
+		        uint32_t maxvoltage = ((DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[index] & USBPD_PDO_SRC_BATTERY_MAX_VOLTAGE_Msk) >> USBPD_PDO_SRC_BATTERY_MAX_VOLTAGE_Pos) * 50;
+		        uint32_t minvoltage = ((DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[index] & USBPD_PDO_SRC_BATTERY_MIN_VOLTAGE_Msk) >> USBPD_PDO_SRC_BATTERY_MIN_VOLTAGE_Pos) * 50;
+		        uint32_t maxpower = ((DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[index] & USBPD_PDO_SRC_BATTERY_MAX_POWER_Msk) >> USBPD_PDO_SRC_BATTERY_MAX_POWER_Pos) * 250;
+		        sprintf((char*)_str, " BATT:%2d.%1d-%2d.%1dV %2d.%dW", (minvoltage/1000),(minvoltage/100)%10, (maxvoltage/1000),(maxvoltage/100)%10, (maxpower/1000), (maxpower%1000)/100);
+		      }
+		      break;
+		    case USBPD_CORE_PDO_TYPE_VARIABLE :
+		      {
+		        uint32_t maxvoltage = ((DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[index] & USBPD_PDO_SRC_VARIABLE_MAX_VOLTAGE_Msk) >> USBPD_PDO_SRC_VARIABLE_MAX_VOLTAGE_Pos) * 50;
+		        uint32_t minvoltage = ((DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[index] & USBPD_PDO_SRC_VARIABLE_MIN_VOLTAGE_Msk) >> USBPD_PDO_SRC_VARIABLE_MIN_VOLTAGE_Pos) * 50;
+		        uint32_t maxcurrent = ((DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[index] & USBPD_PDO_SRC_VARIABLE_MAX_CURRENT_Msk) >> USBPD_PDO_SRC_VARIABLE_MAX_CURRENT_Pos) * 10;
+		        sprintf((char*)_str, " VAR: %2d.%1d-%2d.%1dV %2d.%dA", (minvoltage/1000),(minvoltage/100)%10, (maxvoltage/1000),(maxvoltage/100)%10, (maxcurrent/1000), ((maxcurrent % 1000) /100));
+		      }
+		      break;
+		    case USBPD_CORE_PDO_TYPE_APDO :
+		      {
+		        uint32_t minvoltage = ((DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[index] & USBPD_PDO_SRC_APDO_MIN_VOLTAGE_Msk) >> USBPD_PDO_SRC_APDO_MIN_VOLTAGE_Pos) * 100;
+		        uint32_t maxvoltage = ((DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[index] & USBPD_PDO_SRC_APDO_MAX_VOLTAGE_Msk) >> USBPD_PDO_SRC_APDO_MAX_VOLTAGE_Pos) * 100;
+		        uint32_t maxcurrent = ((DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[index] & USBPD_PDO_SRC_APDO_MAX_CURRENT_Msk) >> USBPD_PDO_SRC_APDO_MAX_CURRENT_Pos) * 50;
+		        sprintf((char*)_str, " APDO:%2d.%1d-%2d.%1dV %2d.%dA", (minvoltage/1000),(minvoltage/100)%10, (maxvoltage/1000),(maxvoltage/100)%10, (maxcurrent/1000), ((maxcurrent % 1000) /100));
+		      }
+		      break;
+		    default :
+		      sprintf((char*)_str,"Not yet managed by demo");
+		      break;
+		    }
+			printf("%s", _str);
+		  }
 	}
 }
 
