@@ -47,11 +47,11 @@ USBPD_SettingsTypeDef       DPM_Settings[USBPD_PORT_COUNT] =
     .PE_SupportedSOP = USBPD_SUPPORTED_SOP_SOP | USBPD_SUPPORTED_SOP_SOP1 | USBPD_SUPPORTED_SOP_SOP2, /* Supported SOP : SOP, SOP' SOP" SOP'Debug SOP"Debug      */
     .PE_SpecRevision = USBPD_SPECIFICATION_REV3,/* spec revision value                                     */
     .PE_DefaultRole = USBPD_PORTPOWERROLE_SNK,  /* Default port role                                       */
-    .PE_RoleSwap = USBPD_TRUE,                  /* support port role swap                                  */
+    .PE_RoleSwap = USBPD_FALSE,                  /* support port role swap                                  */
     .PE_VDMSupport = USBPD_TRUE,
     .PE_RespondsToDiscovSOP = USBPD_TRUE,      /*!< Can respond successfully to a Discover Identity */
     .PE_AttemptsDiscovSOP = USBPD_TRUE,        /*!< Can send a Discover Identity */
-    .PE_PingSupport = USBPD_FALSE,             /* support Ping (only for PD3.0)                           */
+    .PE_PingSupport = USBPD_TRUE,             /* support Ping (only for PD3.0)                           */
     .PE_CapscounterSupport = USBPD_FALSE,       /* support caps counter                                    */
     .CAD_RoleToggle = USBPD_TRUE,               /* cad role toggle                                         */
     .CAD_TryFeature = USBPD_FALSE,              /* cad try feature                                         */
@@ -115,7 +115,7 @@ USBPD_USER_SettingsTypeDef       DPM_USER_Settings[USBPD_PORT_COUNT] =
     {
       .VID = USBPD_VID,                      /*!< Vendor ID (assigned by the USB-IF)        */
       .PID = USBPD_PID,                      /*!< Product ID (assigned by the manufacturer) */
-      .ManuString = "STMicroelectronics",    /*!< Vendor defined byte array                 */
+      .ManuString = "Ark Electronics",    /*!< Vendor defined byte array                 */
     },
   },
 };

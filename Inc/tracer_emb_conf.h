@@ -38,7 +38,7 @@ extern "C" {
 /* -----------------------------------------------------------------------------
       Definitions for TRACE feature
 -------------------------------------------------------------------------------*/
-#define TRACER_EMB_BAUDRATE                          115200UL
+#define TRACER_EMB_BAUDRATE                          921600UL
 
 #define TRACER_EMB_DMA_MODE                          1UL
 #define TRACER_EMB_IT_MODE                           0UL
