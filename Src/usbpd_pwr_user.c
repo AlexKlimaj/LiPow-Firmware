@@ -22,6 +22,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "usbpd_pwr_user.h"
 #include "stm32g0xx_hal.h"
+#include "bq25703a_regulator.h"
 
 /* USER CODE BEGIN include */
 
@@ -257,7 +258,7 @@ PWR_StatusTypeDef BSP_PWR_VBUSSetVoltage_APDO(uint32_t PortId,
 uint32_t  BSP_PWR_VBUSGetVoltage(uint32_t PortId)
 {
 /* USER CODE BEGIN BSP_PWR_VBUSGetVoltage */
-  return 0;
+  return ((Get_VBUS_ADC_Reading()*1000)/BATTERY_ADC_MULTIPLIER);
 /* USER CODE END BSP_PWR_VBUSGetVoltage */
 }
 
@@ -272,7 +273,7 @@ uint32_t  BSP_PWR_VBUSGetVoltage(uint32_t PortId)
 int32_t BSP_PWR_VBUSGetCurrent(uint32_t PortId)
 {
 /* USER CODE BEGIN BSP_PWR_VBUSGetCurrent */
-  return 0;
+  return ((Get_Input_Current_ADC_Reading()*1000)/BATTERY_ADC_MULTIPLIER);;
 /* USER CODE END BSP_PWR_VBUSGetCurrent */
 }
 
@@ -393,7 +394,7 @@ PWR_StatusTypeDef BSP_PWR_RegisterVBUSDetectCallback(uint32_t                   
                                                      PWR_VBUSDetectCallbackFunc *   pfnVBUSDetectCallback)
 {
 /* USER CODE BEGIN BSP_PWR_RegisterVBUSDetectCallback */
-  return PWR_ERROR;
+  return 0;
 /* USER CODE END BSP_PWR_RegisterVBUSDetectCallback */
 }
 
@@ -407,7 +408,7 @@ PWR_StatusTypeDef BSP_PWR_RegisterVBUSDetectCallback(uint32_t                   
 uint8_t BSP_PWR_VBUSIsOn(uint32_t PortId)
 {
 /* USER CODE BEGIN BSP_PWR_VBUSIsOn */
-  return 0;
+  return 1;
 /* USER CODE END BSP_PWR_VBUSIsOn */
 }
 
