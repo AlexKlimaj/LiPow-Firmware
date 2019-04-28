@@ -800,7 +800,9 @@ void USBPD_PWR_IF_Alarm()
 
   /* Remove the resitor */
   USBPD_CAD_EnterErrorRecovery(0);
+#if USBPD_PORT_COUNT == 2
   USBPD_CAD_EnterErrorRecovery(1);
+#endif /* USBPD_PORT_COUNT == 2 */
 
   /* Stop RTOS scheduling */
   vTaskSuspendAll ();
@@ -922,6 +924,7 @@ void USBPD_PWR_IF_MonitorSafety(void const *argument)
       USBPD_PWR_IF_Alarm();
     }
 
+#if USBPD_PORT_COUNT == 2
     /* Monitor the current for the SNK power PORT1 */
     isense_safety[USBPD_PORT_1] = BSP_PWR_VBUSGetCurrent(USBPD_PORT_1);
 
@@ -930,6 +933,7 @@ void USBPD_PWR_IF_MonitorSafety(void const *argument)
     {
       USBPD_PWR_IF_Alarm();
     }
+#endif
 
     osDelay(1);
   }
