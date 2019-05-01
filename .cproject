@@ -62,8 +62,7 @@
 									<listOptionValue builtIn="false" value="_SNK"/>
 									<listOptionValue builtIn="false" value="_RTOS"/>
 									<listOptionValue builtIn="false" value="USBPDCORE_LIB_PD3_FULL"/>
-									<listOptionValue builtIn="false" value="_GUI_INTERFACE"/>
-									<listOptionValue builtIn="false" value="_TRACE"/>
+									<listOptionValue builtIn="false" value="_CLI_INTERFACE"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1854274048" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false" value="com.atollic.truestudio.common_options.target.endianess.little" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.191909026" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32G071CB" valueType="enumerated"/>
