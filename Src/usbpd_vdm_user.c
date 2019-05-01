@@ -982,9 +982,11 @@ USBPD_StatusTypeDef USBPD_VDM_UserInit(uint8_t PortNum)
   USBPD_PE_InitVDM_Callback(PortNum, (USBPD_VDM_Callbacks *)&vdmCallbacks);
 
 
+#if USBPD_PORT_COUNT == 2
   if (USBPD_PORT_1 == PortNum)
     return HPD_Init(PortNum);
   else
+#endif
     return USBPD_OK;
 }
 
@@ -996,9 +998,11 @@ void USBPD_VDM_UserReset(uint8_t PortNum)
 {
   /* Reset Port Partner variables*/
   Remote_CurrentSVID[PortNum]       = 0;
+#if USBPD_PORT_COUNT == 2
   if (USBPD_PORT_1 == PortNum)
   {
   }
+#endif
 
   /* Disconnect received on Type-C */
   VDM_Mode_On[PortNum] = 0;

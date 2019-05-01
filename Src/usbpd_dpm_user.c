@@ -142,35 +142,46 @@ USBPD_StatusTypeDef USBPD_DPM_UserInit(void)
   /* PWR SET UP */
   if(USBPD_OK !=  USBPD_PWR_IF_Init())
   {
-	  printf("Error Initializing USB PD PWR IF\n\r");
+#ifdef _TRACE
+    USBPD_TRACE_Add(USBPD_TRACE_DEBUG, 0, 0, (uint8_t *) "Error Initializing USB PD PWR IF", sizeof("Error Initializing USB PD PWR IF"));
+#endif /* _TRACE */
     return USBPD_ERROR;
   }
   if(USBPD_OK != USBPD_PWR_IF_PowerResetGlobal()) return USBPD_ERROR;
 
   if (USBPD_OK != USBPD_VDM_UserInit(USBPD_PORT_0))
   {
-	  printf("Error Initializing USB PD VDM User port 0\n\r");
+#ifdef _TRACE
+    USBPD_TRACE_Add(USBPD_TRACE_DEBUG, 0, 0, (uint8_t *) "Error Initializing USB PD VDM User port 0", sizeof("Error Initializing USB PD VDM User port 0"));
+#endif /* _TRACE */
     return USBPD_ERROR;
   }
+#if USBPD_PORT_COUNT == 2
   if (USBPD_OK != USBPD_VDM_UserInit(USBPD_PORT_1))
   {
-	  printf("Error Initializing USB PD VDM User port 1\n\r");
+#ifdef _TRACE
+    USBPD_TRACE_Add(USBPD_TRACE_DEBUG, 0, 0, (uint8_t *) "Error Initializing USB PD VDM User port 1", sizeof("Error Initializing USB PD VDM User port 1"));
+#endif /* _TRACE */
     return USBPD_ERROR;
   }
-
+#endif /* USBPD_PORT_COUNT == 2 */
   osMessageQDef(MsgBox, DPM_BOX_MESSAGES_MAX, uint32_t);
   DPMMsgBox = osMessageCreate(osMessageQ(MsgBox), NULL);
   osThreadDef(DPM, USBPD_DPM_UserExecute, osPriorityLow, 0, 300);
 
   if(NULL == osThreadCreate(osThread(DPM), &DPMMsgBox))
   {
-	  printf("Error Creating USB PD DPM Thread\n\r");
+#ifdef _TRACE
+    USBPD_TRACE_Add(USBPD_TRACE_DEBUG, 0, 0, (uint8_t *) "Error Creating USB PD DPM Thread", sizeof("Error Creating USB PD DPM Thread"));
+#endif /* _TRACE */
     return USBPD_ERROR;
   }
 
   if(USBPD_OK != USBPD_PWR_IF_StartMonitoring())
   {
-	  printf("Error Starting USB PD Monitoring\n\r");
+#ifdef _TRACE
+    USBPD_TRACE_Add(USBPD_TRACE_DEBUG, 0, 0, (uint8_t *) "Error Starting USB PD Monitoring", sizeof("Error Starting USB PD Monitoring"));
+#endif /* _TRACE */
     return USBPD_ERROR;
   }
 
