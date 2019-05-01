@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    usbpd_devices_conf.h
+  * @file    tracer_emb_conf.h
   * @author  MCD Application Team
   * @brief   This file contains the device define.
   ******************************************************************************
