@@ -188,6 +188,9 @@ int main(void)
   MX_UCPD2_Init();
   /* USER CODE BEGIN 2 */
 #if defined(_GUI_INTERFACE)
+  /* Disable dead battery to use USART1_RX used by GUI 	*/
+  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
+  LL_SYSCFG_DisableDBATT(SYSCFG_CFGR1_UCPD2_STROBE);
   /* Initialize GUI */
   GUI_Init(BSP_GetHWBoardVersionName, BSP_GetPDTypeName);
 #endif /* _GUI_INTERFACE */
