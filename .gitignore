@@ -57,3 +57,5 @@ Debug/
 
 # Environment specific
 .settings/language.settings.xml
+.prefs
+.settings
