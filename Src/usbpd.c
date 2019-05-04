@@ -99,19 +99,17 @@ void vUSBPD_User(void const *pvParameters) {
 		vTaskDelay(xDelay);
 	}
 
-	USBPD_DPM_RequestGetSourceCapability(USBPD_PORT_0);
-	vTaskDelay(xDelay);
 	printf("Number of received Source PDOs: %d\r\n", DPM_Ports[USBPD_PORT_0].DPM_NumberOfRcvSRCPDO);
 
 	for (int i = 0; i < DPM_Ports[USBPD_PORT_0].DPM_NumberOfRcvSRCPDO; i++) {
 		printf("PDO From Source: #%d PDO: %d\r\n", i, DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[i]);
 	}
 
-	status = USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, 0, LE16(&DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[0]));
-	printf("USBPD_DPM_RequestMessageRequest Status: %d\r\n", status);
+	//status = USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, 1, LE16(&DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[1]));
+	//printf("USBPD_DPM_RequestMessageRequest Status: %d\r\n", status);
 
-	USBPD_DPM_SNK_EvaluateMatchWithSRCPDO(uint8_t PortNum, uint32_t SrcPDO, uint32_t* PtrRequestedVoltage, uint32_t* PtrRequestedPower);
-	USBPD_DPM_SNK_EvaluateCapabilities(uint8_t PortNum, uint32_t *PtrRequestData, USBPD_CORE_PDO_Type_TypeDef *PtrPowerObjectType);
+	//USBPD_DPM_SNK_EvaluateMatchWithSRCPDO(uint8_t PortNum, uint32_t SrcPDO, uint32_t* PtrRequestedVoltage, uint32_t* PtrRequestedPower);
+	//USBPD_DPM_SNK_EvaluateCapabilities(uint8_t PortNum, uint32_t *PtrRequestData, USBPD_CORE_PDO_Type_TypeDef *PtrPowerObjectType);
 
 	//USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, uint8_t IndexSrcPDO, uint16_t RequestedVoltage);
 
