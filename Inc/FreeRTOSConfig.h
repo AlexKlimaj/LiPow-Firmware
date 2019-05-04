@@ -119,6 +119,7 @@ standard names. */
 #define ADC_TASK_PRIORITY				( tskIDLE_PRIORITY + 3 )
 #define	LED_TASK_PRIORITY				( tskIDLE_PRIORITY + 2 )
 #define UART_CLI_TASK_PRIORITY			( tskIDLE_PRIORITY + 1 )
+#define USBPD_TASK_PRIORITY				( tskIDLE_PRIORITY + 2 )
 
 #define vcliSTACK_SIZE					( configMINIMAL_STACK_SIZE * 3 )
 #define vRead_ADC_STACK_SIZE			( configMINIMAL_STACK_SIZE * 2 )
