@@ -1593,8 +1593,9 @@ uint32_t USBPD_DPM_SNK_EvaluateMatchWithSRCPDO(uint8_t PortNum, uint32_t SrcPDO,
                Requested Op Current : SNK Op Current
                Requested Max Current : SNK Op Current
             */
-            if (  (snkvoltage50mv == srcvoltage50mv)
-                &&(snkopcurrent10ma <= srcmaxcurrent10ma))
+//            if (  (snkvoltage50mv == srcvoltage50mv)
+//                &&(snkopcurrent10ma <= srcmaxcurrent10ma))
+            if (snkvoltage50mv == srcvoltage50mv)
             {
               currentrequestedpower = (snkvoltage50mv * snkopcurrent10ma) / 2; /* to get value in mw */
               currentrequestedvoltage = snkvoltage50mv;

@@ -53,14 +53,14 @@ typedef struct
 
 /* Exported define -----------------------------------------------------------*/
 #define USBPD_PDP_SRC_IN_WATTS          45  /* SRC PD Power in Watts */
-#define USBPD_PDP_SNK_IN_WATTS          7.5 /* SINK PD Power in Watts */
+#define USBPD_PDP_SNK_IN_WATTS          60 /* SINK PD Power in Watts */
 
 /* Define board operating power and max power */
 /* Request 5V and 1500mA in sink mode */
 #define USBPD_BOARD_REQUESTED_VOLTAGE_MV       5000
-#define USBPD_BOARD_MIN_VOLTAGE_MV_PORT0       5000
+#define USBPD_BOARD_MIN_VOLTAGE_MV_PORT0       4000
 #define USBPD_BOARD_MIN_VOLTAGE_MV_PORT1       3300
-#define USBPD_BOARD_MAX_VOLTAGE_MV             15000
+#define USBPD_BOARD_MAX_VOLTAGE_MV             22000
 
 /* PDP = 45W */
 #define USBPD_PDO_APDO_9VPROG_45W_MAX_CURRENT  3   /* Max Current in A */
@@ -72,14 +72,14 @@ typedef struct
 
 /* Definitions of nb of PDO and APDO for each port */
 #define USBPD_CORE_PDO_SRC_FIXED_MAX_CURRENT 3
-#define USBPD_CORE_PDO_SNK_FIXED_MAX_CURRENT 3000
+#define USBPD_CORE_PDO_SNK_FIXED_MAX_CURRENT 3
 
 #define USBPD_PDO_APDO_5VPROG_15W_MAX_CURRENT  3   /* Max Current in A (PDP / 5) */
 
 /* Definitions of nb of PDO and APDO for each port */
 #define PORT0_NB_SOURCEPDO         4   /* Number of Source PDOs (applicable for port 0)   */
 #define PORT1_NB_SOURCEPDO         0   /* Number of Source PDOs (applicable for port 1)   */
-#define PORT0_NB_SINKPDO           3   /* Number of Sink PDOs (applicable for port 0)     */
+#define PORT0_NB_SINKPDO           5   /* Number of Sink PDOs (applicable for port 0)     */
 #define PORT1_NB_SINKPDO           4   /* Number of Sink PDOs (applicable for port 1)     */
 #define PORT0_NB_SOURCEAPDO        0   /* Number of Source APDOs (applicable for port 0)  */
 #define PORT0_NB_SINKAPDO          0   /* Number of Sink APDOs (applicable for port 0)    */

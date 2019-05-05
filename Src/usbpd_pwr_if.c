@@ -151,6 +151,70 @@ USBPD_StatusTypeDef USBPD_PWR_IF_Init(void)
   USBPD_StatusTypeDef _status = USBPD_OK;
   uint32_t index;
 
+  /* Definition of Sink PDO for Port 0 */
+  uint32_t PORT0_PDO_USER_ListSNK[USBPD_MAX_NB_PDO] =
+  {
+    /* PDO 1 */
+          ( ((PWR_A_10MA(3)) << USBPD_PDO_SRC_FIXED_MAX_CURRENT_Pos) |
+            ((PWR_V_50MV(5)) << USBPD_PDO_SRC_FIXED_VOLTAGE_Pos)                                        |
+             USBPD_PDO_SNK_FIXED_FRS_NOT_SUPPORTED                                                     |
+			 USBPD_PDO_SNK_FIXED_DRD_NOT_SUPPORTED                                                         |
+             USBPD_PDO_SNK_FIXED_USBCOMM_NOT_SUPPORTED                                                 |
+             USBPD_PDO_SNK_FIXED_EXT_POWER_NOT_AVAILABLE                                               |
+             USBPD_PDO_SNK_FIXED_HIGHERCAPAB_NOT_SUPPORTED                                             |
+			 USBPD_PDO_SNK_FIXED_DRP_NOT_SUPPORTED                                                         |
+             USBPD_PDO_TYPE_FIXED
+          ),
+    /* PDO 2 */
+          ( ((PWR_A_10MA(3)) << USBPD_PDO_SRC_FIXED_MAX_CURRENT_Pos) |
+            ((PWR_V_50MV(9)) << USBPD_PDO_SRC_FIXED_VOLTAGE_Pos) |
+            USBPD_PDO_SNK_FIXED_FRS_NOT_SUPPORTED                                                     |
+			USBPD_PDO_SNK_FIXED_DRD_NOT_SUPPORTED                                                         |
+            USBPD_PDO_SNK_FIXED_USBCOMM_NOT_SUPPORTED                                                 |
+            USBPD_PDO_SNK_FIXED_EXT_POWER_NOT_AVAILABLE                                               |
+			USBPD_PDO_SNK_FIXED_HIGHERCAPAB_SUPPORTED                                             |
+			USBPD_PDO_SNK_FIXED_DRP_NOT_SUPPORTED                                                         |
+            USBPD_PDO_TYPE_FIXED
+          ),
+    /* PDO 3 */
+          ( ((PWR_A_10MA(3)) << USBPD_PDO_SRC_FIXED_MAX_CURRENT_Pos) |
+            ((PWR_V_50MV(12)) << USBPD_PDO_SRC_FIXED_VOLTAGE_Pos) |
+            USBPD_PDO_SNK_FIXED_FRS_NOT_SUPPORTED                                                     |
+			USBPD_PDO_SNK_FIXED_DRD_NOT_SUPPORTED                                                         |
+            USBPD_PDO_SNK_FIXED_USBCOMM_NOT_SUPPORTED                                                 |
+            USBPD_PDO_SNK_FIXED_EXT_POWER_NOT_AVAILABLE                                               |
+			USBPD_PDO_SNK_FIXED_HIGHERCAPAB_SUPPORTED                                             |
+			USBPD_PDO_SNK_FIXED_DRP_NOT_SUPPORTED                                                         |
+            USBPD_PDO_TYPE_FIXED
+          ),
+    /* PDO 4 */
+          ( ((PWR_A_10MA(3)) << USBPD_PDO_SRC_FIXED_MAX_CURRENT_Pos) |
+            ((PWR_V_50MV(15)) << USBPD_PDO_SRC_FIXED_VOLTAGE_Pos) |
+            USBPD_PDO_SNK_FIXED_FRS_NOT_SUPPORTED                                                     |
+			USBPD_PDO_SNK_FIXED_DRD_NOT_SUPPORTED                                                         |
+            USBPD_PDO_SNK_FIXED_USBCOMM_NOT_SUPPORTED                                                 |
+            USBPD_PDO_SNK_FIXED_EXT_POWER_NOT_AVAILABLE                                               |
+			USBPD_PDO_SNK_FIXED_HIGHERCAPAB_SUPPORTED                                             |
+			USBPD_PDO_SNK_FIXED_DRP_NOT_SUPPORTED                                                         |
+            USBPD_PDO_TYPE_FIXED
+          ),
+    /* PDO 5 */
+          ( ((PWR_A_10MA(3)) << USBPD_PDO_SRC_FIXED_MAX_CURRENT_Pos) |
+            ((PWR_V_50MV(20)) << USBPD_PDO_SRC_FIXED_VOLTAGE_Pos) |
+            USBPD_PDO_SNK_FIXED_FRS_NOT_SUPPORTED                                                     |
+			USBPD_PDO_SNK_FIXED_DRD_NOT_SUPPORTED                                                         |
+            USBPD_PDO_SNK_FIXED_USBCOMM_NOT_SUPPORTED                                                 |
+            USBPD_PDO_SNK_FIXED_EXT_POWER_NOT_AVAILABLE                                               |
+			USBPD_PDO_SNK_FIXED_HIGHERCAPAB_SUPPORTED                                             |
+			USBPD_PDO_SNK_FIXED_DRP_NOT_SUPPORTED                                                         |
+            USBPD_PDO_TYPE_FIXED
+          ),
+    /* PDO 6 */ (0x00000000U),
+    /* PDO 7 */ (0x00000000U)
+  };
+
+  uint8_t num_of_user_sink_pdo = 5;
+
   /* Reset PDO values */
   memset(PWR_Port_PDO_Storage, 0, sizeof(PWR_Port_PDO_Storage));
 
@@ -159,14 +223,22 @@ USBPD_StatusTypeDef USBPD_PWR_IF_Init(void)
     /* SRC PDO for Port 0 */
     PWR_Port_PDO_Storage[USBPD_PORT_0].SourcePDO.ListOfPDO[index] = PORT0_PDO_ListSRC[index];
 
-
+#ifdef _GUI_INTERFACE
     /* SNK PDO for Port 0 */
     PWR_Port_PDO_Storage[USBPD_PORT_0].SinkPDO.ListOfPDO[index] = PORT0_PDO_ListSNK[index];
+#else
+    /* SNK PDO for Port 0 */
+    PWR_Port_PDO_Storage[USBPD_PORT_0].SinkPDO.ListOfPDO[index] = PORT0_PDO_USER_ListSNK[index];
+#endif
   }
+#ifdef _GUI_INTERFACE
   PWR_Port_PDO_Storage[USBPD_PORT_0].SinkPDO.NumberOfPDO   = USBPD_NbPDO[0];
+#else
+  PWR_Port_PDO_Storage[USBPD_PORT_0].SinkPDO.NumberOfPDO   = num_of_user_sink_pdo;
+#endif
   PWR_Port_PDO_Storage[USBPD_PORT_0].SourcePDO.NumberOfPDO = USBPD_NbPDO[1];
 
-  _status |= USBPD_PWR_IF_CheckUpdateSNKPower(USBPD_PORT_0);
+  //_status |= USBPD_PWR_IF_CheckUpdateSNKPower(USBPD_PORT_0);
 
   return _status;
 }

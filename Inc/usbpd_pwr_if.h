@@ -48,19 +48,19 @@
   */
 
 /* Macros used to convert values into PDO representation */
-#define PWR_V_20MV(_V_)        ((uint16_t)(( (_V_) * 1000.0) / 20.0))   /* From Volt to 20mV multiples      */
-#define PWR_V_50MV(_V_)        ((uint16_t)(( (_V_) * 1000.0) / 50.0))   /* From Volt to 50mV multiples      */
-#define PWR_V_100MV(_V_)       ((uint16_t)(( (_V_) * 1000.0) / 100.0))  /* From Volt to 100mV multiples     */
-#define PWR_A_10MA(_A_)        ((uint16_t)(( (_A_) * 1000.0) / 10.0))   /* From Ampere to 10mA multiples    */
-#define PWR_A_50MA(_A_)        ((uint16_t)(( (_A_) * 1000.0) / 50.0))   /* From Ampere to 50mA multiples    */
-#define PWR_W(_W_)             ((uint16_t)(( (_W_) * 1000.0) / 250.0))  /* From Watt to 250mW multiples     */
+#define PWR_V_20MV(_V_)        ((uint16_t)(( (_V_) * 1000.0f) / 20.0f))   /* From Volt to 20mV multiples      */
+#define PWR_V_50MV(_V_)        ((uint16_t)(( (_V_) * 1000.0f) / 50.0f))   /* From Volt to 50mV multiples      */
+#define PWR_V_100MV(_V_)       ((uint16_t)(( (_V_) * 1000.0f) / 100.0f))  /* From Volt to 100mV multiples     */
+#define PWR_A_10MA(_A_)        ((uint16_t)(( (_A_) * 1000.0f) / 10.0f))   /* From Ampere to 10mA multiples    */
+#define PWR_A_50MA(_A_)        ((uint16_t)(( (_A_) * 1000.0f) / 50.0f))   /* From Ampere to 50mA multiples    */
+#define PWR_W(_W_)             ((uint16_t)(( (_W_) * 1000.0f) / 250.0f))  /* From Watt to 250mW multiples     */
 
 /* Macros used to get values from PDO representation */
-#define PWR_DECODE_50MV(_Value_)           ((uint16_t)(( (float)(_Value_) * 50.0)))     /* From 50mV multiples to mV        */
-#define PWR_DECODE_100MV(_Value_)          ((uint16_t)(( (float)(_Value_) * 100.0)))    /* From 100mV multiples to mV       */
-#define PWR_DECODE_10MA(_Value_)           ((uint16_t)(( (float)(_Value_) * 10.0)))     /* From 10mA multiples to mA        */
-#define PWR_DECODE_50MA(_Value_)           ((uint16_t)(( (float)(_Value_) * 50.0)))     /* From 50mA multiples to mA        */
-#define PWR_DECODE_MW(_Value_)             ((uint16_t)(( (float)(_Value_) * 250.0)))    /* From 250mW multiples to mW       */
+#define PWR_DECODE_50MV(_Value_)           ((uint16_t)(( (float)(_Value_) * 50.0f)))     /* From 50mV multiples to mV        */
+#define PWR_DECODE_100MV(_Value_)          ((uint16_t)(( (float)(_Value_) * 100.0f)))    /* From 100mV multiples to mV       */
+#define PWR_DECODE_10MA(_Value_)           ((uint16_t)(( (float)(_Value_) * 10.0f)))     /* From 10mA multiples to mA        */
+#define PWR_DECODE_50MA(_Value_)           ((uint16_t)(( (float)(_Value_) * 50.0f)))     /* From 50mA multiples to mA        */
+#define PWR_DECODE_MW(_Value_)             ((uint16_t)(( (float)(_Value_) * 250.0f)))    /* From 250mW multiples to mW       */
 
 #define USBPD_PORT_IsValid(__Port__) ((__Port__) < (USBPD_PORT_COUNT))
 
