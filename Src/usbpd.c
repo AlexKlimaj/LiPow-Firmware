@@ -30,6 +30,7 @@
 #include "usbpd_dpm_user.h"
 #include "usbpd_pwr_if.h"
 
+#include "battery.h"
 #include "printf.h"
 
 /* USER CODE END 0 */
@@ -105,15 +106,32 @@ void vUSBPD_User(void const *pvParameters) {
 		printf("PDO From Source: #%d PDO: %d\r\n", i, DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[i]);
 	}
 
-	//status = USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, 1, LE16(&DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[1]));
-	//printf("USBPD_DPM_RequestMessageRequest Status: %d\r\n", status);
-
-	//USBPD_DPM_SNK_EvaluateMatchWithSRCPDO(uint8_t PortNum, uint32_t SrcPDO, uint32_t* PtrRequestedVoltage, uint32_t* PtrRequestedPower);
-	//USBPD_DPM_SNK_EvaluateCapabilities(uint8_t PortNum, uint32_t *PtrRequestData, USBPD_CORE_PDO_Type_TypeDef *PtrPowerObjectType);
-
-	//USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, uint8_t IndexSrcPDO, uint16_t RequestedVoltage);
-
 	for (;;) {
+
+		if (Get_XT60_Connection_State() == CONNECTED) {
+			switch(Get_Number_Of_Cells()) {
+				case 2:
+					status = USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, 1, (uint16_t)5000);
+					//printf("USBPD_DPM_RequestMessageRequest Status: %d\r\n", status);
+					break;
+
+				case 3:
+					status = USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, 2, (uint16_t)9000);
+					//printf("USBPD_DPM_RequestMessageRequest Status: %d\r\n", status);
+					break;
+
+				case 4:
+					status = USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, 3, (uint16_t)15000);
+					//printf("USBPD_DPM_RequestMessageRequest Status: %d\r\n", status);
+//					status = USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, 4, (uint16_t)20000);
+//					printf("USBPD_DPM_RequestMessageRequest Status: %d\r\n", status);
+					break;
+
+				default:
+					break;
+			}
+		}
+
 		vTaskDelay(xDelay);
 	}
 }

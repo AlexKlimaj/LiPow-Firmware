@@ -60,7 +60,7 @@ typedef struct
 #define USBPD_BOARD_REQUESTED_VOLTAGE_MV       5000
 #define USBPD_BOARD_MIN_VOLTAGE_MV_PORT0       4000
 #define USBPD_BOARD_MIN_VOLTAGE_MV_PORT1       3300
-#define USBPD_BOARD_MAX_VOLTAGE_MV             20000
+#define USBPD_BOARD_MAX_VOLTAGE_MV             22000
 
 /* PDP = 45W */
 #define USBPD_PDO_APDO_9VPROG_45W_MAX_CURRENT  3   /* Max Current in A */
@@ -72,7 +72,7 @@ typedef struct
 
 /* Definitions of nb of PDO and APDO for each port */
 #define USBPD_CORE_PDO_SRC_FIXED_MAX_CURRENT 3
-#define USBPD_CORE_PDO_SNK_FIXED_MAX_CURRENT 5
+#define USBPD_CORE_PDO_SNK_FIXED_MAX_CURRENT 3
 
 #define USBPD_PDO_APDO_5VPROG_15W_MAX_CURRENT  3   /* Max Current in A (PDP / 5) */
 

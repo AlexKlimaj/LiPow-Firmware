@@ -15,6 +15,7 @@ extern "C" {
 #include "stm32g0xx_hal.h"
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
+#include "error.h"
 
 #define VOLTAGE_CONNECTED_THRESHOLD			(uint32_t)( 0.5 * BATTERY_ADC_MULTIPLIER )
 #define CELL_DELTA_V_ENABLE_BALANCING		(uint32_t)( 0.08 * BATTERY_ADC_MULTIPLIER )
