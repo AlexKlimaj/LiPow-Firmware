@@ -826,9 +826,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
-  if (htim->Instance == TIM1) {
-	extern void USBPD_DPM_TimerCounter(void);
-	USBPD_DPM_TimerCounter();
+  if (htim->Instance == TIM2) {
+    extern void USBPD_DPM_TimerCounter(void);
+    USBPD_DPM_TimerCounter();
   }
   /* USER CODE END Callback 1 */
 }
