@@ -41,6 +41,8 @@
 
 /* Global variables ---------------------------------------------------------*/
 
+TIM_HandleTypeDef        htim2;
+
 /* USER CODE BEGIN 2 */
 
 osMessageQId  USBPDMsgBox;
@@ -54,13 +56,14 @@ void vUSBPD_User(void const *pvParameters);
 void MX_USBPD_Init(void)
 {
 
+  htim2.Instance = TIMX;
+
   /* Global Init of USBPD HW */
   USBPD_HW_IF_GlobalHwInit();
 
   /* Initialize the Device Policy Manager */
-  if( USBPD_ERROR == USBPD_DPM_InitCore())
+  if(USBPD_OK != USBPD_DPM_InitCore())
   {
-    /* error on core init  */
     while(1);
   }
 
@@ -90,11 +93,11 @@ void vUSBPD_User(void const *pvParameters) {
 
 	while (status != USBPD_OK) {
 		status = USBPD_DPM_RequestGetSourceCapability(USBPD_PORT_0);
-		printf("USBPD_DPM_RequestGetSourceCapability Status: %d\r\n", status);
+		//printf("USBPD_DPM_RequestGetSourceCapability Status: %d\r\n", status);
 
 		if (status == USBPD_ERROR) {
-			printf("USBPD Error. Sending Hard Reset\r\n");
-			USBPD_DPM_RequestHardReset(USBPD_PORT_0);
+			//printf("USBPD Error. Sending Hard Reset\r\n");
+			//USBPD_DPM_RequestHardReset(USBPD_PORT_0);
 		}
 
 		vTaskDelay(xDelay);

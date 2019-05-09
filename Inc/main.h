@@ -125,10 +125,6 @@ void Error_Handler(void);
 #define ILIM_HIZ_GPIO_Port GPIOB
 #define CHRG_OK_Pin GPIO_PIN_12
 #define CHRG_OK_GPIO_Port GPIOB
-#define EN_CC1_Pin GPIO_PIN_13
-#define EN_CC1_GPIO_Port GPIOB
-#define EN_CC2_Pin GPIO_PIN_14
-#define EN_CC2_GPIO_Port GPIOB
 #define CELL_1S_DIS_EN_Pin GPIO_PIN_4
 #define CELL_1S_DIS_EN_GPIO_Port GPIOB
 #define CELL_2S_DIS_EN_Pin GPIO_PIN_5
