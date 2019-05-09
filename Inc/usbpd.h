@@ -33,6 +33,8 @@
 #include "usbpd_hw_if.h"
 
 /* USER CODE BEGIN 0 */
+#define VOLTAGE_CHOICE_ARRAY_SIZE 5
+#define INPUT_VOLTAGE_VALID_THRESH_MV 1000
 
 /* USER CODE END 0 */
 
