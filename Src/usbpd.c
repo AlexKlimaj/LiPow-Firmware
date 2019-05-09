@@ -31,6 +31,7 @@
 #include "usbpd_pwr_if.h"
 
 #include "battery.h"
+#include "bq25703a_regulator.h"
 #include "printf.h"
 
 /* USER CODE END 0 */
@@ -91,8 +92,8 @@ void vUSBPD_User(void const *pvParameters) {
 
 	vTaskDelay(xDelay);
 
-	while (status != USBPD_OK) {
-		status = USBPD_DPM_RequestGetSourceCapability(USBPD_PORT_0);
+/*	while (status != USBPD_OK) {
+		//status = USBPD_DPM_RequestGetSourceCapability(USBPD_PORT_0);
 		//printf("USBPD_DPM_RequestGetSourceCapability Status: %d\r\n", status);
 
 		if (status == USBPD_ERROR) {
@@ -107,7 +108,7 @@ void vUSBPD_User(void const *pvParameters) {
 
 	for (int i = 0; i < DPM_Ports[USBPD_PORT_0].DPM_NumberOfRcvSRCPDO; i++) {
 		printf("PDO From Source: #%d PDO: %d\r\n", i, DPM_Ports[USBPD_PORT_0].DPM_ListOfRcvSRCPDO[i]);
-	}
+	}*/
 
 	for (;;) {
 
@@ -132,6 +133,18 @@ void vUSBPD_User(void const *pvParameters) {
 
 				default:
 					break;
+			}
+		}
+		else {
+			if (Get_VBUS_ADC_Reading() > (6 * BATTERY_ADC_MULTIPLIER)) {
+				printf("Requesting 5V, Result: ");
+				status = USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, 1, (uint16_t)5000);
+				if (status == USBPD_OK) {
+					printf("Success\r\n");
+				}
+				else {
+					printf("Failed\r\n");
+				}
 			}
 		}
 
