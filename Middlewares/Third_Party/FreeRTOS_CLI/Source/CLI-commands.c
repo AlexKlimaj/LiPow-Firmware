@@ -131,6 +131,8 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 
 	float efficiency = output_power/input_power;
 
+	float max_charge_current = (float)Get_Max_Charge_Current()/1000.0f;
+
 	/* Generate a table of stats. */
 	sprintf(pcWriteBuffer,
 			"Variable                    Value\r\n"
@@ -151,6 +153,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			"Balancing State              %u\r\n"
 			"Regulator Connection State   %d\r\n"
 			"Charging State               %u\r\n"
+			"Max Charge Current           %.3f\r\n"
 			"Vbus Voltage (V)             %.2f\r\n"
 			"Input Current (A)            %.2f\r\n"
 			"Input Power (W)              %.2f\r\n"
@@ -172,6 +175,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			Get_Balancing_State(),
 			Get_Regulator_Connection_State(),
 			Get_Regulator_Charging_State(),
+			max_charge_current,
 			vbus_voltage,
 			input_current,
 			input_power,
