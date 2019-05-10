@@ -36,6 +36,9 @@
 #define VOLTAGE_CHOICE_ARRAY_SIZE 5
 #define INPUT_VOLTAGE_VALID_THRESH_MV 1000
 
+#define READY 1
+#define NOT_READY 0
+
 /* USER CODE END 0 */
 
 /* Global variables ---------------------------------------------------------*/
@@ -45,6 +48,10 @@
 
 /* USBPD init function */
 void MX_USBPD_Init(void);
+uint8_t Get_Input_Power_Ready(void);
+uint32_t Get_Max_Input_Power(void);
+uint32_t Get_Max_Input_Current(void);
+uint32_t Get_Input_Voltage(void);
 
 /* USER CODE BEGIN 2 */
 

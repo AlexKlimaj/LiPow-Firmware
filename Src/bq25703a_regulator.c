@@ -12,6 +12,7 @@
 #include "main.h"
 #include "string.h"
 #include "printf.h"
+#include "usbpd.h"
 
 extern I2C_HandleTypeDef hi2c1;
 
@@ -315,16 +316,26 @@ void Regulator_Set_Charge_Option_0() {
 
 /**
  * @brief Sets the charging current limit. From 64mA to 8.128A in 64mA steps. Maps from 0 - 128. 7 bit value.
- * @param charge_current_limit 0-128 which remaps from 64mA-8.128A. 7 bit value.
+ * @param charge_current_limit Charge current limit in mA
  */
-void Set_Charge_Current(uint8_t charge_current_limit) {
+void Set_Charge_Current(uint32_t charge_current_limit) {
 
+	uint32_t charge_current = 0;
+
+	if (charge_current_limit > MAX_CHARGE_CURRENT_MA) {
+		charge_current = MAX_CHARGE_CURRENT_MA;
+	}
+	else if (charge_current_limit != 0){
+		charge_current = charge_current_limit/64;
+	}
+
+	//0-128 which remaps from 64mA-8.128A. 7 bit value.
 	uint8_t charge_current_register_1_value = 0;
 	uint8_t charge_current_register_2_value = 0;
 
-	if ((charge_current_limit >= 0) || (charge_current_limit <= 128)) {
-		charge_current_register_1_value = (charge_current_limit >> 3);
-		charge_current_register_2_value = (charge_current_limit << 6);
+	if ((charge_current >= 0) || (charge_current <= 128)) {
+		charge_current_register_1_value = (charge_current >> 3);
+		charge_current_register_2_value = (charge_current << 6);
 	}
 
 	I2C_Write_Two_Byte_Register(CHARGE_CURRENT_ADDR, charge_current_register_2_value, charge_current_register_1_value);
@@ -415,17 +426,19 @@ void vRegulator(void const *pvParameters) {
 			regulator.connected = 0;
 		}
 
-		if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0)) {
+		if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0) && (Get_Input_Power_Ready() == READY)) {
 
 			if (regulator.charging_status == 0) {
 				Set_Charge_Voltage(Get_Number_Of_Cells());
-				Set_Charge_Current(1); //Hardcoded for now. Will need to be determined with an algorithm once USB PD is implemented
+				Set_Charge_Current(320);
 				vTaskDelay(xDelay*4);
 				Regulator_HI_Z(0);
 			}
 			else {
 				Set_Charge_Voltage(Get_Number_Of_Cells());
-				Set_Charge_Current(10); //Hardcoded for now. Will need to be determined with an algorithm once USB PD is implemented
+				uint32_t charging_power_mw = (Get_Max_Input_Power() * ASSUME_EFFICIENCY); //Assume 90% efficiency
+				uint32_t charging_current_ma = ((charging_power_mw) / ((Get_Battery_Voltage()) / (BATTERY_ADC_MULTIPLIER)));
+				Set_Charge_Current(charging_current_ma);
 			}
 
 		}

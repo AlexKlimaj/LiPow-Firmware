@@ -58,7 +58,7 @@ volatile uint32_t max_source_power_mw = 0;
 volatile uint8_t max_source_power_pdo = 0;
 
 volatile uint8_t selected_source_pdo = 0;
-volatile uint8_t power_ready = 0;
+volatile uint8_t power_ready = NOT_READY;
 volatile uint8_t match_found = 0;
 
 volatile uint16_t voltage_choice_list_mv[3][VOLTAGE_CHOICE_ARRAY_SIZE] = {
@@ -105,6 +105,37 @@ void MX_USBPD_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+/**
+ * @brief Gets the state of the input power supply
+ * @retval READY or NOT_READY
+ */
+uint8_t Get_Input_Power_Ready(void) {
+	return power_ready;
+}
+
+/**
+ * @brief Gets the max input power for the selected PDO
+ * @retval Max input power in mW
+ */
+uint32_t Get_Max_Input_Power(void){
+	return source_pdo[selected_source_pdo].power_mw;
+}
+
+/**
+ * @brief Gets the max input current for the selected PDO
+ * @retval Max input current in mA
+ */
+uint32_t Get_Max_Input_Current(void) {
+	return source_pdo[selected_source_pdo].current_ma;
+}
+
+/**
+ * @brief Gets the input voltage for the selected PDO
+ * @retval Input Voltage in mV
+ */
+uint32_t Get_Input_Voltage(void) {
+	return source_pdo[selected_source_pdo].voltage_mv;
+}
 
 void vUSBPD_User(void const *pvParameters) {
 	TickType_t xDelay = 500 / portTICK_PERIOD_MS;
@@ -200,24 +231,24 @@ void vUSBPD_User(void const *pvParameters) {
 			match_found = 0;
 		}
 
-		if ((Get_XT60_Connection_State() == CONNECTED) && (power_ready == 0) && (match_found == 1)) {
+		if ((Get_XT60_Connection_State() == CONNECTED) && (power_ready == NOT_READY) && (match_found == 1)) {
 			printf("Requesting %dV, Result: ", (source_pdo[selected_source_pdo].voltage_mv/1000));
 			status = USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, (selected_source_pdo + 1), (uint16_t)source_pdo[selected_source_pdo].voltage_mv);
 			vTaskDelay(xDelay/5);
 			if (status == USBPD_OK) {
 				printf("Success\r\n");
-				power_ready = 1;
+				power_ready = READY;
 			}
 			else {
 				printf("Failed\r\n");
-				power_ready = 0;
+				power_ready = NOT_READY;
 			}
 		}
 		else if ((Get_XT60_Connection_State() == NOT_CONNECTED)){
 			if (Get_VBUS_ADC_Reading() > (6 * BATTERY_ADC_MULTIPLIER)) {
 				printf("Requesting 5V, Result: ");
 				status = USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, 1, (uint16_t)5000);
-				vTaskDelay(xDelay/5);
+				vTaskDelay(xDelay/2);
 				if (status == USBPD_OK) {
 					printf("Success\r\n");
 				}
@@ -225,7 +256,7 @@ void vUSBPD_User(void const *pvParameters) {
 					printf("Failed\r\n");
 				}
 			}
-			power_ready = 0;
+			power_ready = NOT_READY;
 		}
 
 		vTaskDelay(xDelay);
