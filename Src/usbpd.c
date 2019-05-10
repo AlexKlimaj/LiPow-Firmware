@@ -33,7 +33,6 @@
 #include "battery.h"
 #include "bq25703a_regulator.h"
 #include "printf.h"
-#include <stdlib.h>
 
 /* USER CODE END 0 */
 
