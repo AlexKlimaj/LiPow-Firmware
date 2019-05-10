@@ -28,6 +28,7 @@ struct Regulator {
 	uint32_t vsys_voltage;
 	uint32_t charge_current;
 	uint32_t input_current;
+	uint32_t max_charge_current_ma;
 };
 
 /* Private variables ---------------------------------------------------------*/
@@ -91,6 +92,14 @@ uint32_t Get_Input_Current_ADC_Reading() {
  */
 uint32_t Get_Charge_Current_ADC_Reading() {
 	return regulator.charge_current;
+}
+
+/**
+ * @brief Gets the max output current for charging
+ * @retval Max Charge Current in miliamps
+ */
+uint32_t Get_Max_Charge_Current() {
+	return regulator.max_charge_current_ma;
 }
 
 /**
@@ -325,7 +334,10 @@ void Set_Charge_Current(uint32_t charge_current_limit) {
 	if (charge_current_limit > MAX_CHARGE_CURRENT_MA) {
 		charge_current = MAX_CHARGE_CURRENT_MA;
 	}
-	else if (charge_current_limit != 0){
+
+	regulator.max_charge_current_ma = charge_current_limit;
+
+	if (charge_current_limit != 0){
 		charge_current = charge_current_limit/64;
 	}
 

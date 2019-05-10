@@ -73,6 +73,7 @@ uint32_t Get_VBUS_ADC_Reading(void);
 uint32_t Get_PSYS_ADC_Reading(void);
 uint32_t Get_Input_Current_ADC_Reading(void);
 uint32_t Get_Charge_Current_ADC_Reading(void);
+uint32_t Get_Max_Charge_Current(void);
 void vRegulator(void const *pvParameters);
 
 /* Used to guard access to the I2C in case messages are sent to the UART from
