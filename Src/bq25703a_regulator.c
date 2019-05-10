@@ -364,7 +364,7 @@ void Set_Charge_Voltage(uint8_t number_of_cells) {
 	uint8_t max_charge_register_1_value = 0;
 	uint8_t max_charge_register_2_value = 0;
 
-	uint8_t	minimum_system_voltage_value = 0b00000100; //1.024V
+	uint8_t	minimum_system_voltage_value = MIN_VOLT_ADD_1024_MV;
 
 	if ((number_of_cells > 0) || (number_of_cells < 5)) {
 		switch (number_of_cells) {
