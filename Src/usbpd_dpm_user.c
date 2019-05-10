@@ -1207,7 +1207,7 @@ USBPD_StatusTypeDef USBPD_DPM_RequestMessageRequest(uint8_t PortNum, uint8_t Ind
     if (RequestedVoltage == voltage)
     {
       request_details.RequestedVoltageInmVunits    = RequestedVoltage;
-      request_details.OperatingCurrentInmAunits    = (1000 * allowablepower)/RequestedVoltage;
+      request_details.OperatingCurrentInmAunits    = ((1000 * allowablepower)/RequestedVoltage);
       request_details.MaxOperatingCurrentInmAunits = puser->DPM_SNKRequestedPower.MaxOperatingCurrentInmAunits;
       request_details.MaxOperatingPowerInmWunits   = puser->DPM_SNKRequestedPower.MaxOperatingPowerInmWunits;
       request_details.OperatingPowerInmWunits      = puser->DPM_SNKRequestedPower.OperatingPowerInmWunits;
@@ -2070,6 +2070,26 @@ void DPM_SNK_BuildRDOfromSelectedPDO(uint8_t PortNum, uint8_t IndexSrcPDO, USBPD
   switch(pdo.GenericPDO.PowerObject)
   {
   case USBPD_CORE_PDO_TYPE_FIXED:
+      /* USBPD_DPM_EvaluateCapabilities: Mismatch, less power offered than the operating power */
+      ma = USBPD_MIN(ma, (pdo.SRCFixedPDO.MaxCurrentIn10mAunits * 10));
+
+      mw = (ma * mv)/1000; /* mW */
+
+      DPM_Ports[PortNum].DPM_RequestedCurrent           = ma;
+      rdo.FixedVariableRDO.OperatingCurrentIn10mAunits  = ma / 10;
+      rdo.FixedVariableRDO.MaxOperatingCurrent10mAunits = ma / 10;
+
+      rdo.FixedVariableRDO.CapabilityMismatch = 0;
+      rdo.FixedVariableRDO.GiveBackFlag = 0;
+
+      if(mw < puser->DPM_SNKRequestedPower.OperatingPowerInmWunits)
+      {
+        /* USBPD_DPM_EvaluateCapabilities: Mismatch, less power offered than the operating power */
+        rdo.FixedVariableRDO.MaxOperatingCurrent10mAunits = puser->DPM_SNKRequestedPower.MaxOperatingCurrentInmAunits / 10;
+        rdo.FixedVariableRDO.CapabilityMismatch = 1;
+      }
+      break;
+
   case USBPD_CORE_PDO_TYPE_VARIABLE:
     {
       /* USBPD_DPM_EvaluateCapabilities: Mismatch, less power offered than the operating power */

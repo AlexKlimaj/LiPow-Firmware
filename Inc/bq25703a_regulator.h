@@ -88,7 +88,7 @@ extern "C" {
 #define IIN_ADC_SCALE				(uint32_t)(0.050 * BATTERY_ADC_MULTIPLIER)
 
 #define MAX_CHARGE_CURRENT_MA		5000
-#define ASSUME_EFFICIENCY			0.9f
+#define ASSUME_EFFICIENCY			0.85f
 
 uint8_t Get_Regulator_Connection_State(void);
 uint8_t Get_Regulator_Charging_State(void);

@@ -52,7 +52,7 @@ typedef struct
 }USBPD_PWR_Port_PDO_Storage_TypeDef;
 
 /* Exported define -----------------------------------------------------------*/
-#define USBPD_PDP_SRC_IN_WATTS          45  /* SRC PD Power in Watts */
+#define USBPD_PDP_SRC_IN_WATTS          60  /* SRC PD Power in Watts */
 #define USBPD_PDP_SNK_IN_WATTS          60 /* SINK PD Power in Watts */
 
 /* Define board operating power and max power */

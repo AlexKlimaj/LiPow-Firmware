@@ -341,12 +341,16 @@ void Set_Charge_Current(uint32_t charge_current_limit) {
 		charge_current = charge_current_limit/64;
 	}
 
+	if (charge_current > 128) {
+		charge_current = 128;
+	}
+
 	//0-128 which remaps from 64mA-8.128A. 7 bit value.
 	uint8_t charge_current_register_1_value = 0;
 	uint8_t charge_current_register_2_value = 0;
 
 	if ((charge_current >= 0) || (charge_current <= 128)) {
-		charge_current_register_1_value = (charge_current >> 3);
+		charge_current_register_1_value = (charge_current >> 2);
 		charge_current_register_2_value = (charge_current << 6);
 	}
 
