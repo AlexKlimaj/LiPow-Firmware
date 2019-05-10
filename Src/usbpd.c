@@ -207,6 +207,13 @@ void vUSBPD_User(void const *pvParameters) {
 		printf("Voltage: %dmV  Current: %dmA  Power: %dmW\r\n", source_pdo[i].voltage_mv, source_pdo[i].current_ma, source_pdo[i].power_mw);
 	}
 
+	if (DPM_Ports[USBPD_PORT_0].DPM_NumberOfRcvSRCPDO == 0) {
+		power_ready = NO_USB_PD_SUPPLY;
+		for(;;) {
+			vTaskDelay(xDelay);
+		}
+	}
+
 	for (;;) {
 
 		//Find the best PDO from the source for the highest regulator efficiency

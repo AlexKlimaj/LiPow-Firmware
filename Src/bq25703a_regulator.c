@@ -458,6 +458,21 @@ void vRegulator(void const *pvParameters) {
 			}
 
 		}
+		// Case to handle non USB PD supplies. Limited to 5V 500mA.
+		else if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0) && (Get_Input_Power_Ready() == NO_USB_PD_SUPPLY)) {
+
+			if (regulator.charging_status == 0) {
+				Set_Charge_Voltage(Get_Number_Of_Cells());
+				Set_Charge_Current(128);
+				vTaskDelay(xDelay*4);
+				Regulator_HI_Z(0);
+			}
+			else {
+				Set_Charge_Voltage(Get_Number_Of_Cells());
+				Set_Charge_Current(448);
+			}
+
+		}
 		else {
 			Regulator_HI_Z(1);
 			Set_Charge_Voltage(0);
