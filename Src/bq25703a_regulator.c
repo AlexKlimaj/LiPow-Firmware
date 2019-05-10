@@ -341,12 +341,16 @@ void Set_Charge_Current(uint32_t charge_current_limit) {
 		charge_current = charge_current_limit/64;
 	}
 
+	if (charge_current > 128) {
+		charge_current = 128;
+	}
+
 	//0-128 which remaps from 64mA-8.128A. 7 bit value.
 	uint8_t charge_current_register_1_value = 0;
 	uint8_t charge_current_register_2_value = 0;
 
 	if ((charge_current >= 0) || (charge_current <= 128)) {
-		charge_current_register_1_value = (charge_current >> 3);
+		charge_current_register_1_value = (charge_current >> 2);
 		charge_current_register_2_value = (charge_current << 6);
 	}
 
@@ -364,34 +368,34 @@ void Set_Charge_Voltage(uint8_t number_of_cells) {
 	uint8_t max_charge_register_1_value = 0;
 	uint8_t max_charge_register_2_value = 0;
 
-	uint8_t	minimum_system_voltage_value = 0b00000100; //1.024V
+	uint8_t	minimum_system_voltage_value = MIN_VOLT_ADD_1024_MV;
 
 	if ((number_of_cells > 0) || (number_of_cells < 5)) {
 		switch (number_of_cells) {
 			case 1:
-				max_charge_register_1_value = 0b00010000;
-				max_charge_register_2_value = 0b01100000;
-				minimum_system_voltage_value = 0b00001011; //2.816V
+				max_charge_register_1_value = MAX_VOLT_ADD_4096_MV;
+				max_charge_register_2_value = MAX_VOLT_ADD_64_MV | MAX_VOLT_ADD_32_MV;
+				minimum_system_voltage_value = MIN_VOLT_ADD_2048_MV | MIN_VOLT_ADD_512_MV | MIN_VOLT_ADD_256_MV;
 				break;
 			case 2:
-				max_charge_register_1_value = 0b00100000;
-				max_charge_register_2_value = 0b11010000;
-				minimum_system_voltage_value = 0b00010110; //5.632V
+				max_charge_register_1_value = MAX_VOLT_ADD_8192_MV;
+				max_charge_register_2_value = MAX_VOLT_ADD_128_MV | MAX_VOLT_ADD_64_MV | MAX_VOLT_ADD_16_MV;
+				minimum_system_voltage_value = MIN_VOLT_ADD_4096_MV | MIN_VOLT_ADD_1024_MV | MIN_VOLT_ADD_512_MV;
 				break;
 			case 3:
-				max_charge_register_1_value = 0b00110001;
-				max_charge_register_2_value = 0b00110000;
-				minimum_system_voltage_value = 0b00100001; //8.448V
+				max_charge_register_1_value = MAX_VOLT_ADD_8192_MV | MAX_VOLT_ADD_4096_MV | MAX_VOLT_ADD_256_MV;
+				max_charge_register_2_value = MAX_VOLT_ADD_32_MV | MAX_VOLT_ADD_16_MV;
+				minimum_system_voltage_value = MIN_VOLT_ADD_8192_MV |  MIN_VOLT_ADD_256_MV;
 				break;
 			case 4:
-				max_charge_register_1_value = 0b01000001;
-				max_charge_register_2_value = 0b10100000;
-				minimum_system_voltage_value = 0b00101100; //11.264V
+				max_charge_register_1_value = MAX_VOLT_ADD_16384_MV | MAX_VOLT_ADD_256_MV;
+				max_charge_register_2_value = MAX_VOLT_ADD_128_MV | MAX_VOLT_ADD_16_MV;
+				minimum_system_voltage_value = MIN_VOLT_ADD_8192_MV | MIN_VOLT_ADD_2048_MV | MIN_VOLT_ADD_1024_MV;
 				break;
 			default:
 				max_charge_register_1_value = 0;
 				max_charge_register_2_value = 0;
-				minimum_system_voltage_value = 0b00000100; //1.024V
+				minimum_system_voltage_value = MIN_VOLT_ADD_1024_MV;
 				break;
 			}
 	}
@@ -451,6 +455,21 @@ void vRegulator(void const *pvParameters) {
 				uint32_t charging_power_mw = (Get_Max_Input_Power() * ASSUME_EFFICIENCY); //Assume 90% efficiency
 				uint32_t charging_current_ma = ((charging_power_mw) / ((Get_Battery_Voltage()) / (BATTERY_ADC_MULTIPLIER)));
 				Set_Charge_Current(charging_current_ma);
+			}
+
+		}
+		// Case to handle non USB PD supplies. Limited to 5V 500mA.
+		else if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0) && (Get_Input_Power_Ready() == NO_USB_PD_SUPPLY)) {
+
+			if (regulator.charging_status == 0) {
+				Set_Charge_Voltage(Get_Number_Of_Cells());
+				Set_Charge_Current(128);
+				vTaskDelay(xDelay*4);
+				Regulator_HI_Z(0);
+			}
+			else {
+				Set_Charge_Voltage(Get_Number_Of_Cells());
+				Set_Charge_Current(448);
 			}
 
 		}
