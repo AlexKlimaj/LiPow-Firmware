@@ -71,6 +71,14 @@ uint8_t Get_Regulator_Charging_State() {
 }
 
 /**
+ * @brief Gets VBAT voltage that was read in from the ADC on the regulator
+ * @retval VBAT voltage in volts * BATTERY_ADC_MULTIPLIER
+ */
+uint32_t Get_VBAT_ADC_Reading() {
+	return regulator.vbat_voltage;
+}
+
+/**
  * @brief Gets VBUS voltage that was read in from the ADC on the regulator
  * @retval VBUS voltage in volts * BATTERY_ADC_MULTIPLIER
  */
@@ -455,6 +463,13 @@ void vRegulator(void const *pvParameters) {
 				uint32_t charging_power_mw = (Get_Max_Input_Power() * ASSUME_EFFICIENCY); //Assume 90% efficiency
 				uint32_t charging_current_ma = ((charging_power_mw) / ((Get_Battery_Voltage()) / (BATTERY_ADC_MULTIPLIER)));
 				Set_Charge_Current(charging_current_ma);
+
+				//Check if XT60 was disconnected
+				if (regulator.charge_current == 0) {
+					Regulator_HI_Z(1);
+					vTaskDelay(xDelay*2);
+					Regulator_HI_Z(0);
+				}
 			}
 
 		}

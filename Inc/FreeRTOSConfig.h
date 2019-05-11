@@ -110,7 +110,7 @@ standard names. */
 
 /* USER CODE BEGIN Defines */   	      
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
-#define configCOMMAND_INT_MAX_OUTPUT_SIZE 1600
+#define configCOMMAND_INT_MAX_OUTPUT_SIZE 3200
 #define configUSE_STATS_FORMATTING_FUNCTIONS 1
 #define configUSE_TASK_NOTIFICATIONS 1
 

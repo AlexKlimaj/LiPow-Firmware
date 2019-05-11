@@ -308,7 +308,7 @@
 	</storageModule>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="Lipow"/>
+			<resource resourceType="PROJECT" workspacePath="/Lipow"/>
 		</configuration>
 		<configuration configurationName="Release">
 			<resource resourceType="PROJECT" workspacePath="/USB PD Charger Rev 02"/>

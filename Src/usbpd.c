@@ -264,6 +264,7 @@ void vUSBPD_User(void const *pvParameters) {
 				}
 			}
 			power_ready = NOT_READY;
+			vTaskDelay(xDelay*5);
 		}
 
 		vTaskDelay(xDelay);
