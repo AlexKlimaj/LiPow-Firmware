@@ -465,7 +465,7 @@ void vRegulator(void const *pvParameters) {
 				Set_Charge_Current(charging_current_ma);
 
 				//Check if XT60 was disconnected
-				if (regulator.charge_current == 0) {
+				if (regulator.vbat_voltage > (BATTERY_DISCONNECT_THRESH * Get_Number_Of_Cells())) {
 					Regulator_HI_Z(1);
 					vTaskDelay(xDelay*2);
 					Regulator_HI_Z(0);
