@@ -125,6 +125,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 	float charge_current = ((float)Get_Charge_Current_ADC_Reading()/BATTERY_ADC_MULTIPLIER);
 	float output_power = battery_voltage * charge_current;
 
+	float regulator_vbat_voltage = ((float)Get_VBAT_ADC_Reading()/BATTERY_ADC_MULTIPLIER);
 	float vbus_voltage = ((float)Get_VBUS_ADC_Reading()/BATTERY_ADC_MULTIPLIER);
 	float input_current = ((float)Get_Input_Current_ADC_Reading()/BATTERY_ADC_MULTIPLIER);
 	float input_power = vbus_voltage * input_current;
@@ -137,7 +138,8 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 	sprintf(pcWriteBuffer,
 			"Variable                    Value\r\n"
 			"************************************************\r\n"
-			"Battery Voltage (V)          %.2f\r\n"
+			"Battery Voltage MCU(V)       %.2f\r\n"
+			"Battery Voltage Reg (V)      %.2f\r\n"
 			"Charging Current (A)         %.2f\r\n"
 			"Charging Power (W)           %.2f\r\n"
 			"Cell One Voltage (V)         %.2f\r\n"
@@ -160,6 +162,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			"Efficiency (OutputW/InputW)  %.3f\r\n"
 			"Battery Error State          %u\r\n",
 			battery_voltage,
+			regulator_vbat_voltage,
 			charge_current,
 			output_power,
 			cell_voltage_float[0],
