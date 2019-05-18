@@ -468,6 +468,7 @@ void vRegulator(void const *pvParameters) {
 					charging_power_mw = MAX_CHARGING_POWER * ASSUME_EFFICIENCY;
 				}
 				//Throttle charging power if temperature is too high
+				// TODO - Change to linear temp throttling over entire operating range. ie at 20C allow 100% charing power, at 75C 0%, 47.5C, 50%, etc. Below 20C allow 100%.
 				if (Get_MCU_Temperature() > TEMP_THROTTLE_THRESH_C) {
 					charging_power_mw = charging_power_mw * (float)(1 - ((float)Get_MCU_Temperature()/(float)MAX_MCU_TEMP_C_FOR_OPERATION));
 				}
