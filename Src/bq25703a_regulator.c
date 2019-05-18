@@ -5,7 +5,7 @@
  ******************************************************************************
  */
 
-
+#include "adc_interface.h"
 #include "bq25703a_regulator.h"
 #include "battery.h"
 #include "error.h"
@@ -461,13 +461,18 @@ void vRegulator(void const *pvParameters) {
 			else {
 				Set_Charge_Voltage(Get_Number_Of_Cells());
 
+				//Account for system losses with ASSUME_EFFICIENCY fudge factor to not overload source
 				uint32_t charging_power_mw = (Get_Max_Input_Power() * ASSUME_EFFICIENCY);
 
 				if (charging_power_mw > MAX_CHARGING_POWER) {
 					charging_power_mw = MAX_CHARGING_POWER * ASSUME_EFFICIENCY;
 				}
+				//Throttle charging power if temperature is too high
+				if (Get_MCU_Temperature() > TEMP_THROTTLE_THRESH_C) {
+					charging_power_mw = charging_power_mw * (float)(1 - ((float)Get_MCU_Temperature()/(float)MAX_MCU_TEMP_C_FOR_OPERATION));
+				}
 
-				uint32_t charging_current_ma = ((charging_power_mw) / ((Get_Battery_Voltage()) / (BATTERY_ADC_MULTIPLIER)));
+				uint32_t charging_current_ma = ((charging_power_mw) / (Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
 				Set_Charge_Current(charging_current_ma);
 
 				//Check if XT60 was disconnected
