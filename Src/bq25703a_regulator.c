@@ -460,7 +460,13 @@ void vRegulator(void const *pvParameters) {
 			}
 			else {
 				Set_Charge_Voltage(Get_Number_Of_Cells());
-				uint32_t charging_power_mw = (Get_Max_Input_Power() * ASSUME_EFFICIENCY); //Assume 90% efficiency
+
+				uint32_t charging_power_mw = (Get_Max_Input_Power() * ASSUME_EFFICIENCY);
+
+				if (charging_power_mw > MAX_CHARGING_POWER) {
+					charging_power_mw = MAX_CHARGING_POWER * ASSUME_EFFICIENCY;
+				}
+
 				uint32_t charging_current_ma = ((charging_power_mw) / ((Get_Battery_Voltage()) / (BATTERY_ADC_MULTIPLIER)));
 				Set_Charge_Current(charging_current_ma);
 
