@@ -397,7 +397,7 @@ void Set_Charge_Voltage(uint8_t number_of_cells) {
 				break;
 			case 4:
 				max_charge_register_1_value = MAX_VOLT_ADD_16384_MV | MAX_VOLT_ADD_256_MV;
-				max_charge_register_2_value = MAX_VOLT_ADD_128_MV | MAX_VOLT_ADD_16_MV;
+				max_charge_register_2_value = MAX_VOLT_ADD_128_MV | MAX_VOLT_ADD_32_MV;
 				minimum_system_voltage_value = MIN_VOLT_ADD_8192_MV | MIN_VOLT_ADD_2048_MV | MIN_VOLT_ADD_1024_MV;
 				break;
 			default:
