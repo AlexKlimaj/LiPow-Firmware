@@ -340,7 +340,7 @@ void Set_Charge_Current(uint32_t charge_current_limit) {
 	uint32_t charge_current = 0;
 
 	if (charge_current_limit > MAX_CHARGE_CURRENT_MA) {
-		charge_current = MAX_CHARGE_CURRENT_MA;
+		charge_current_limit = MAX_CHARGE_CURRENT_MA;
 	}
 
 	regulator.max_charge_current_ma = charge_current_limit;
@@ -416,6 +416,37 @@ void Set_Charge_Voltage(uint8_t number_of_cells) {
 }
 
 /**
+ * @brief Calculates the max charge power based on temperature of MCU
+ */
+uint32_t Calculate_Max_Charge_Power() {
+
+	//Account for system losses with ASSUME_EFFICIENCY fudge factor to not overload source
+	uint32_t charging_power_mw = (Get_Max_Input_Power() * ASSUME_EFFICIENCY);
+
+	if (charging_power_mw > MAX_CHARGING_POWER) {
+		charging_power_mw = MAX_CHARGING_POWER;
+	}
+
+	//Throttle charging power if temperature is too high
+	if (Get_MCU_Temperature() > TEMP_THROTTLE_THRESH_C){
+		float temperature = (float)Get_MCU_Temperature();
+
+		float power_scalar = 1.0f - ((float)(0.0333 * temperature) - 1.33f);
+
+		if (power_scalar > 1.0f) {
+			power_scalar = 1.0f;
+		}
+		if (power_scalar < 0.00f) {
+			power_scalar = 0.00f;
+		}
+
+		charging_power_mw = charging_power_mw * power_scalar;
+	}
+
+	return charging_power_mw;
+}
+
+/**
  * @brief Main regulator task
  */
 void vRegulator(void const *pvParameters) {
@@ -461,19 +492,7 @@ void vRegulator(void const *pvParameters) {
 			else {
 				Set_Charge_Voltage(Get_Number_Of_Cells());
 
-				//Account for system losses with ASSUME_EFFICIENCY fudge factor to not overload source
-				uint32_t charging_power_mw = (Get_Max_Input_Power() * ASSUME_EFFICIENCY);
-
-				if (charging_power_mw > MAX_CHARGING_POWER) {
-					charging_power_mw = MAX_CHARGING_POWER * ASSUME_EFFICIENCY;
-				}
-				//Throttle charging power if temperature is too high
-				// TODO - Change to linear temp throttling over entire operating range. ie at 20C allow 100% charing power, at 75C 0%, 47.5C, 50%, etc. Below 20C allow 100%.
-				if (Get_MCU_Temperature() > TEMP_THROTTLE_THRESH_C) {
-					charging_power_mw = charging_power_mw * (float)(1 - ((float)Get_MCU_Temperature()/(float)MAX_MCU_TEMP_C_FOR_OPERATION));
-				}
-
-				uint32_t charging_current_ma = ((charging_power_mw) / (Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
+				uint32_t charging_current_ma = ((Calculate_Max_Charge_Power()) / (Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
 				Set_Charge_Current(charging_current_ma);
 
 				//Check if XT60 was disconnected
