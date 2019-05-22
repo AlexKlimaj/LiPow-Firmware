@@ -417,6 +417,7 @@ void Set_Charge_Voltage(uint8_t number_of_cells) {
 
 /**
  * @brief Calculates the max charge power based on temperature of MCU
+ * @retval Max charging power in mW
  */
 uint32_t Calculate_Max_Charge_Power() {
 
