@@ -448,6 +448,61 @@ uint32_t Calculate_Max_Charge_Power() {
 }
 
 /**
+ * @brief Determines if charger output should be on and sets voltage and current parameters as needed
+ */
+void Control_Charger_Output() {
+
+	TickType_t xDelay = 500 / portTICK_PERIOD_MS;
+
+	//Charging for USB PD enabled supplies
+	if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0) && (Get_Input_Power_Ready() == READY) && (Get_Cell_Over_Voltage_State() == 0)) {
+
+		if (regulator.charging_status == 0) {
+			Set_Charge_Voltage(Get_Number_Of_Cells());
+			Set_Charge_Current(320);
+			vTaskDelay(xDelay*4);
+			Regulator_HI_Z(0);
+		}
+		else {
+			Set_Charge_Voltage(Get_Number_Of_Cells());
+
+			uint32_t charging_current_ma = ((Calculate_Max_Charge_Power()) / (Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
+			Set_Charge_Current(charging_current_ma);
+
+			//Check if XT60 was disconnected
+			if (regulator.vbat_voltage > (BATTERY_DISCONNECT_THRESH * Get_Number_Of_Cells())) {
+				Regulator_HI_Z(1);
+				vTaskDelay(xDelay*2);
+				Regulator_HI_Z(0);
+			}
+		}
+
+	}
+	// Case to handle non USB PD supplies. Limited to 5V 500mA.
+	else if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0) && (Get_Input_Power_Ready() == NO_USB_PD_SUPPLY) && (Get_Cell_Over_Voltage_State() == 0)) {
+
+		if (regulator.charging_status == 0) {
+			Set_Charge_Voltage(Get_Number_Of_Cells());
+			Set_Charge_Current(64);
+			vTaskDelay(xDelay*4);
+			Regulator_HI_Z(0);
+		}
+		else {
+			Set_Charge_Voltage(Get_Number_Of_Cells());
+
+			uint32_t charging_current_ma = ((NON_USB_PD_CHARGE_POWER * ASSUME_EFFICIENCY) / (Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
+			Set_Charge_Current(charging_current_ma);
+		}
+
+	}
+	else {
+		Regulator_HI_Z(1);
+		Set_Charge_Voltage(0);
+		Set_Charge_Current(0);
+	}
+}
+
+/**
  * @brief Main regulator task
  */
 void vRegulator(void const *pvParameters) {
@@ -471,6 +526,7 @@ void vRegulator(void const *pvParameters) {
 
 	for (;;) {
 
+		//Check if power into regulator is okay
 		if (Read_Charge_Okay() != 1) {
 			Set_Error_State(VOLTAGE_INPUT_ERROR);
 		}
@@ -478,53 +534,13 @@ void vRegulator(void const *pvParameters) {
 			Clear_Error_State(VOLTAGE_INPUT_ERROR);
 		}
 
+		//Check if STM32G0 can communicate with regulator
 		if ((Get_Error_State() & REGULATOR_COMMUNICATION_ERROR) == REGULATOR_COMMUNICATION_ERROR) {
 			regulator.connected = 0;
 		}
 
-		if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0) && (Get_Input_Power_Ready() == READY)) {
 
-			if (regulator.charging_status == 0) {
-				Set_Charge_Voltage(Get_Number_Of_Cells());
-				Set_Charge_Current(320);
-				vTaskDelay(xDelay*4);
-				Regulator_HI_Z(0);
-			}
-			else {
-				Set_Charge_Voltage(Get_Number_Of_Cells());
-
-				uint32_t charging_current_ma = ((Calculate_Max_Charge_Power()) / (Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
-				Set_Charge_Current(charging_current_ma);
-
-				//Check if XT60 was disconnected
-				if (regulator.vbat_voltage > (BATTERY_DISCONNECT_THRESH * Get_Number_Of_Cells())) {
-					Regulator_HI_Z(1);
-					vTaskDelay(xDelay*2);
-					Regulator_HI_Z(0);
-				}
-			}
-
-		}
-		// Case to handle non USB PD supplies. Limited to 5V 500mA.
-		else if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0) && (Get_Input_Power_Ready() == NO_USB_PD_SUPPLY)) {
-
-			if (regulator.charging_status == 0) {
-				Set_Charge_Voltage(Get_Number_Of_Cells());
-				Set_Charge_Current(128);
-				vTaskDelay(xDelay*4);
-				Regulator_HI_Z(0);
-			}
-			else {
-				Set_Charge_Voltage(Get_Number_Of_Cells());
-				Set_Charge_Current(448);
-			}
-
-		}
-		else {
-			Regulator_HI_Z(1);
-			Set_Charge_Voltage(0);
-			Set_Charge_Current(0);
-		}
+		Control_Charger_Output();
 
 		Read_Charge_Status();
 		Regulator_Read_ADC();

@@ -22,6 +22,8 @@ extern "C" {
 #define CELL_BALANCING_HYSTERESIS_V			(uint32_t)( 0.03 * BATTERY_ADC_MULTIPLIER )
 #define MIN_CELL_V_FOR_BALANCING			(uint32_t)( 3.0 * BATTERY_ADC_MULTIPLIER )
 #define CELL_VOLTAGE_TO_ENABLE_CHARGING		(uint32_t)( 4.18 * BATTERY_ADC_MULTIPLIER )
+#define CELL_OVER_VOLTAGE_DISABLE_CHARGING	(uint32_t)( 4.21 * BATTERY_ADC_MULTIPLIER )
+#define MIN_CELL_VOLTAGE_SAFE_LIMIT			(uint32_t)( 2.7 * BATTERY_ADC_MULTIPLIER )
 
 #define MAX_MCU_TEMP_C_FOR_OPERATION	75
 #define MCU_TEMP_C_RECOVERY				65
@@ -41,5 +43,7 @@ uint8_t Get_Number_Of_Cells(void);
 uint8_t Get_Balancing_State(void);
 
 uint8_t Get_Requires_Charging_State(void);
+
+uint8_t Get_Cell_Over_Voltage_State(void);
 
 #endif /* BATTERY_H_ */
