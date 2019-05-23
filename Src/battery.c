@@ -18,6 +18,7 @@ struct Battery {
 	uint8_t number_of_cells;
 	uint8_t balancing_enabled;
 	uint8_t requires_charging;
+	uint8_t cell_over_voltage;
 };
 
 /* Private variables ---------------------------------------------------------*/
@@ -153,6 +154,34 @@ void Balance_Connection_State()
 }
 
 /**
+ * @brief Checks if any cell is over or under voltage
+ */
+void Cell_Voltage_Safety_Check()
+{
+	uint8_t over_voltage_temp = 0;
+	uint8_t under_voltage_temp = 0;
+
+	for (int i = 0; i < battery_state.number_of_cells; i++) {
+		if (Get_Cell_Voltage(i) > CELL_OVER_VOLTAGE_DISABLE_CHARGING) {
+			over_voltage_temp = 1;
+		}
+
+		if (Get_Cell_Voltage(i) < MIN_CELL_VOLTAGE_SAFE_LIMIT) {
+			under_voltage_temp = 1;
+		}
+	}
+
+	if (under_voltage_temp == 1) {
+		Set_Error_State(CELL_VOLTAGE_ERROR);
+	}
+	else {
+		Clear_Error_State(CELL_VOLTAGE_ERROR);
+	}
+
+	battery_state.cell_over_voltage = over_voltage_temp;
+}
+
+/**
  * @brief Determines the state of connections based on ADC readings
  */
 void Battery_Connection_State()
@@ -167,6 +196,8 @@ void Battery_Connection_State()
 	Balance_Connection_State();
 
 	MCU_Temperature_Safety_Check();
+
+	Cell_Voltage_Safety_Check();
 
 	Balance_Battery();
 
@@ -275,3 +306,7 @@ uint8_t Get_XT60_Connection_State()
 	return battery_state.xt60_connected;
 }
 
+uint8_t Get_Cell_Over_Voltage_State()
+{
+	return battery_state.cell_over_voltage;
+}
