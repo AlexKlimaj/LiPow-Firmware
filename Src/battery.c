@@ -60,7 +60,7 @@ void Balance_Battery()
 		if (battery_state.balancing_enabled == 1) {
 
 			uint8_t cell_balance_bitmask = 0;
-			for(int i = 1; i < battery_state.number_of_cells; i++) {
+			for(int i = 0; i < battery_state.number_of_cells; i++) {
 				if ( (Get_Cell_Voltage(i) - min_cell_voltage) > (CELL_DELTA_V_ENABLE_BALANCING - CELL_BALANCING_HYSTERESIS_V)) {
 					cell_balance_bitmask |= (1<<i);
 				}
