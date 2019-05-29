@@ -60,7 +60,7 @@ Charging current is decided by the USB PD Source capability. First, it checks th
 
 # Where to Buy
 
-You can purchase a board [here](https://www.tindie.com/products/arkelectronics/lipow-the-usb-c-lipo-battery-charger/). 
+You can purchase a unit [here](https://www.tindie.com/products/arkelectronics/lipow-the-usb-c-lipo-battery-charger/) or a bare PCB [here](https://www.tindie.com/products/arkelectronics/lipow-the-usb-c-lipo-battery-charger-bare-pcb/).
 
 # Questions, Comments, and Contributions
 
