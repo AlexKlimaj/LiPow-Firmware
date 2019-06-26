@@ -208,7 +208,7 @@ uint8_t Set_VDDa(uint32_t adc_reading) {
 void vRead_ADC(void const *pvParameters) {
 	// calibrate ADC
 	while (HAL_ADCEx_Calibration_Start(&hadc1) != HAL_OK);
-	vTaskDelay(100 / portTICK_PERIOD_MS);
+	vTaskDelay(200 / portTICK_PERIOD_MS);
 	vrefint_cal = (uint32_t)(*VREFINT_CAL_ADDR); // VREFINT calibration value
 
 	adc_sum_count = 0;

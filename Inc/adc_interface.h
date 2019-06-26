@@ -25,11 +25,11 @@ extern "C" {
 #define BATTERY_ADC_MULTIPLIER 		100000
 
 #define BATTERY_ADC_OFFSET 			(int32_t)( 0 )
-#define BATTERY_ADC_SCALAR 			(uint32_t)( 449 )
+#define BATTERY_ADC_SCALAR 			(uint32_t)( 450 )
 #define BATTERY_MIN_ADC_READING 	20
 
 #define CELL_ONE_ADC_OFFSET 		(int32_t)( 0 )
-#define CELL_ONE_ADC_SCALAR 		(uint32_t)( 112 )
+#define CELL_ONE_ADC_SCALAR 		(uint32_t)( 111 )
 #define CELL_ONE_MIN_ADC_READING 	20
 
 #define CELL_TWO_ADC_OFFSET 		(int32_t)( 0 )
@@ -41,7 +41,7 @@ extern "C" {
 #define CELL_THREE_MIN_ADC_READING 	20
 
 #define CELL_FOUR_ADC_OFFSET 		(int32_t)( 0 )
-#define CELL_FOUR_ADC_SCALAR 		(uint32_t)( 449 )
+#define CELL_FOUR_ADC_SCALAR 		(uint32_t)( 450 )
 #define CELL_FOUR_MIN_ADC_READING 	20
 
 #define CELL_MAX_VOLTAGE			(uint32_t)( 5 * BATTERY_ADC_MULTIPLIER )

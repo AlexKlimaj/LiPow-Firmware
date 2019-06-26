@@ -457,42 +457,31 @@ void Control_Charger_Output() {
 	//Charging for USB PD enabled supplies
 	if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0) && (Get_Input_Power_Ready() == READY) && (Get_Cell_Over_Voltage_State() == 0)) {
 
-		if (regulator.charging_status == 0) {
-			Set_Charge_Voltage(Get_Number_Of_Cells());
-			Set_Charge_Current(320);
-			vTaskDelay(xDelay*4);
+		Set_Charge_Voltage(Get_Number_Of_Cells());
+
+		uint32_t charging_current_ma = ((Calculate_Max_Charge_Power()) / (Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
+
+		Set_Charge_Current(charging_current_ma);
+
+		Regulator_HI_Z(0);
+
+		//Check if XT60 was disconnected
+		if (regulator.vbat_voltage > (BATTERY_DISCONNECT_THRESH * Get_Number_Of_Cells())) {
+			Regulator_HI_Z(1);
+			vTaskDelay(xDelay*2);
 			Regulator_HI_Z(0);
 		}
-		else {
-			Set_Charge_Voltage(Get_Number_Of_Cells());
-
-			uint32_t charging_current_ma = ((Calculate_Max_Charge_Power()) / (Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
-			Set_Charge_Current(charging_current_ma);
-
-			//Check if XT60 was disconnected
-			if (regulator.vbat_voltage > (BATTERY_DISCONNECT_THRESH * Get_Number_Of_Cells())) {
-				Regulator_HI_Z(1);
-				vTaskDelay(xDelay*2);
-				Regulator_HI_Z(0);
-			}
-		}
-
 	}
 	// Case to handle non USB PD supplies. Limited to 5V 500mA.
 	else if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0) && (Get_Input_Power_Ready() == NO_USB_PD_SUPPLY) && (Get_Cell_Over_Voltage_State() == 0)) {
 
-		if (regulator.charging_status == 0) {
-			Set_Charge_Voltage(Get_Number_Of_Cells());
-			Set_Charge_Current(64);
-			vTaskDelay(xDelay*4);
-			Regulator_HI_Z(0);
-		}
-		else {
-			Set_Charge_Voltage(Get_Number_Of_Cells());
+		Set_Charge_Voltage(Get_Number_Of_Cells());
 
-			uint32_t charging_current_ma = ((NON_USB_PD_CHARGE_POWER * ASSUME_EFFICIENCY) / (Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
-			Set_Charge_Current(charging_current_ma);
-		}
+		uint32_t charging_current_ma = ((NON_USB_PD_CHARGE_POWER * ASSUME_EFFICIENCY) / (Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
+
+		Set_Charge_Current(charging_current_ma);
+
+		Regulator_HI_Z(0);
 
 	}
 	else {
@@ -524,6 +513,8 @@ void vRegulator(void const *pvParameters) {
 	/* Setup the ADC on the Regulator */
 	Regulator_Set_ADC_Option();
 
+	uint8_t timer_count = 0;
+
 	for (;;) {
 
 		//Check if power into regulator is okay
@@ -539,11 +530,20 @@ void vRegulator(void const *pvParameters) {
 			regulator.connected = 0;
 		}
 
-
-		Control_Charger_Output();
-
 		Read_Charge_Status();
+
 		Regulator_Read_ADC();
+
+		timer_count++;
+		if (timer_count < 30) {
+			Control_Charger_Output();
+		}
+		else if (timer_count > 35){
+			timer_count = 0;
+		}
+		else {
+			Regulator_HI_Z(1);
+		}
 
 		vTaskDelay(xDelay);
 	}
