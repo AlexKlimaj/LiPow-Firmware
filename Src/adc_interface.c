@@ -29,7 +29,7 @@ struct Adc {
 /* Private variables ---------------------------------------------------------*/
 struct Adc adc_values;
 uint32_t adc_buffer[7];
-static volatile uint32_t adc_scalars[5], adc_buffer_filtered[7], adc_filtered_output[7];
+static volatile uint32_t adc_scalars[5], adc_offset[5], adc_buffer_filtered[7], adc_filtered_output[7];
 static volatile uint32_t adc_sum_count;
 static volatile uint16_t vrefint_cal;
 
@@ -58,7 +58,7 @@ uint8_t Set_Battery_Voltage(uint32_t adc_reading) {
 		return 0;
 	}
 
-	adc_values.bat_voltage = (adc_reading * BATTERY_ADC_SCALAR) + BATTERY_ADC_OFFSET;
+	adc_values.bat_voltage = adc_reading * adc_scalars[0];
 
 	return 1;
 }
@@ -92,10 +92,13 @@ uint8_t Set_Cell_Voltage(uint8_t cell_number, uint32_t adc_reading) {
 			adc_values.cell_voltage[0] = 0;
 			return 0;
 		}
+		else {
+			adc_values.cell_voltage[0] = adc_reading * adc_scalars[1];
 
-		adc_values.cell_voltage[0] = (adc_reading * CELL_ONE_ADC_SCALAR) + CELL_ONE_ADC_OFFSET;
-		if (adc_values.cell_voltage[0] > CELL_MAX_VOLTAGE) {
-			adc_values.cell_voltage[0] = 0;
+			if (adc_values.cell_voltage[0] > CELL_MAX_VOLTAGE) {
+				adc_values.cell_voltage[0] = 0;
+				return 0;
+			}
 		}
 	}
 
@@ -105,17 +108,21 @@ uint8_t Set_Cell_Voltage(uint8_t cell_number, uint32_t adc_reading) {
 			adc_values.two_s_battery_voltage = 0;
 			return 0;
 		}
-
-		adc_values.two_s_battery_voltage = ((adc_reading * CELL_TWO_ADC_SCALAR) + CELL_TWO_ADC_OFFSET);
-		if (adc_values.two_s_battery_voltage > TWO_S_MAX_VOLTAGE) {
-			adc_values.two_s_battery_voltage = 0;
-		}
-
-		if ( adc_values.two_s_battery_voltage > adc_values.cell_voltage[0] ) {
-			adc_values.cell_voltage[1] = adc_values.two_s_battery_voltage - adc_values.cell_voltage[0];
-		}
 		else {
-			adc_values.cell_voltage[1] = 0;
+			adc_values.two_s_battery_voltage = adc_reading * adc_scalars[2];
+
+			if (adc_values.two_s_battery_voltage > TWO_S_MAX_VOLTAGE) {
+				adc_values.two_s_battery_voltage = 0;
+				return 0;
+			}
+
+			if ( adc_values.two_s_battery_voltage > adc_values.cell_voltage[0] ) {
+				adc_values.cell_voltage[1] = adc_values.two_s_battery_voltage - adc_values.cell_voltage[0];
+			}
+			else {
+				adc_values.cell_voltage[1] = 0;
+				return 0;
+			}
 		}
 	}
 
@@ -124,17 +131,21 @@ uint8_t Set_Cell_Voltage(uint8_t cell_number, uint32_t adc_reading) {
 			adc_values.cell_voltage[2] = 0;
 			return 0;
 		}
-
-		adc_values.three_s_battery_voltage = ((adc_reading * CELL_THREE_ADC_SCALAR) + CELL_THREE_ADC_OFFSET);
-		if (adc_values.three_s_battery_voltage > THREE_S_MAX_VOLTAGE) {
-			adc_values.three_s_battery_voltage = 0;
-		}
-
-		if ( adc_values.three_s_battery_voltage > adc_values.two_s_battery_voltage ) {
-			adc_values.cell_voltage[2] = adc_values.three_s_battery_voltage - adc_values.two_s_battery_voltage;
-		}
 		else {
-			adc_values.cell_voltage[2] = 0;
+			adc_values.three_s_battery_voltage = adc_reading * adc_scalars[3];
+
+			if (adc_values.three_s_battery_voltage > THREE_S_MAX_VOLTAGE) {
+				adc_values.three_s_battery_voltage = 0;
+				return 0;
+			}
+
+			if ( adc_values.three_s_battery_voltage > adc_values.two_s_battery_voltage ) {
+				adc_values.cell_voltage[2] = adc_values.three_s_battery_voltage - adc_values.two_s_battery_voltage;
+			}
+			else {
+				adc_values.cell_voltage[2] = 0;
+				return 0;
+			}
 		}
 	}
 
@@ -143,17 +154,21 @@ uint8_t Set_Cell_Voltage(uint8_t cell_number, uint32_t adc_reading) {
 			adc_values.cell_voltage[3] = 0;
 			return 0;
 		}
-
-		adc_values.four_s_battery_voltage = ((adc_reading * CELL_FOUR_ADC_SCALAR) + CELL_FOUR_ADC_OFFSET);
-		if (adc_values.four_s_battery_voltage > FOUR_S_MAX_VOLTAGE) {
-			adc_values.four_s_battery_voltage = 0;
-		}
-
-		if ( adc_values.four_s_battery_voltage > adc_values.three_s_battery_voltage ) {
-			adc_values.cell_voltage[3] = adc_values.four_s_battery_voltage - adc_values.three_s_battery_voltage;
-		}
 		else {
-			adc_values.cell_voltage[3] = 0;
+			adc_values.four_s_battery_voltage = adc_reading * adc_scalars[4];
+
+			if (adc_values.four_s_battery_voltage > FOUR_S_MAX_VOLTAGE) {
+				adc_values.four_s_battery_voltage = 0;
+				return 0;
+			}
+
+			if ( adc_values.four_s_battery_voltage > adc_values.three_s_battery_voltage ) {
+				adc_values.cell_voltage[3] = adc_values.four_s_battery_voltage - adc_values.three_s_battery_voltage;
+			}
+			else {
+				adc_values.cell_voltage[3] = 0;
+				return 0;
+			}
 		}
 	}
 
@@ -212,13 +227,26 @@ uint8_t Set_VDDa(uint32_t adc_reading) {
  */
 uint8_t Calibrate_ADC(float reference_voltage_mv) {
 
+	if (reference_voltage_mv > 4200.0f) {
+		return 0;
+	}
+
 	printf("Input Reference Voltage in mv: %.3f\r\n", reference_voltage_mv);
 
-	for (int i = 0; i < 5; i++) {
-		float scale = ((reference_voltage_mv / 1000.0f) * BATTERY_ADC_MULTIPLIER) / adc_filtered_output[i];
-		adc_scalars[i] = (uint32_t)scale;
+	if (reference_voltage_mv < 0.01f) {
+		for (int i = 0; i < 5; i++) {
+			adc_offset[i] = adc_filtered_output[i];
 
-		printf("ADC Channel %u scalar: %u\r\n", i, adc_scalars[i]);
+			printf("ADC Channel %u offset: %u\r\n", i, adc_offset[i]);
+		}
+	}
+	else {
+		for (int i = 0; i < 5; i++) {
+			float scale = (reference_voltage_mv * BATTERY_ADC_MULTIPLIER) / (adc_filtered_output[i] * 1000);
+			adc_scalars[i] = (uint32_t)scale;
+
+			printf("ADC Channel %u scalar: %u\r\n", i, adc_scalars[i]);
+		}
 	}
 
 	return 1;

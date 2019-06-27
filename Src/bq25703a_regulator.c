@@ -459,7 +459,7 @@ void Control_Charger_Output() {
 
 		Set_Charge_Voltage(Get_Number_Of_Cells());
 
-		uint32_t charging_current_ma = ((Calculate_Max_Charge_Power()) / (Get_Battery_Voltage() / REG_ADC_MULTIPLIER));
+		uint32_t charging_current_ma = ((Calculate_Max_Charge_Power()) / (Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
 
 		Set_Charge_Current(charging_current_ma);
 
@@ -477,7 +477,7 @@ void Control_Charger_Output() {
 
 		Set_Charge_Voltage(Get_Number_Of_Cells());
 
-		uint32_t charging_current_ma = ((NON_USB_PD_CHARGE_POWER * ASSUME_EFFICIENCY) / (Get_Battery_Voltage() / REG_ADC_MULTIPLIER));
+		uint32_t charging_current_ma = ((NON_USB_PD_CHARGE_POWER * ASSUME_EFFICIENCY) / (Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
 
 		Set_Charge_Current(charging_current_ma);
 

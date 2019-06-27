@@ -154,16 +154,19 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 	sprintf(pcWriteBuffer,
 			"Variable                    Value\r\n"
 			"************************************************\r\n"
-			"Battery Voltage MCU(V)       %.2f\r\n"
-			"Battery Voltage Reg (V)      %.2f\r\n"
-			"Charging Current (A)         %.2f\r\n"
-			"Charging Power (W)           %.2f\r\n"
-			"Cell One Voltage (V)         %.2f\r\n"
-			"Cell Two Voltage (V)         %.2f\r\n"
-			"Cell Three Voltage (V)       %.2f\r\n"
-			"Cell Four Voltage (V)        %.2f\r\n"
+			"Battery Voltage MCU(V)       %.3f\r\n"
+			"Battery Voltage Reg (V)      %.3f\r\n"
+			"Charging Current (A)         %.3f\r\n"
+			"Charging Power (W)           %.3f\r\n"
+			"Cell One Voltage (V)         %.3f\r\n"
+			"Cell Two Voltage (V)         %.3f\r\n"
+			"Cell Three Voltage (V)       %.3f\r\n"
+			"Cell Four Voltage (V)        %.3f\r\n"
+			"2 Series Voltage (V)         %.3f\r\n"
+			"3 Series Voltage (V)         %.3f\r\n"
+			"4 Series Voltage (V)         %.3f\r\n"
 			"MCU Temperature (C)          %d\r\n"
-			"VDDa (V)                     %.2f\r\n"
+			"VDDa (V)                     %.3f\r\n"
 			"XT60 Connected               %u\r\n"
 			"Balance Connection State     %u\r\n"
 			"Number of Cells              %u\r\n"
@@ -172,9 +175,9 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			"Regulator Connection State   %d\r\n"
 			"Charging State               %u\r\n"
 			"Max Charge Current           %.3f\r\n"
-			"Vbus Voltage (V)             %.2f\r\n"
-			"Input Current (A)            %.2f\r\n"
-			"Input Power (W)              %.2f\r\n"
+			"Vbus Voltage (V)             %.3f\r\n"
+			"Input Current (A)            %.3f\r\n"
+			"Input Power (W)              %.3f\r\n"
 			"Efficiency (OutputW/InputW)  %.3f\r\n"
 			"Battery Error State          %u\r\n",
 			battery_voltage,
@@ -185,6 +188,9 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			cell_voltage_float[1],
 			cell_voltage_float[2],
 			cell_voltage_float[3],
+			(float)Get_Two_S_Voltage()/BATTERY_ADC_MULTIPLIER,
+			(float)Get_Three_S_Voltage()/BATTERY_ADC_MULTIPLIER,
+			(float)Get_Four_S_Voltage()/BATTERY_ADC_MULTIPLIER,
 			Get_MCU_Temperature(),
 			vdda_float,
 			Get_XT60_Connection_State(),
