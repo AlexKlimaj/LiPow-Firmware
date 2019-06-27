@@ -55,9 +55,15 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 static BaseType_t prvTaskStatsCommand( char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString );
 
 /*
- * Implements the adc_raw command.
+ * Implements the cal command.
  */
 static BaseType_t prvCalibrateCommand( char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString );
+
+/*
+ * Implements the write_otp_scalars_to_flash command.
+ */
+static BaseType_t prvWriteOTPFlashCommand( char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString );
+
 /*
  * Implements the run-time-stats command.
  */
@@ -74,13 +80,22 @@ static const CLI_Command_Definition_t xStats =
 	0 /* No parameters are expected. */
 };
 
-/* Structure that defines the "adc_raw" command line command. */
+/* Structure that defines the "cal" command line command. */
 static const CLI_Command_Definition_t xCal =
 {
 	"cal", /* The command string to type. */
 	"\r\ncal:\r\n Calibrates the ADC based on a known input voltage. Expects one argument as a float in milivolts. Connect input voltage to cells 1-4 and the XT60 battery output.\r\n",
 	prvCalibrateCommand, /* The function to run. */
-	1 /* No parameters are expected. */
+	1 /* One parameter are expected. */
+};
+
+/* Structure that defines the "write_otp_scalars_to_flash" command line command. */
+static const CLI_Command_Definition_t xOTP =
+{
+	"write_otp_scalars_to_flash", /* The command string to type. */
+	"\r\nwrite_otp_scalars_to_flash:\r\n Writes the calibration scalars to OTP flash. Only works ONCE!. Will fail if scalars not set or out of range. Must run cal first with known accurate voltage. USE Wisely.\r\n",
+	prvWriteOTPFlashCommand, /* The function to run. */
+	0 /* No parameters are expected. */
 };
 
 /* Structure that defines the "task-stats" command line command.  This generates
@@ -110,7 +125,10 @@ static const CLI_Command_Definition_t xTaskStats =
 void vRegisterCLICommands(void) {
 	/* Register all the command line commands defined immediately above. */
 	FreeRTOS_CLIRegisterCommand(&xStats);
+
 	FreeRTOS_CLIRegisterCommand(&xCal);
+
+	FreeRTOS_CLIRegisterCommand(&xOTP);
 
 	FreeRTOS_CLIRegisterCommand(&xTaskStats);
 
@@ -239,6 +257,24 @@ static BaseType_t prvCalibrateCommand(char *pcWriteBuffer, size_t xWriteBufferLe
 	uint8_t result = Calibrate_ADC(input_voltage_mv);
 
 	sprintf(pcWriteBuffer, "Calibration Result: %u\r\n", result);
+
+	/* There is no more data to return after this single string, so return
+	 pdFALSE. */
+	return pdFALSE;
+}
+/*-----------------------------------------------------------*/
+
+static BaseType_t prvWriteOTPFlashCommand(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString) {
+	/* Remove compile time warnings about unused parameters, and check the
+	 write buffer is not NULL.  NOTE - for simplicity, this example assumes the
+	 write buffer length is adequate, so does not check for buffer overflows. */
+	(void) xWriteBufferLen;
+	configASSERT(pcWriteBuffer);
+
+	/* Print the result */
+	uint8_t result = Write_Cal_To_OTP_Flash();
+
+	sprintf(pcWriteBuffer, "OTP Write Result: %u\r\n", result);
 
 	/* There is no more data to return after this single string, so return
 	 pdFALSE. */

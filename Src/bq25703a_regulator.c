@@ -535,10 +535,10 @@ void vRegulator(void const *pvParameters) {
 		Regulator_Read_ADC();
 
 		timer_count++;
-		if (timer_count < 30) {
+		if (timer_count < 45) {
 			Control_Charger_Output();
 		}
-		else if (timer_count > 35){
+		else if (timer_count > 50){
 			timer_count = 0;
 		}
 		else {

@@ -45,6 +45,26 @@ extern "C" {
 #define THREE_S_MAX_VOLTAGE			(uint32_t)( 15 * BATTERY_ADC_MULTIPLIER )
 #define FOUR_S_MAX_VOLTAGE			(uint32_t)( 20 * BATTERY_ADC_MULTIPLIER )
 
+/**
+ * @brief  OTP memory start address
+ */
+#define OTP_START_ADDR		(0x1FFF7000)
+
+/**
+ * @brief  Number of bytes in one uint64_t
+ */
+#define BYTES_IN_UINT64		8
+
+/**
+ * @brief  Number of bytes in one uint64_t
+ */
+#define BYTES_IN_UINT32		4
+
+/**
+ * @brief  Number of all OTP bytes
+ */
+#define OTP_SIZE			128
+
 void vRead_ADC(void const *pvParameters);
 
 uint8_t Calibrate_ADC(float reference_voltage_mv);
@@ -62,6 +82,8 @@ uint32_t Get_Four_S_Voltage(void);
 int32_t Get_MCU_Temperature(void);
 
 uint32_t Get_VDDa(void);
+
+uint8_t Write_Cal_To_OTP_Flash(void);
 
 osThreadId adcTaskHandle;
 
