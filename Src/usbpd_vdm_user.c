@@ -139,7 +139,7 @@ static void                USBPD_VDM_ReceiveAttention(uint8_t PortNum, uint8_t N
 static void                USBPD_VDM_SendSpecific(uint8_t PortNum, USBPD_VDM_Command_Typedef VDMCommand, uint8_t *NbData, uint32_t *VDO);
 static USBPD_StatusTypeDef USBPD_VDM_ReceiveSpecific(uint8_t PortNum, USBPD_VDM_Command_Typedef VDMCommand, uint8_t *NbData, uint32_t *VDO);
 static void                USBPD_VDM_InformSpecific(uint8_t PortNum, USBPD_VDM_Command_Typedef VDMCommand, uint8_t *NbData, uint32_t *VDO);
-static USBPD_StatusTypeDef HPD_Init(uint8_t PortNum);
+//static USBPD_StatusTypeDef HPD_Init(uint8_t PortNum);
 /* Private variables ---------------------------------------------------------*/
 USBPD_VDM_SettingsTypeDef DPM_VDM_Settings[USBPD_PORT_COUNT] =
 {
@@ -954,10 +954,10 @@ static void USBPD_VDM_InformSpecific(uint8_t PortNum, USBPD_VDM_Command_Typedef 
   * @param  PortNum    current port number
   * @retval USBPD status
   */
-static USBPD_StatusTypeDef HPD_Init(uint8_t PortNum)
-{
-  return USBPD_OK;
-}
+//static USBPD_StatusTypeDef HPD_Init(uint8_t PortNum)
+//{
+// return USBPD_OK;
+//}
 
 /* Exported functions ---------------------------------------------------------*/
 /**

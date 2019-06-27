@@ -50,20 +50,6 @@ extern "C" {
 #include <stdint.h>
 #include <stddef.h>
 
-#if !defined (_SIMULATOR)
-
-/* Check if USBPD_CMSIS_CORE_VERSION is defined in compilation options. if not set it to default CMSIS Core v4.5 */
-#if !defined(USBPD_CMSIS_CORE_VERSION)
-#define USBPD_CMSIS_CORE_VERSION 4u
-#endif
-#if (USBPD_CMSIS_CORE_VERSION == 5u)
-#include "cmsis_compiler.h"
-#else
-#include "core_cmFunc.h"
-#endif
-
-#endif /* _SIMULATOR */
-
 /** @addtogroup STM32_USBPD_LIBRARY
   * @{
   */
