@@ -29,7 +29,7 @@ struct Adc {
 /* Private variables ---------------------------------------------------------*/
 struct Adc adc_values;
 uint32_t adc_buffer[7];
-static volatile uint32_t adc_buffer_filtered[7], adc_filtered_output[7];
+static volatile uint32_t adc_scalars[5], adc_buffer_filtered[7], adc_filtered_output[7];
 static volatile uint32_t adc_sum_count;
 static volatile uint16_t vrefint_cal;
 
@@ -211,7 +211,13 @@ uint8_t Set_VDDa(uint32_t adc_reading) {
  * @retval uint8_t 1 if successful, 0 if error
  */
 uint8_t Calibrate_ADC(float reference_voltage_mv) {
+
 	printf("Input Reference Voltage in mv: %.3f\r\n", reference_voltage_mv);
+
+	for (int i = 0; i < 5; i++) {
+		adc_scalars[i] = adc_filtered_output[i];
+	}
+
 	return 1;
 }
 
