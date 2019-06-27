@@ -205,6 +205,16 @@ uint8_t Set_VDDa(uint32_t adc_reading) {
 	return 1;
 }
 
+/**
+ * @brief  Calculates and sets the ADC scalars based on a reference voltage input
+ * @param  reference_voltage: Reference voltage in milivolts
+ * @retval uint8_t 1 if successful, 0 if error
+ */
+uint8_t Calibrate_ADC(float reference_voltage_mv) {
+	printf("Input Reference Voltage in mv: %.3f\r\n", reference_voltage_mv);
+	return 1;
+}
+
 void vRead_ADC(void const *pvParameters) {
 	// calibrate ADC
 	while (HAL_ADCEx_Calibration_Start(&hadc1) != HAL_OK);
@@ -289,16 +299,4 @@ uint32_t Get_Three_S_Voltage() {
 
 uint32_t Get_Four_S_Voltage() {
 	return adc_values.four_s_battery_voltage;
-}
-
-/**
- * @brief  Gets the raw ADC value read in by the STM32G0
- * @param  index: Index of the raw reading to get
- * @retval raw reading if successful, UINT32_MAX if error
- */
-uint32_t Get_Raw_ADC_Reading(uint32_t index) {
-	if ((index >= 0) && (index < 7)) {
-		return adc_filtered_output[index];
-	}
-	return UINT32_MAX;
 }

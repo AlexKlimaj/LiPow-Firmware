@@ -258,7 +258,7 @@ PWR_StatusTypeDef BSP_PWR_VBUSSetVoltage_APDO(uint32_t PortId,
 uint32_t  BSP_PWR_VBUSGetVoltage(uint32_t PortId)
 {
 /* USER CODE BEGIN BSP_PWR_VBUSGetVoltage */
-  return ((Get_VBUS_ADC_Reading()*1000)/BATTERY_ADC_MULTIPLIER);
+  return ((Get_VBUS_ADC_Reading()*1000)/REG_ADC_MULTIPLIER);
 /* USER CODE END BSP_PWR_VBUSGetVoltage */
 }
 
@@ -273,7 +273,7 @@ uint32_t  BSP_PWR_VBUSGetVoltage(uint32_t PortId)
 int32_t BSP_PWR_VBUSGetCurrent(uint32_t PortId)
 {
 /* USER CODE BEGIN BSP_PWR_VBUSGetCurrent */
-  return ((Get_Input_Current_ADC_Reading()*1000)/BATTERY_ADC_MULTIPLIER);;
+  return ((Get_Input_Current_ADC_Reading()*1000)/REG_ADC_MULTIPLIER);;
 /* USER CODE END BSP_PWR_VBUSGetCurrent */
 }
 

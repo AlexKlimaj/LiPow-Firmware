@@ -72,7 +72,7 @@ uint8_t Get_Regulator_Charging_State() {
 
 /**
  * @brief Gets VBAT voltage that was read in from the ADC on the regulator
- * @retval VBAT voltage in volts * BATTERY_ADC_MULTIPLIER
+ * @retval VBAT voltage in volts * REG_ADC_MULTIPLIER
  */
 uint32_t Get_VBAT_ADC_Reading() {
 	return regulator.vbat_voltage;
@@ -80,7 +80,7 @@ uint32_t Get_VBAT_ADC_Reading() {
 
 /**
  * @brief Gets VBUS voltage that was read in from the ADC on the regulator
- * @retval VBUS voltage in volts * BATTERY_ADC_MULTIPLIER
+ * @retval VBUS voltage in volts * REG_ADC_MULTIPLIER
  */
 uint32_t Get_VBUS_ADC_Reading() {
 	return regulator.vbus_voltage;
@@ -88,7 +88,7 @@ uint32_t Get_VBUS_ADC_Reading() {
 
 /**
  * @brief Gets Input Current that was read in from the ADC on the regulator
- * @retval Input Current in amps * BATTERY_ADC_MULTIPLIER
+ * @retval Input Current in amps * REG_ADC_MULTIPLIER
  */
 uint32_t Get_Input_Current_ADC_Reading() {
 	return regulator.input_current;
@@ -96,7 +96,7 @@ uint32_t Get_Input_Current_ADC_Reading() {
 
 /**
  * @brief Gets Charge Current that was read in from the ADC on the regulator
- * @retval Charge Current in amps * BATTERY_ADC_MULTIPLIER
+ * @retval Charge Current in amps * REG_ADC_MULTIPLIER
  */
 uint32_t Get_Charge_Current_ADC_Reading() {
 	return regulator.charge_current;
@@ -459,7 +459,7 @@ void Control_Charger_Output() {
 
 		Set_Charge_Voltage(Get_Number_Of_Cells());
 
-		uint32_t charging_current_ma = ((Calculate_Max_Charge_Power()) / (Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
+		uint32_t charging_current_ma = ((Calculate_Max_Charge_Power()) / (Get_Battery_Voltage() / REG_ADC_MULTIPLIER));
 
 		Set_Charge_Current(charging_current_ma);
 
@@ -477,7 +477,7 @@ void Control_Charger_Output() {
 
 		Set_Charge_Voltage(Get_Number_Of_Cells());
 
-		uint32_t charging_current_ma = ((NON_USB_PD_CHARGE_POWER * ASSUME_EFFICIENCY) / (Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
+		uint32_t charging_current_ma = ((NON_USB_PD_CHARGE_POWER * ASSUME_EFFICIENCY) / (Get_Battery_Voltage() / REG_ADC_MULTIPLIER));
 
 		Set_Charge_Current(charging_current_ma);
 

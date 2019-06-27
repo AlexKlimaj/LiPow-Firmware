@@ -252,7 +252,7 @@ void vUSBPD_User(void const *pvParameters) {
 			}
 		}
 		else if ((Get_XT60_Connection_State() == NOT_CONNECTED) || (Get_Balance_Connection_State() == NOT_CONNECTED)){
-			if (Get_VBUS_ADC_Reading() > (6 * BATTERY_ADC_MULTIPLIER)) {
+			if (Get_VBUS_ADC_Reading() > (6 * REG_ADC_MULTIPLIER)) {
 				printf("Requesting 5V, Result: ");
 				status = USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, 1, (uint16_t)5000);
 				vTaskDelay(xDelay/2);

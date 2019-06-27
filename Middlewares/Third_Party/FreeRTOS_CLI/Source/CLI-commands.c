@@ -57,7 +57,7 @@ static BaseType_t prvTaskStatsCommand( char *pcWriteBuffer, size_t xWriteBufferL
 /*
  * Implements the adc_raw command.
  */
-static BaseType_t prvadc_rawCommand( char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString );
+static BaseType_t prvCalibrateCommand( char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString );
 /*
  * Implements the run-time-stats command.
  */
@@ -75,11 +75,11 @@ static const CLI_Command_Definition_t xStats =
 };
 
 /* Structure that defines the "adc_raw" command line command. */
-static const CLI_Command_Definition_t xAdc =
+static const CLI_Command_Definition_t xCal =
 {
-	"adc_raw", /* The command string to type. */
-	"\r\nadc_raw:\r\n Returns the raw value from the adc reading selected\r\n",
-	prvadc_rawCommand, /* The function to run. */
+	"cal", /* The command string to type. */
+	"\r\ncal:\r\n Calibrates the ADC based on a known input voltage. Expects one argument as a float in milivolts. Connect input voltage to cells 1-4 and the XT60 battery output.\r\n",
+	prvCalibrateCommand, /* The function to run. */
 	1 /* No parameters are expected. */
 };
 
@@ -110,7 +110,7 @@ static const CLI_Command_Definition_t xTaskStats =
 void vRegisterCLICommands(void) {
 	/* Register all the command line commands defined immediately above. */
 	FreeRTOS_CLIRegisterCommand(&xStats);
-	FreeRTOS_CLIRegisterCommand(&xAdc);
+	FreeRTOS_CLIRegisterCommand(&xCal);
 
 	FreeRTOS_CLIRegisterCommand(&xTaskStats);
 
@@ -138,12 +138,12 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 	float vdda_float = (float)Get_VDDa()/BATTERY_ADC_MULTIPLIER;
 
 	float battery_voltage = ((float)Get_Battery_Voltage()/BATTERY_ADC_MULTIPLIER);
-	float charge_current = ((float)Get_Charge_Current_ADC_Reading()/BATTERY_ADC_MULTIPLIER);
+	float charge_current = ((float)Get_Charge_Current_ADC_Reading()/REG_ADC_MULTIPLIER);
 	float output_power = battery_voltage * charge_current;
 
-	float regulator_vbat_voltage = ((float)Get_VBAT_ADC_Reading()/BATTERY_ADC_MULTIPLIER);
-	float vbus_voltage = ((float)Get_VBUS_ADC_Reading()/BATTERY_ADC_MULTIPLIER);
-	float input_current = ((float)Get_Input_Current_ADC_Reading()/BATTERY_ADC_MULTIPLIER);
+	float regulator_vbat_voltage = ((float)Get_VBAT_ADC_Reading()/REG_ADC_MULTIPLIER);
+	float vbus_voltage = ((float)Get_VBUS_ADC_Reading()/REG_ADC_MULTIPLIER);
+	float input_current = ((float)Get_Input_Current_ADC_Reading()/REG_ADC_MULTIPLIER);
 	float input_power = vbus_voltage * input_current;
 
 	float efficiency = output_power/input_power;
@@ -207,7 +207,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 }
 /*-----------------------------------------------------------*/
 
-static BaseType_t prvadc_rawCommand(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString) {
+static BaseType_t prvCalibrateCommand(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString) {
 	/* Remove compile time warnings about unused parameters, and check the
 	 write buffer is not NULL.  NOTE - for simplicity, this example assumes the
 	 write buffer length is adequate, so does not check for buffer overflows. */
@@ -227,11 +227,12 @@ static BaseType_t prvadc_rawCommand(char *pcWriteBuffer, size_t xWriteBufferLen,
                           &xParameter1StringLength
                         );
 
-	char *ptr;
-	uint32_t index = strtol(pcParameter1, &ptr, 10);
+	float input_voltage_mv = strtof(pcParameter1, NULL);
 
 	/* Print the ADC reading. */
-	sprintf(pcWriteBuffer, "%u\r\n", Get_Raw_ADC_Reading(index));
+	uint8_t result = Calibrate_ADC(input_voltage_mv);
+
+	sprintf(pcWriteBuffer, "Calibration Result: %u\r\n", result);
 
 	/* There is no more data to return after this single string, so return
 	 pdFALSE. */
