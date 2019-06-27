@@ -65,6 +65,8 @@ int32_t Get_MCU_Temperature(void);
 
 uint32_t Get_VDDa(void);
 
+uint32_t Get_Raw_ADC_Reading(uint32_t index);
+
 osThreadId adcTaskHandle;
 
 #ifdef __cplusplus

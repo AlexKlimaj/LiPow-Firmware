@@ -239,7 +239,6 @@ void vRead_ADC(void const *pvParameters) {
 			/* Determines battery connection state and performs balancing */
 			Battery_Connection_State();
 
-			//printf("adc 4 value = %d\r\n", adc_filtered_output[4]);
 		} else {
 			/* Did not receive a notification within the expected time. */
 			printf("Did Not Receive an ADC Notification\r\n");
@@ -292,3 +291,14 @@ uint32_t Get_Four_S_Voltage() {
 	return adc_values.four_s_battery_voltage;
 }
 
+/**
+ * @brief  Gets the raw ADC value read in by the STM32G0
+ * @param  index: Index of the raw reading to get
+ * @retval raw reading if successful, UINT32_MAX if error
+ */
+uint32_t Get_Raw_ADC_Reading(uint32_t index) {
+	if ((index >= 0) && (index < 7)) {
+		return adc_filtered_output[index];
+	}
+	return UINT32_MAX;
+}

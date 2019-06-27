@@ -41,6 +41,7 @@
 #include "error.h"
 #include "UARTCommandConsole.h"
 #include "usbpd.h"
+#include <stdlib.h>
 
 /*
  * Defines a command that returns a table showing the state of each task at the
@@ -54,19 +55,32 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 static BaseType_t prvTaskStatsCommand( char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString );
 
 /*
+ * Implements the adc_raw command.
+ */
+static BaseType_t prvadc_rawCommand( char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString );
+/*
  * Implements the run-time-stats command.
  */
 #if( configGENERATE_RUN_TIME_STATS == 1 )
 	static BaseType_t prvRunTimeStatsCommand( char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString );
 #endif /* configGENERATE_RUN_TIME_STATS */
 
-/* Structure that defines the "task-stats" command line command. */
+/* Structure that defines the "stats" command line command. */
 static const CLI_Command_Definition_t xStats =
 {
 	"stats", /* The command string to type. */
 	"\r\nstats:\r\n Displays a table showing the system stats\r\n",
 	prvStatsCommand, /* The function to run. */
 	0 /* No parameters are expected. */
+};
+
+/* Structure that defines the "adc_raw" command line command. */
+static const CLI_Command_Definition_t xAdc =
+{
+	"adc_raw", /* The command string to type. */
+	"\r\nadc_raw:\r\n Returns the raw value from the adc reading selected\r\n",
+	prvadc_rawCommand, /* The function to run. */
+	1 /* No parameters are expected. */
 };
 
 /* Structure that defines the "task-stats" command line command.  This generates
@@ -96,6 +110,8 @@ static const CLI_Command_Definition_t xTaskStats =
 void vRegisterCLICommands(void) {
 	/* Register all the command line commands defined immediately above. */
 	FreeRTOS_CLIRegisterCommand(&xStats);
+	FreeRTOS_CLIRegisterCommand(&xAdc);
+
 	FreeRTOS_CLIRegisterCommand(&xTaskStats);
 
 	#if( configGENERATE_RUN_TIME_STATS == 1 )
@@ -184,6 +200,38 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			input_power,
 			efficiency,
 			Get_Error_State());
+
+	/* There is no more data to return after this single string, so return
+	 pdFALSE. */
+	return pdFALSE;
+}
+/*-----------------------------------------------------------*/
+
+static BaseType_t prvadc_rawCommand(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString) {
+	/* Remove compile time warnings about unused parameters, and check the
+	 write buffer is not NULL.  NOTE - for simplicity, this example assumes the
+	 write buffer length is adequate, so does not check for buffer overflows. */
+	(void) xWriteBufferLen;
+	configASSERT(pcWriteBuffer);
+
+	const char *pcParameter1;
+	BaseType_t xParameter1StringLength;
+
+    pcParameter1 = FreeRTOS_CLIGetParameter
+                        (
+                          /* The command string itself. */
+                          pcCommandString,
+                          /* Return the first parameter. */
+                          1,
+                          /* Store the parameter string length. */
+                          &xParameter1StringLength
+                        );
+
+	char *ptr;
+	uint32_t index = strtol(pcParameter1, &ptr, 10);
+
+	/* Print the ADC reading. */
+	sprintf(pcWriteBuffer, "%u\r\n", Get_Raw_ADC_Reading(index));
 
 	/* There is no more data to return after this single string, so return
 	 pdFALSE. */
