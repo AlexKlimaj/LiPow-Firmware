@@ -20,6 +20,7 @@ struct Battery {
 	uint8_t balancing_enabled;
 	uint8_t requires_charging;
 	uint8_t cell_over_voltage;
+	uint8_t cell_balance_bitmask;
 };
 
 /* Private variables ---------------------------------------------------------*/
@@ -60,16 +61,15 @@ void Balance_Battery()
 
 		if (battery_state.balancing_enabled == 1) {
 
-			uint8_t cell_balance_bitmask = 0;
 			for(int i = 0; i < battery_state.number_of_cells; i++) {
 				if ( (Get_Cell_Voltage(i) - min_cell_voltage) >= (CELL_DELTA_V_ENABLE_BALANCING - CELL_BALANCING_HYSTERESIS_V)) {
-					cell_balance_bitmask |= (1<<i);
+					battery_state.cell_balance_bitmask |= (1<<i);
 				}
 				else {
-					cell_balance_bitmask &= ~(1<<i);
+					battery_state.cell_balance_bitmask &= ~(1<<i);
 				}
 			}
-			Balancing_GPIO_Control(cell_balance_bitmask);
+			Balancing_GPIO_Control(battery_state.cell_balance_bitmask);
 		}
 		else {
 			Balancing_GPIO_Control(0);
@@ -276,11 +276,14 @@ uint8_t Get_Balance_Connection_State()
 
 /**
  * @brief Returns the state of balancing
- * @retval uint8_t 1 if balancing enabled or 0 if not enabled
+ * @retval uint8_t battery_state.cell_balance_bitmask if balancing enabled or 0 if not enabled
  */
 uint8_t Get_Balancing_State()
 {
-	return battery_state.balancing_enabled;
+	if (battery_state.balancing_enabled == 1) {
+		return battery_state.cell_balance_bitmask;
+	}
+	return 0;
 }
 
 /**

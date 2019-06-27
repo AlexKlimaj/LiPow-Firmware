@@ -20,30 +20,22 @@ extern "C" {
 
 #define BATTERY_ADC_MULTIPLIER 		1000000
 
-#define BATTERY_ADC_OFFSET 			(int32_t)( 0 )
-#define BATTERY_ADC_SCALAR 			(uint32_t)( 4500 )
 #define BATTERY_MIN_ADC_READING 	20
 
-#define CELL_ONE_ADC_OFFSET 		(int32_t)( 0 )
-#define CELL_ONE_ADC_SCALAR 		(uint32_t)( 1110 )
 #define CELL_ONE_MIN_ADC_READING 	20
 
-#define CELL_TWO_ADC_OFFSET 		(int32_t)( 0 )
-#define CELL_TWO_ADC_SCALAR 		(uint32_t)( 2150 )
 #define CELL_TWO_MIN_ADC_READING 	20
 
-#define CELL_THREE_ADC_OFFSET 		(int32_t)( 0 )
-#define CELL_THREE_ADC_SCALAR 		(uint32_t)( 3270 )
 #define CELL_THREE_MIN_ADC_READING 	20
 
-#define CELL_FOUR_ADC_OFFSET 		(int32_t)( 0 )
-#define CELL_FOUR_ADC_SCALAR 		(uint32_t)( 4500 )
 #define CELL_FOUR_MIN_ADC_READING 	20
 
 #define CELL_MAX_VOLTAGE			(uint32_t)( 5 * BATTERY_ADC_MULTIPLIER )
 #define TWO_S_MAX_VOLTAGE			(uint32_t)( 10 * BATTERY_ADC_MULTIPLIER )
 #define THREE_S_MAX_VOLTAGE			(uint32_t)( 15 * BATTERY_ADC_MULTIPLIER )
 #define FOUR_S_MAX_VOLTAGE			(uint32_t)( 20 * BATTERY_ADC_MULTIPLIER )
+
+#define SCALAR_ARRAY_SIZE			5
 
 /**
  * @brief  OTP memory start address

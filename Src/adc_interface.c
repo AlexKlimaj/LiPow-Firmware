@@ -31,7 +31,7 @@ struct Adc {
 /* Private variables ---------------------------------------------------------*/
 struct Adc adc_values;
 uint32_t adc_buffer[7];
-static volatile uint32_t adc_scalars[5], adc_offset[5], adc_buffer_filtered[7], adc_filtered_output[7];
+static volatile uint32_t adc_scalars[SCALAR_ARRAY_SIZE], adc_offset[SCALAR_ARRAY_SIZE], adc_buffer_filtered[7], adc_filtered_output[7];
 static volatile uint32_t adc_sum_count;
 static volatile uint16_t vrefint_cal;
 static volatile uint8_t cal_present;
@@ -354,7 +354,7 @@ uint8_t Write_Cal_To_OTP_Flash() {
 	HAL_StatusTypeDef status;
 
 	/* Check input parameters */
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < SCALAR_ARRAY_SIZE; i++) {
 		if ((adc_scalars[i] < 750) || (adc_scalars[i] > 5000)) {
 			printf("ERROR: ADC Scalar %u Not Set or Out of Range\r\n", i);
 			/* Return error */
@@ -372,7 +372,7 @@ uint8_t Write_Cal_To_OTP_Flash() {
 
 	for (int i = 0; i < OTP_SIZE; i++) {
 
-		for (int x = 0; x < 5; x++) {
+		for (int x = 0; x < SCALAR_ARRAY_SIZE; x++) {
 			uint32_t value = *(uint32_t *)(temp_address + (i * BYTES_IN_UINT64) + (x * BYTES_IN_UINT32));
 			if ((value > 750) && (value < 5000)) {
 				printf("OTP Memory Value: %u\r\n", value);
@@ -431,9 +431,9 @@ uint8_t Write_Cal_To_OTP_Flash() {
 uint8_t Read_Scalars_From_Flash() {
 	uint32_t address = OTP_START_ADDR;
 
-	uint32_t temp_scalars[5] = {0};
+	uint32_t temp_scalars[SCALAR_ARRAY_SIZE] = {0};
 
-	uint8_t t = 4;
+	uint8_t t = SCALAR_ARRAY_SIZE - 1;
 
 	for (int i = OTP_SIZE; i >= 0; i--) {
 
@@ -448,7 +448,7 @@ uint8_t Read_Scalars_From_Flash() {
 
 			if(t == 0) {
 				cal_present = cal_present + 1;
-				t = 5;
+				t = SCALAR_ARRAY_SIZE;
 			}
 
 			t--;
@@ -457,14 +457,14 @@ uint8_t Read_Scalars_From_Flash() {
 
 	if (cal_present != 0) {
 
-		for (int y = 0; y < 5; y++) {
+		for (int y = 0; y < SCALAR_ARRAY_SIZE; y++) {
 			adc_scalars[y] = temp_scalars[y];
 		}
 
 		printf("Calibration values already present. 32 total calibrations can be performed. Number of calibrations performed: %u\r\n", cal_present);
 		printf("Using these calibration values:\r\n");
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < SCALAR_ARRAY_SIZE; i++) {
 			printf("Scalar: %u  Value: %u\r\n", i, adc_scalars[i]);
 		}
 		return 0;

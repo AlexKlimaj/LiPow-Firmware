@@ -496,7 +496,7 @@ void Control_Charger_Output() {
  */
 void vRegulator(void const *pvParameters) {
 
-	TickType_t xDelay = 500 / portTICK_PERIOD_MS;
+	TickType_t xDelay = 250 / portTICK_PERIOD_MS;
 
 	/* Disable the output of the regulator for safety */
 	Regulator_HI_Z(1);
@@ -535,10 +535,10 @@ void vRegulator(void const *pvParameters) {
 		Regulator_Read_ADC();
 
 		timer_count++;
-		if (timer_count < 45) {
+		if (timer_count < 90) {
 			Control_Charger_Output();
 		}
-		else if (timer_count > 50){
+		else if (timer_count > 100){
 			timer_count = 0;
 		}
 		else {
