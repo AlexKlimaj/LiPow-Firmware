@@ -215,7 +215,10 @@ uint8_t Calibrate_ADC(float reference_voltage_mv) {
 	printf("Input Reference Voltage in mv: %.3f\r\n", reference_voltage_mv);
 
 	for (int i = 0; i < 5; i++) {
-		adc_scalars[i] = adc_filtered_output[i];
+		float scale = ((reference_voltage_mv / 1000.0f) * BATTERY_ADC_MULTIPLIER) / adc_filtered_output[i];
+		adc_scalars[i] = (uint32_t)scale;
+
+		printf("ADC Channel %u scalar: %u\r\n", i, adc_scalars[i]);
 	}
 
 	return 1;
