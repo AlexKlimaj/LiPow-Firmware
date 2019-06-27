@@ -60,7 +60,7 @@ static BaseType_t prvTaskStatsCommand( char *pcWriteBuffer, size_t xWriteBufferL
 static BaseType_t prvCalibrateCommand( char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString );
 
 /*
- * Implements the write_otp_scalars_to_flash command.
+ * Implements the write_otp command.
  */
 static BaseType_t prvWriteOTPFlashCommand( char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString );
 
@@ -92,8 +92,8 @@ static const CLI_Command_Definition_t xCal =
 /* Structure that defines the "write_otp_scalars_to_flash" command line command. */
 static const CLI_Command_Definition_t xOTP =
 {
-	"write_otp_scalars_to_flash", /* The command string to type. */
-	"\r\nwrite_otp_scalars_to_flash:\r\n Writes the calibration scalars to OTP flash. Only works ONCE!. Will fail if scalars not set or out of range. Must run cal first with known accurate voltage. USE Wisely.\r\n",
+	"write_otp", /* The command string to type. */
+	"\r\nwrite_otp:\r\n Writes the calibration scalars to OTP flash. Will fail if scalars not set or out of range. Must run cal first with known accurate voltage. Can run up to ~32 times.\r\n",
 	prvWriteOTPFlashCommand, /* The function to run. */
 	0 /* No parameters are expected. */
 };
