@@ -471,7 +471,7 @@ uint8_t Read_Scalars_From_Flash() {
 	}
 
 	cal_present = 0;
-	printf("NOT CALIBRATED. Connect known good voltage to cells 1-4 and XT60 in the range of 3.3V - 4V and run cal command.\r\nThen write then to flash with write_otp_scalars_to_flash\r\n");
+	printf("NOT CALIBRATED. Connect known good voltage to cells 1-4 and XT60 in the range of 3.3V - 4V and run cal command.\r\nThen write then to flash with write_otp\r\n");
 
 	return 1;
 }
