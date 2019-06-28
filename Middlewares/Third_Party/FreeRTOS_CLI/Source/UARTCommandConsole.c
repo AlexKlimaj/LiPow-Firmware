@@ -35,7 +35,9 @@
 #include "semphr.h"
 
 #include "FreeRTOS_CLI.h"
+#include "main.h"
 #include "UARTCommandConsole.h"
+#include "printf.h"
 
 /* Dimensions the buffer into which input characters are placed. */
 #define cmdMAX_INPUT_SIZE	50
@@ -57,8 +59,7 @@ static volatile uint8_t sUart_tx_ready = 0;
 /* Const messages output by the command console. */
 static const char * const pcWelcomeMessage =
 		"\r\nStarting LiPow.\r\n"
-		"Firmware Version: 1.1\r\n"
-		"Type Help to view a list of registered commands.\r\n\r\n>";
+		"Type Help to view a list of registered commands.\r\n";
 static const char * const pcEndOfOutputMessage = "\r\n[Press ENTER to execute the previous command again]\r\n>";
 static const char * const pcNewLine = "\r\n";
 
@@ -81,8 +82,10 @@ void prvUARTCommandConsoleTask(void const *pvParameters) {
 	 will be used at any one time. */
 	pcOutputString = FreeRTOS_CLIGetOutputBuffer();
 
-	/* Send the welcome message. */
-	UART_Transfer((uint8_t *) pcWelcomeMessage, (unsigned short) strlen(pcWelcomeMessage));
+	/* Send the welcome message and firmware version. */
+	char firmware_verion[100];
+	snprintf(firmware_verion, sizeof(firmware_verion), "%sFirmware Version: %u.%u\r\n\r\n>", pcWelcomeMessage, (uint8_t)LIPOW_MAJOR_VERION, (uint8_t)LIPOW_MINOR_VERION);
+	UART_Transfer((uint8_t *) firmware_verion, (unsigned short) strlen(firmware_verion));
 
 	for (;;) {
 		/* Wait for the next character.  The while loop is used in case
