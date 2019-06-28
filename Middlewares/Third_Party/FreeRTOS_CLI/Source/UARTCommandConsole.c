@@ -56,7 +56,9 @@ static volatile uint8_t sUart_tx_ready = 0;
 
 /* Const messages output by the command console. */
 static const char * const pcWelcomeMessage =
-		"\r\nStarting LiPow.\r\nType Help to view a list of registered commands.\r\n\r\n>";
+		"\r\nStarting LiPow.\r\n"
+		"Firmware Version: 1.1\r\n"
+		"Type Help to view a list of registered commands.\r\n\r\n>";
 static const char * const pcEndOfOutputMessage = "\r\n[Press ENTER to execute the previous command again]\r\n>";
 static const char * const pcNewLine = "\r\n";
 

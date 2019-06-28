@@ -241,7 +241,7 @@ void vUSBPD_User(void const *pvParameters) {
 		if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (power_ready == NOT_READY) && (match_found == 1)) {
 			printf("Requesting %dV, Result: ", (source_pdo[selected_source_pdo].voltage_mv/1000));
 			status = USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, (selected_source_pdo + 1), (uint16_t)source_pdo[selected_source_pdo].voltage_mv);
-			vTaskDelay(xDelay/5);
+			vTaskDelay(xDelay);
 			if (status == USBPD_OK) {
 				printf("Success\r\n");
 				power_ready = READY;
