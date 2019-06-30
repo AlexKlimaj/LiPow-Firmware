@@ -71,7 +71,7 @@ osMessageQId  USBPDMsgBox;
 osThreadId USBPD_User_TaskHandle;
 
 void vUSBPD_User(void const *pvParameters);
-void get_USBPD_profiles(void);
+uint8_t check_if_power_ready(void);
 
 /* USER CODE END 2 */
 
@@ -241,10 +241,16 @@ void vUSBPD_User(void const *pvParameters) {
 		if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (power_ready == NOT_READY) && (match_found == 1)) {
 			printf("Requesting %dV, Result: ", (source_pdo[selected_source_pdo].voltage_mv/1000));
 			status = USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, (selected_source_pdo + 1), (uint16_t)source_pdo[selected_source_pdo].voltage_mv);
-			vTaskDelay(xDelay);
+			vTaskDelay(400 / portTICK_PERIOD_MS);
 			if (status == USBPD_OK) {
-				printf("Success\r\n");
-				power_ready = READY;
+				if (check_if_power_ready() != READY) {
+					printf("Waiting for input voltage to be ready\r\n");
+					power_ready = NOT_READY;
+				}
+				else {
+					printf("Success\r\n");
+					power_ready = READY;
+				}
 			}
 			else {
 				printf("Failed\r\n");
@@ -255,7 +261,7 @@ void vUSBPD_User(void const *pvParameters) {
 			if (Get_VBUS_ADC_Reading() > (6 * REG_ADC_MULTIPLIER)) {
 				printf("Requesting 5V, Result: ");
 				status = USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, 1, (uint16_t)5000);
-				vTaskDelay(xDelay/2);
+				vTaskDelay(100 / portTICK_PERIOD_MS);
 				if (status == USBPD_OK) {
 					printf("Success\r\n");
 				}
@@ -264,11 +270,22 @@ void vUSBPD_User(void const *pvParameters) {
 				}
 			}
 			power_ready = NOT_READY;
-			vTaskDelay(xDelay*5);
+			vTaskDelay(1000 / portTICK_PERIOD_MS);
 		}
 
 		vTaskDelay(xDelay);
 	}
+}
+
+/**
+ * @brief Compares the selected source PDO voltage to the measured input voltage
+ * @retval READY or NOT_READY
+ */
+uint8_t check_if_power_ready() {
+	if (Get_VBUS_ADC_Reading() > ((source_pdo[selected_source_pdo].voltage_mv * (REG_ADC_MULTIPLIER/1000)) - (2 * REG_ADC_MULTIPLIER))) {
+		return READY;
+	}
+	return NOT_READY;
 }
 
 /* USER CODE END 4 */

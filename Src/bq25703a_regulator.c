@@ -422,10 +422,14 @@ void Set_Charge_Voltage(uint8_t number_of_cells) {
 uint32_t Calculate_Max_Charge_Power() {
 
 	//Account for system losses with ASSUME_EFFICIENCY fudge factor to not overload source
-	uint32_t charging_power_mw = (Get_Max_Input_Power() * ASSUME_EFFICIENCY);
+	uint32_t charging_power_mw = (((float)(regulator.vbus_voltage/REG_ADC_MULTIPLIER) * Get_Max_Input_Current()) * ASSUME_EFFICIENCY);
 
 	if (charging_power_mw > MAX_CHARGING_POWER) {
 		charging_power_mw = MAX_CHARGING_POWER;
+	}
+
+	if (charging_power_mw > Get_Max_Input_Power()){
+		charging_power_mw = Get_Max_Input_Power() * ASSUME_EFFICIENCY;
 	}
 
 	//Throttle charging power if temperature is too high
@@ -459,7 +463,7 @@ void Control_Charger_Output() {
 
 		Set_Charge_Voltage(Get_Number_Of_Cells());
 
-		uint32_t charging_current_ma = ((Calculate_Max_Charge_Power()) / (Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
+		uint32_t charging_current_ma = ((Calculate_Max_Charge_Power()) / (float)(Get_Battery_Voltage() / BATTERY_ADC_MULTIPLIER));
 
 		Set_Charge_Current(charging_current_ma);
 
