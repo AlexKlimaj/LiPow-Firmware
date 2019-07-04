@@ -54,6 +54,7 @@ dkms.conf
 
 # Folders
 Debug/
+build/
 
 # Environment specific
 .settings/language.settings.xml

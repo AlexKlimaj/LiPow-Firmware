@@ -22,7 +22,7 @@ TARGET = Lipow
 # debug build?
 DEBUG = 1
 # optimization
-OPT = -Og
+OPT = -Os
 
 
 #######################################
@@ -154,18 +154,15 @@ AS_DEFS =
 
 # C defines
 C_DEFS =  \
--DUSE_FULL_LL_DRIVER \
 -DUSBPD_PORT_COUNT=1 \
 -DUSBPDCORE_LIB_PD3_FULL \
 -D_RTOS \
 -D_SNK \
--DUSE_FULL_LL_DRIVER \
--DUSE_HAL_DRIVER \
 -DSTM32G071xx \
 -DUSE_FULL_LL_DRIVER \
 -DUSE_HAL_DRIVER \
--DUSE_HAL_DRIVER \
--DSTM32G071xx
+-DSTM32G071xx \
+-D_CLI_INTERFACE
 
 
 # AS includes
