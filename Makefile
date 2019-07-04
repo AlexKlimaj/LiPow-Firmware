@@ -61,6 +61,7 @@ Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_i2c.c \
 Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_i2c_ex.c \
 Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_tim.c \
 Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_tim_ex.c \
+Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_tim.c \
 Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_ucpd.c \
 Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_gpio.c \
 Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_exti.c \
@@ -80,7 +81,6 @@ Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_cortex.c \
 Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal.c \
 Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_exti.c \
 Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_utils.c \
-Middlewares/ST/STM32_USBPD_Library/../../../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_tim.c \
 Middlewares/Third_Party/FreeRTOS/Source/croutine.c \
 Middlewares/Third_Party/FreeRTOS/Source/event_groups.c \
 Middlewares/Third_Party/FreeRTOS/Source/list.c \
@@ -102,7 +102,6 @@ Middlewares/ST/STM32_USBPD_Library/Devices/STM32G0XX/src/usbpd_phy.c \
 Middlewares/ST/STM32_USBPD_Library/Devices/STM32G0XX/src/usbpd_phy_hw_if.c \
 Middlewares/ST/STM32_USBPD_Library/Devices/STM32G0XX/src/usbpd_pwr_hw_if.c \
 Middlewares/ST/STM32_USBPD_Library/Devices/STM32G0XX/src/usbpd_timersserver.c \
-Middlewares/ST/STM32_USBPD_Library/../../../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_tim.c \
 Utilities/GUI_INTERFACE/bsp_gui.c \
 Utilities/GUI_INTERFACE/data_struct_tlv.c \
 Utilities/GUI_INTERFACE/gui_api.c \
@@ -212,9 +211,8 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 LDSCRIPT = STM32G071CBTx_FLASH.ld
 
 # libraries
-LIBS = -lc -lm -lnosys -lUSBPDCORE_PD3_FULL_CM0PLUS_wc32
-LIBDIR = -LMiddlewares/ST/STM32_USBPD_Library/Core/lib
-LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
+LIBS = -lc -lm -lnosys Middlewares/ST/STM32_USBPD_Library/Core/lib/USBPDCORE_PD3_FULL_CM0PLUS_wc32.a
+LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
