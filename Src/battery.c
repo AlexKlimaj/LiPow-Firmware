@@ -5,12 +5,11 @@
  ******************************************************************************
  */
 
-
-#include "main.h"
-#include "battery.h"
-
 #include "adc_interface.h"
+#include "battery.h"
 #include "bq25703a_regulator.h"
+#include "main.h"
+#include "printf.h"
 
 /* Private typedef -----------------------------------------------------------*/
 struct Battery {
@@ -52,17 +51,23 @@ void Balance_Battery()
 			}
 		}
 
-		if ( ((max_cell_voltage - min_cell_voltage) >= CELL_DELTA_V_ENABLE_BALANCING) && (min_cell_voltage > MIN_CELL_V_FOR_BALANCING) && (battery_state.balancing_enabled == 0)) {
+		// Scale the balancing thresholds tighter as the battery voltage increases. Allows for faster charging.
+		float scalar = (float)CELL_BALANCING_SCALAR_MAX * (1.0f - (((float)max_cell_voltage - (float)MIN_CELL_V_FOR_BALANCING)/((float)CELL_VOLTAGE_TO_ENABLE_CHARGING - (float)MIN_CELL_V_FOR_BALANCING)));
+		if (scalar < 1.0f) {
+			scalar = 1.0f;
+		}
+
+		if ( ((max_cell_voltage - min_cell_voltage) >= ((float)CELL_DELTA_V_ENABLE_BALANCING * scalar)) && (min_cell_voltage > MIN_CELL_V_FOR_BALANCING) && (battery_state.balancing_enabled == 0)) {
 			battery_state.balancing_enabled = 1;
 		}
-		else if ( (((max_cell_voltage - min_cell_voltage) < CELL_BALANCING_HYSTERESIS_V) && (battery_state.balancing_enabled == 1)) || (min_cell_voltage < MIN_CELL_V_FOR_BALANCING) ) {
+		else if ( (((max_cell_voltage - min_cell_voltage) < ((float)CELL_BALANCING_HYSTERESIS_V * scalar)) && (battery_state.balancing_enabled == 1)) || (min_cell_voltage < MIN_CELL_V_FOR_BALANCING) ) {
 			battery_state.balancing_enabled = 0;
 		}
 
 		if (battery_state.balancing_enabled == 1) {
 
 			for(int i = 0; i < battery_state.number_of_cells; i++) {
-				if ( (Get_Cell_Voltage(i) - min_cell_voltage) >= CELL_BALANCING_HYSTERESIS_V) {
+				if ( (Get_Cell_Voltage(i) - min_cell_voltage) >= ((float)CELL_BALANCING_HYSTERESIS_V * scalar)) {
 					battery_state.cell_balance_bitmask |= (1<<i);
 				}
 				else {
