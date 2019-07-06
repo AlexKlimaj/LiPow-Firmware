@@ -754,7 +754,7 @@ void vLED_Blinky(void const *pvParameters) {
 			vTaskDelay(xDelay * 4);
 		}
 		else {
-			if (Get_Balancing_State() == 1) {
+			if (Get_Balancing_State() >= 1) {
 				HAL_GPIO_WritePin(Blue_LED_GPIO_Port, Blue_LED_Pin, GPIO_PIN_RESET);
 			}
 			else {

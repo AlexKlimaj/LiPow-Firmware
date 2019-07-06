@@ -5,11 +5,11 @@
  ******************************************************************************
  */
 
-
-#include "main.h"
-#include "battery.h"
-
 #include "adc_interface.h"
+#include "battery.h"
+#include "bq25703a_regulator.h"
+#include "main.h"
+#include "printf.h"
 
 /* Private typedef -----------------------------------------------------------*/
 struct Battery {
@@ -19,6 +19,7 @@ struct Battery {
 	uint8_t balancing_enabled;
 	uint8_t requires_charging;
 	uint8_t cell_over_voltage;
+	uint8_t cell_balance_bitmask;
 };
 
 /* Private variables ---------------------------------------------------------*/
@@ -50,25 +51,30 @@ void Balance_Battery()
 			}
 		}
 
-		if ( ((max_cell_voltage - min_cell_voltage) > CELL_DELTA_V_ENABLE_BALANCING) && (min_cell_voltage > MIN_CELL_V_FOR_BALANCING) && (battery_state.balancing_enabled == 0)) {
+		// Scale the balancing thresholds tighter as the battery voltage increases. Allows for faster charging.
+		float scalar = (float)CELL_BALANCING_SCALAR_MAX * (1.0f - (((float)max_cell_voltage - (float)MIN_CELL_V_FOR_BALANCING)/((float)CELL_VOLTAGE_TO_ENABLE_CHARGING - (float)MIN_CELL_V_FOR_BALANCING)));
+		if (scalar < 1.0f) {
+			scalar = 1.0f;
+		}
+
+		if ( ((max_cell_voltage - min_cell_voltage) >= ((float)CELL_DELTA_V_ENABLE_BALANCING * scalar)) && (min_cell_voltage > MIN_CELL_V_FOR_BALANCING) && (battery_state.balancing_enabled == 0)) {
 			battery_state.balancing_enabled = 1;
 		}
-		else if ( (((max_cell_voltage - min_cell_voltage) < (CELL_DELTA_V_ENABLE_BALANCING - CELL_BALANCING_HYSTERESIS_V)) && (battery_state.balancing_enabled == 1)) || (min_cell_voltage < MIN_CELL_V_FOR_BALANCING) ) {
+		else if ( (((max_cell_voltage - min_cell_voltage) < ((float)CELL_BALANCING_HYSTERESIS_V * scalar)) && (battery_state.balancing_enabled == 1)) || (min_cell_voltage < MIN_CELL_V_FOR_BALANCING) ) {
 			battery_state.balancing_enabled = 0;
 		}
 
 		if (battery_state.balancing_enabled == 1) {
 
-			uint8_t cell_balance_bitmask = 0;
 			for(int i = 0; i < battery_state.number_of_cells; i++) {
-				if ( (Get_Cell_Voltage(i) - min_cell_voltage) > (CELL_DELTA_V_ENABLE_BALANCING - CELL_BALANCING_HYSTERESIS_V)) {
-					cell_balance_bitmask |= (1<<i);
+				if ( (Get_Cell_Voltage(i) - min_cell_voltage) >= ((float)CELL_BALANCING_HYSTERESIS_V * scalar)) {
+					battery_state.cell_balance_bitmask |= (1<<i);
 				}
 				else {
-					cell_balance_bitmask &= ~(1<<i);
+					battery_state.cell_balance_bitmask &= ~(1<<i);
 				}
 			}
-			Balancing_GPIO_Control(cell_balance_bitmask);
+			Balancing_GPIO_Control(battery_state.cell_balance_bitmask);
 		}
 		else {
 			Balancing_GPIO_Control(0);
@@ -199,7 +205,10 @@ void Battery_Connection_State()
 
 	Cell_Voltage_Safety_Check();
 
-	Balance_Battery();
+	//Only update the balancing state if charging is off
+	if (Get_Regulator_Charging_State() == 0) {
+		Balance_Battery();
+	}
 
 	if ((battery_state.xt60_connected == CONNECTED) && (battery_state.balance_port_connected == CONNECTED)){
 		if (Get_Battery_Voltage() < (battery_state.number_of_cells * CELL_VOLTAGE_TO_ENABLE_CHARGING)) {
@@ -272,11 +281,14 @@ uint8_t Get_Balance_Connection_State()
 
 /**
  * @brief Returns the state of balancing
- * @retval uint8_t 1 if balancing enabled or 0 if not enabled
+ * @retval uint8_t battery_state.cell_balance_bitmask if balancing enabled or 0 if not enabled
  */
 uint8_t Get_Balancing_State()
 {
-	return battery_state.balancing_enabled;
+	if (battery_state.balancing_enabled == 1) {
+		return battery_state.cell_balance_bitmask;
+	}
+	return 0;
 }
 
 /**
