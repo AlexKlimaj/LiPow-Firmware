@@ -65,6 +65,7 @@
 
 // System
 #include "printf.h"
+#include "stm32g0xx_hal_flash.h"
 #include "stm32g0xx_hal_tim.h"
 #include "error.h"
 
@@ -187,6 +188,14 @@ int main(void)
   MX_TIM7_Init();
   MX_UCPD2_Init();
   /* USER CODE BEGIN 2 */
+
+  // Check nBOOT_SEL value. Set if not 0.
+  uint32_t nboot_sel_value = *(uint32_t *)(0x1FFF7800);
+  printf("Option Register Value = %x\r\n", nboot_sel_value);
+  if (nboot_sel_value & OB_USER_nBOOT_SEL) {
+
+  }
+
 #if defined(_GUI_INTERFACE)
   /* Disable dead battery to use USART1_RX used by GUI 	*/
   LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
