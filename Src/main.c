@@ -66,6 +66,7 @@
 // System
 #include "printf.h"
 #include "stm32g0xx_hal_flash.h"
+#include "stm32g0xx_hal_flash_ex.h"
 #include "stm32g0xx_hal_tim.h"
 #include "error.h"
 
@@ -716,12 +717,24 @@ void vLED_Blinky(void const *pvParameters) {
 	uint32_t nboot_sel_value = *(uint32_t *)(0x1FFF7800);
 	printf("Option Register Value = %x\r\n", nboot_sel_value);
 	if ((nboot_sel_value & OB_USER_nBOOT_SEL) == OB_BOOT0_FROM_OB) {
-		while (HAL_FLASH_OB_Unlock() != HAL_OK);
+
 
 		nboot_sel_value &= ~(OB_USER_nBOOT_SEL);
-		HAL_FLASH_Program(FLASH_TYPEPROGRAM_DOUBLEWORD, (uint32_t)0x1FFF7800, ((uint32_t)nboot_sel_value));
 
-		while (HAL_FLASH_OB_Lock() != HAL_OK);
+		// unlock flash
+		if(HAL_FLASH_Unlock() == HAL_OK) {
+		   // unlock option bytes in particular
+		   if(HAL_FLASH_OB_Unlock() == HAL_OK) {
+			 // program selected option byte
+			 FLASH_OBProgramInitTypeDef OBInit; // programming option structure
+			 HAL_FLASHEx_OBProgram(&OBInit); // result not checked as there is no recourse at this point
+			 if(HAL_FLASH_OB_Lock() == HAL_OK) {
+				HAL_FLASH_Lock(); // again, no recourse
+				//HAL_FLASH_OB_Launch(); // reset occurs here (sorry, debugger)
+			 }
+		   }
+		}
+
 	}
 
 	vTaskDelay(xDelay*4);
