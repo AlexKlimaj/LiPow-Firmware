@@ -188,14 +188,6 @@ int main(void)
   MX_TIM7_Init();
   MX_UCPD2_Init();
   /* USER CODE BEGIN 2 */
-
-  // Check nBOOT_SEL value. Set if not 0.
-  uint32_t nboot_sel_value = *(uint32_t *)(0x1FFF7800);
-  printf("Option Register Value = %x\r\n", nboot_sel_value);
-  if (nboot_sel_value & OB_USER_nBOOT_SEL) {
-
-  }
-
 #if defined(_GUI_INTERFACE)
   /* Disable dead battery to use USART1_RX used by GUI 	*/
   LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
@@ -719,6 +711,18 @@ void vLED_Blinky(void const *pvParameters) {
 	HAL_GPIO_WritePin(Red_LED_GPIO_Port, Red_LED_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(Green_LED_GPIO_Port, Green_LED_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(Blue_LED_GPIO_Port, Blue_LED_Pin, GPIO_PIN_RESET);
+
+	// Check nBOOT_SEL value. Set if not 0.
+	uint32_t nboot_sel_value = *(uint32_t *)(0x1FFF7800);
+	printf("Option Register Value = %x\r\n", nboot_sel_value);
+	if ((nboot_sel_value & OB_USER_nBOOT_SEL) == OB_BOOT0_FROM_OB) {
+		while (HAL_FLASH_OB_Unlock() != HAL_OK);
+
+		nboot_sel_value &= ~(OB_USER_nBOOT_SEL);
+		HAL_FLASH_Program(FLASH_TYPEPROGRAM_DOUBLEWORD, (uint32_t)0x1FFF7800, ((uint32_t)nboot_sel_value));
+
+		while (HAL_FLASH_OB_Lock() != HAL_OK);
+	}
 
 	vTaskDelay(xDelay*4);
 
