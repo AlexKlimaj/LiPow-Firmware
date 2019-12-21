@@ -135,8 +135,8 @@ void Error_Handler(void);
 #define CELL_4S_DIS_EN_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
-#define LIPOW_MAJOR_VERION	(uint8_t)1
-#define LIPOW_MINOR_VERION	(uint8_t)2
+#define LIPOW_MAJOR_VERSION	(uint8_t)1
+#define LIPOW_MINOR_VERSION	(uint8_t)3
 
 /* USER CODE END Private defines */
 

@@ -84,7 +84,7 @@ void prvUARTCommandConsoleTask(void const *pvParameters) {
 
 	/* Send the welcome message and firmware version. */
 	char firmware_verion[100];
-	snprintf(firmware_verion, sizeof(firmware_verion), "%sFirmware Version: %u.%u\r\n\r\n>", pcWelcomeMessage, (uint8_t)LIPOW_MAJOR_VERION, (uint8_t)LIPOW_MINOR_VERION);
+	snprintf(firmware_verion, sizeof(firmware_verion), "%sFirmware Version: %u.%u\r\n\r\n>", pcWelcomeMessage, (uint8_t)LIPOW_MAJOR_VERSION, (uint8_t)LIPOW_MINOR_VERSION);
 	UART_Transfer((uint8_t *) firmware_verion, (unsigned short) strlen(firmware_verion));
 
 	for (;;) {
