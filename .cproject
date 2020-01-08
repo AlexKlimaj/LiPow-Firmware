@@ -3,7 +3,13 @@
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="com.atollic.truestudio.exe.debug.1518366166">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.atollic.truestudio.exe.debug.1518366166" moduleId="org.eclipse.cdt.core.settings" name="Debug">
-				<externalSettings/>
+				<externalSettings>
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/Lipow"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/Lipow/Debug"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="Lipow" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
@@ -129,7 +135,10 @@
 								<option id="com.atollic.truestudio.common_options.target.fpucore.1297069055" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" value="com.atollic.truestudio.common_options.target.fpucore.None" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.interwork.1188164138" name="Mix ARM/Thumb" superClass="com.atollic.truestudio.common_options.target.interwork"/>
 							</tool>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.839033486" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.839033486" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput">
+								<option id="com.atollic.truestudio.secoutput.general.convert.1789771150" superClass="com.atollic.truestudio.secoutput.general.convert" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<option id="com.atollic.truestudio.mbs.convert.1486826257" superClass="com.atollic.truestudio.mbs.convert" useByScannerDiscovery="false" value="com.atollic.truestudio.mbs.convert.bin" valueType="enumerated"/>
+							</tool>
 							<tool id="com.atollic.truestudio.ar.base.1647451103" name="Archiver" superClass="com.atollic.truestudio.ar.base"/>
 						</toolChain>
 					</folderInfo>

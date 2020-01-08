@@ -65,6 +65,8 @@
 
 // System
 #include "printf.h"
+#include "stm32g0xx_hal_flash.h"
+#include "stm32g0xx_hal_flash_ex.h"
 #include "stm32g0xx_hal_tim.h"
 #include "error.h"
 
@@ -187,6 +189,28 @@ int main(void)
   MX_TIM7_Init();
   MX_UCPD2_Init();
   /* USER CODE BEGIN 2 */
+
+  // Check nBOOT_SEL value. Set if not 0. Enables BOOT mode from BOOT0 Pin
+  FLASH_OBProgramInitTypeDef OBInit; // programming option structure
+  HAL_FLASHEx_OBGetConfig(&OBInit);
+  if ((OBInit.USERConfig & OB_USER_nBOOT_SEL) == OB_BOOT0_FROM_OB) {
+    // unlock flash
+    if(HAL_FLASH_Unlock() == HAL_OK) {
+      // unlock option bytes in particular
+      if(HAL_FLASH_OB_Unlock() == HAL_OK) {
+        // program selected option byte
+        OBInit.OptionType = OPTIONBYTE_USER;
+        OBInit.USERType = OB_USER_nBOOT_SEL;
+        OBInit.USERConfig = 0;
+        HAL_FLASHEx_OBProgram(&OBInit); // result not checked as there is no recourse at this point
+        if(HAL_FLASH_OB_Lock() == HAL_OK) {
+            HAL_FLASH_Lock(); // again, no recourse
+            HAL_FLASH_OB_Launch(); // reset occurs here (sorry, debugger)
+        }
+      }
+    }
+  }
+
 #if defined(_GUI_INTERFACE)
   /* Disable dead battery to use USART1_RX used by GUI 	*/
   LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
