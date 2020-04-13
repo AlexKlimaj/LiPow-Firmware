@@ -38,7 +38,7 @@ Charging current is decided by the USB PD Source capability. First, it checks th
 - Program through SWD or UART
 - Runs FreeRTOS
 - ST USB PD Middleware
-- UART Command Line Interface
+- UART Command Line Interface (921600 baud rate, 8N1)
 - Build using makefile or in TrueStudio
 
 
