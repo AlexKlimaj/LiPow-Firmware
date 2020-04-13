@@ -35,11 +35,22 @@ Everything runs automatically and will charge up to the max capability of the co
 Charging current is decided by the USB PD Source capability. First, it checks the available voltages from the source, then selects the voltage that will result in the highest efficiency for the regulator based on the number of cells. For instance, using a 30W supply with a 20V 1.5A (30W) capability and a 4s Lipo battery at 15.0V. The charging current will be 30W/15.0V=2A. As the battery voltage increases, the max charging current will decrease. 30W/16.0V=1.875A.
 
 # **Developer Guide**
-- Program through SWD
+- Program through SWD or UART
 - Runs FreeRTOS
 - ST USB PD Middleware
 - UART Command Line Interface
 - Build using makefile or in TrueStudio
+
+
+To load firmware through SWD use a JLINK or STLINK.
+
+To load firmware through UART, use one of these tools:
+
+https://www.st.com/en/development-tools/stm32cubeprog.html
+
+https://sourceforge.net/projects/stm32flash/
+
+To place the STM32G0 into bootloader mode and enable UART firmware loading, jumper BOOT0 to 3.3V before powering on. Use one of the above programs with UART to load the firmware. All necessary pins are located on the debug header shown below.
 
 # **Hardware Specifications**
 
