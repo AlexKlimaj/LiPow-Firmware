@@ -521,6 +521,13 @@ void vRegulator(void const *pvParameters) {
 
 	for (;;) {
 
+		if (Get_MCU_Temperature() > TEMP_FAN_THRESH_C){
+			HAL_GPIO_WritePin(GPIOA, FAN_ENn_Pin, GPIO_PIN_RESET);
+		}
+		else if (Get_MCU_Temperature() < (TEMP_FAN_THRESH_C - TEMP_FAN_HYSTER_C)) {
+			HAL_GPIO_WritePin(GPIOA, FAN_ENn_Pin, GPIO_PIN_SET);
+		}
+
 		//Check if power into regulator is okay
 		if (Read_Charge_Okay() != 1) {
 			Set_Error_State(VOLTAGE_INPUT_ERROR);
@@ -539,7 +546,7 @@ void vRegulator(void const *pvParameters) {
 		Regulator_Read_ADC();
 
 		timer_count++;
-		if (timer_count < 90) {
+		if (timer_count < 98) {
 			Control_Charger_Output();
 		}
 		else if (timer_count > 100){

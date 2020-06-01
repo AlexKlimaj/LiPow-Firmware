@@ -133,6 +133,8 @@ void Error_Handler(void);
 #define CELL_3S_DIS_EN_GPIO_Port GPIOB
 #define CELL_4S_DIS_EN_Pin GPIO_PIN_9
 #define CELL_4S_DIS_EN_GPIO_Port GPIOB
+#define FAN_ENn_Pin GPIO_PIN_15
+#define FAN_ENn_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 #define LIPOW_MAJOR_VERSION	(uint8_t)1
