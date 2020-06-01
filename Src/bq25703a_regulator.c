@@ -380,24 +380,24 @@ void Set_Charge_Voltage(uint8_t number_of_cells) {
 
 	if ((number_of_cells > 0) || (number_of_cells < 5)) {
 		switch (number_of_cells) {
-			case 1:
+			case 1: // 4.176V
 				max_charge_register_1_value = MAX_VOLT_ADD_4096_MV;
-				max_charge_register_2_value = MAX_VOLT_ADD_64_MV | MAX_VOLT_ADD_32_MV;
+				max_charge_register_2_value = MAX_VOLT_ADD_64_MV | MAX_VOLT_ADD_16_MV;
 				minimum_system_voltage_value = MIN_VOLT_ADD_2048_MV | MIN_VOLT_ADD_512_MV | MIN_VOLT_ADD_256_MV;
 				break;
-			case 2:
+			case 2: // 8.384V
 				max_charge_register_1_value = MAX_VOLT_ADD_8192_MV;
-				max_charge_register_2_value = MAX_VOLT_ADD_128_MV | MAX_VOLT_ADD_64_MV | MAX_VOLT_ADD_16_MV;
+				max_charge_register_2_value = MAX_VOLT_ADD_128_MV | MAX_VOLT_ADD_64_MV;
 				minimum_system_voltage_value = MIN_VOLT_ADD_4096_MV | MIN_VOLT_ADD_1024_MV | MIN_VOLT_ADD_512_MV;
 				break;
-			case 3:
+			case 3: // 12.576V
 				max_charge_register_1_value = MAX_VOLT_ADD_8192_MV | MAX_VOLT_ADD_4096_MV | MAX_VOLT_ADD_256_MV;
-				max_charge_register_2_value = MAX_VOLT_ADD_32_MV | MAX_VOLT_ADD_16_MV;
+				max_charge_register_2_value = MAX_VOLT_ADD_32_MV;
 				minimum_system_voltage_value = MIN_VOLT_ADD_8192_MV |  MIN_VOLT_ADD_256_MV;
 				break;
-			case 4:
+			case 4: // 16.784V
 				max_charge_register_1_value = MAX_VOLT_ADD_16384_MV | MAX_VOLT_ADD_256_MV;
-				max_charge_register_2_value = MAX_VOLT_ADD_128_MV | MAX_VOLT_ADD_32_MV;
+				max_charge_register_2_value = MAX_VOLT_ADD_128_MV | MAX_VOLT_ADD_16_MV;
 				minimum_system_voltage_value = MIN_VOLT_ADD_8192_MV | MIN_VOLT_ADD_2048_MV | MIN_VOLT_ADD_1024_MV;
 				break;
 			default:
