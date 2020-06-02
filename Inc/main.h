@@ -138,7 +138,7 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 
 #define LIPOW_MAJOR_VERSION	(uint8_t)1
-#define LIPOW_MINOR_VERSION	(uint8_t)3
+#define LIPOW_MINOR_VERSION	(uint8_t)4
 
 /* USER CODE END Private defines */
 

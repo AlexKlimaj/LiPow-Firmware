@@ -222,7 +222,7 @@ void Battery_Connection_State()
 		if (Get_Battery_Voltage() < (battery_state.number_of_cells * CELL_VOLTAGE_TO_ENABLE_CHARGING)) {
 			battery_state.requires_charging = 1;
 		}
-		else {
+		else if ((battery_state.requires_charging == 1) && (Get_Regulator_Charging_State() == 0)) {
 			battery_state.requires_charging = 0;
 		}
 	}

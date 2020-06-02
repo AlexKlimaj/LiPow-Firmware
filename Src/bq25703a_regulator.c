@@ -422,7 +422,7 @@ void Set_Charge_Voltage(uint8_t number_of_cells) {
 uint32_t Calculate_Max_Charge_Power() {
 
 	//Account for system losses with ASSUME_EFFICIENCY fudge factor to not overload source
-	uint32_t charging_power_mw = (((float)(regulator.vbus_voltage/REG_ADC_MULTIPLIER) * Get_Max_Input_Current()) * ASSUME_EFFICIENCY);
+	uint32_t charging_power_mw = (Get_Max_Input_Power() * ASSUME_EFFICIENCY);
 
 	if (charging_power_mw > MAX_CHARGING_POWER) {
 		charging_power_mw = MAX_CHARGING_POWER;
@@ -436,7 +436,7 @@ uint32_t Calculate_Max_Charge_Power() {
 	if (Get_MCU_Temperature() > TEMP_THROTTLE_THRESH_C){
 		float temperature = (float)Get_MCU_Temperature();
 
-		float power_scalar = 1.0f - ((float)(0.0333 * temperature) - 1.33f);
+		float power_scalar = 1.0f - (float)((temperature - TEMP_THROTTLE_THRESH_C)/(MAX_MCU_TEMP_C_FOR_OPERATION - TEMP_THROTTLE_THRESH_C));
 
 		if (power_scalar > 1.0f) {
 			power_scalar = 1.0f;
