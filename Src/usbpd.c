@@ -257,21 +257,6 @@ void vUSBPD_User(void const *pvParameters) {
 				power_ready = NOT_READY;
 			}
 		}
-		else if ((Get_Requires_Charging_State() == 0) && (Get_Charge_Current_ADC_Reading() == 0) && (Get_Input_Current_ADC_Reading() ==0) && (Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED)){
-			if (Get_VBUS_ADC_Reading() > (6 * REG_ADC_MULTIPLIER)) {
-				printf("Requesting 5V, Result: ");
-				selected_source_pdo = 0;
-				status = USBPD_DPM_RequestMessageRequest(USBPD_PORT_0, selected_source_pdo + 1, (uint16_t)source_pdo[selected_source_pdo].voltage_mv);
-				vTaskDelay(100 / portTICK_PERIOD_MS);
-				if (status == USBPD_OK) {
-					printf("Success\r\n");
-				}
-				else {
-					printf("Failed\r\n");
-				}
-			}
-			vTaskDelay(1000 / portTICK_PERIOD_MS);
-		}
 		else if ((Get_XT60_Connection_State() == NOT_CONNECTED) || (Get_Balance_Connection_State() == NOT_CONNECTED)){
 			if (Get_VBUS_ADC_Reading() > (6 * REG_ADC_MULTIPLIER)) {
 				printf("Requesting 5V, Result: ");
