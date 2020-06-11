@@ -62,8 +62,10 @@ volatile uint8_t power_ready = NOT_READY;
 volatile uint8_t match_found = 0;
 
 volatile uint16_t voltage_choice_list_mv[3][VOLTAGE_CHOICE_ARRAY_SIZE] = {
-		{9000, 12000, 15000, 5000, 20000}, //Two S voltage choice list
-		{12000, 15000, 20000, 9000, 5000}, //Three S voltage choice list
+//		{9000, 12000, 15000, 5000, 20000}, //Two S voltage choice list
+//		{12000, 15000, 20000, 9000, 5000}, //Three S voltage choice list
+		{20000, 15000, 12000, 9000, 5000}, //Two S voltage choice list
+		{20000, 15000, 12000, 9000, 5000}, //Three S voltage choice list
 		{20000, 15000, 12000, 9000, 5000}  //Four S voltage choice list
 };
 
