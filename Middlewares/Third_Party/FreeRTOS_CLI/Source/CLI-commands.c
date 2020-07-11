@@ -39,6 +39,7 @@
 #include "battery.h"
 #include "bq25703a_regulator.h"
 #include "error.h"
+#include "main.h"
 #include "UARTCommandConsole.h"
 #include "usbpd.h"
 #include <stdlib.h>
@@ -65,6 +66,11 @@ static BaseType_t prvCalibrateCommand( char *pcWriteBuffer, size_t xWriteBufferL
 static BaseType_t prvWriteOTPFlashCommand( char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString );
 
 /*
+ * Implements the test_fan command.
+ */
+static BaseType_t prvTestFanCommand( char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString );
+
+/*
  * Implements the run-time-stats command.
  */
 #if( configGENERATE_RUN_TIME_STATS == 1 )
@@ -89,12 +95,21 @@ static const CLI_Command_Definition_t xCal =
 	1 /* One parameter are expected. */
 };
 
-/* Structure that defines the "write_otp_scalars_to_flash" command line command. */
+/* Structure that defines the "write_otp" command line command. */
 static const CLI_Command_Definition_t xOTP =
 {
 	"write_otp", /* The command string to type. */
 	"\r\nwrite_otp:\r\n Writes the calibration scalars to OTP flash. Will fail if scalars not set or out of range. Must run cal first with known accurate voltage. Can run up to ~32 times.\r\n",
 	prvWriteOTPFlashCommand, /* The function to run. */
+	0 /* No parameters are expected. */
+};
+
+/* Structure that defines the "test_fan" command line command. */
+static const CLI_Command_Definition_t xFAN =
+{
+	"test_fan", /* The command string to type. */
+	"\r\ntest_fan:\r\n Turns on the fan\r\n",
+	prvTestFanCommand, /* The function to run. */
 	0 /* No parameters are expected. */
 };
 
@@ -129,6 +144,8 @@ void vRegisterCLICommands(void) {
 	FreeRTOS_CLIRegisterCommand(&xCal);
 
 	FreeRTOS_CLIRegisterCommand(&xOTP);
+
+	FreeRTOS_CLIRegisterCommand(&xFAN);
 
 	FreeRTOS_CLIRegisterCommand(&xTaskStats);
 
@@ -275,6 +292,23 @@ static BaseType_t prvWriteOTPFlashCommand(char *pcWriteBuffer, size_t xWriteBuff
 	uint8_t result = Write_Cal_To_OTP_Flash();
 
 	sprintf(pcWriteBuffer, "OTP Write Result: %u\r\n", result);
+
+	/* There is no more data to return after this single string, so return
+	 pdFALSE. */
+	return pdFALSE;
+}
+/*-----------------------------------------------------------*/
+
+static BaseType_t prvTestFanCommand(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString) {
+	/* Remove compile time warnings about unused parameters, and check the
+	 write buffer is not NULL.  NOTE - for simplicity, this example assumes the
+	 write buffer length is adequate, so does not check for buffer overflows. */
+	(void) xWriteBufferLen;
+	configASSERT(pcWriteBuffer);
+
+	sprintf(pcWriteBuffer, "Turning on Fan");
+
+	HAL_GPIO_WritePin(GPIOA, FAN_ENn_Pin, GPIO_PIN_RESET);
 
 	/* There is no more data to return after this single string, so return
 	 pdFALSE. */
