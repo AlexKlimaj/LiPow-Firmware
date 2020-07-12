@@ -73,6 +73,8 @@ uint32_t Get_Four_S_Voltage(void);
 
 int32_t Get_MCU_Temperature(void);
 
+int32_t Get_MCU_Max_Temperature(void);
+
 uint32_t Get_VDDa(void);
 
 uint8_t Write_Cal_To_OTP_Flash(void);

@@ -23,6 +23,7 @@ struct Adc {
 	uint32_t vrefint;
 	uint32_t vdda;
 	int32_t temperature;
+	int32_t max_temperature;
 	uint32_t two_s_battery_voltage;
 	uint32_t three_s_battery_voltage;
 	uint32_t four_s_battery_voltage;
@@ -188,6 +189,14 @@ int32_t Get_MCU_Temperature(void) {
 }
 
 /**
+ * @brief Gets the max mcu junction temperature that was read in from the ADC
+ * @retval Max MCU junction temperature in celcius
+ */
+int32_t Get_MCU_Max_Temperature(void) {
+	return adc_values.max_temperature;
+}
+
+/**
  * @brief  Sets the mcu junction temperature that was read in from the ADC
  * @param  temperature_c: MCU junction temperature in celcius
  * @retval uint8_t 1 if successful, 0 if error
@@ -198,6 +207,11 @@ uint8_t Set_MCU_Temperature(uint32_t adc_reading) {
 	} else {
 		adc_values.vrefint = __HAL_ADC_CALC_VREFANALOG_VOLTAGE(adc_filtered_output[6], ADC_RESOLUTION_12B);
 		adc_values.temperature = __HAL_ADC_CALC_TEMPERATURE(adc_values.vrefint, adc_reading, ADC_RESOLUTION_12B);
+
+		// Check if new max temperature
+		if (adc_values.temperature > adc_values.max_temperature) {
+			adc_values.max_temperature = adc_values.temperature;
+		}
 	}
 	return 1;
 }

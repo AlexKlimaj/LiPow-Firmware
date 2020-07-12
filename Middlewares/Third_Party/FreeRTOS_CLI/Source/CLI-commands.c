@@ -201,6 +201,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			"3 Series Voltage (V)         %.3f\r\n"
 			"4 Series Voltage (V)         %.3f\r\n"
 			"MCU Temperature (C)          %d\r\n"
+			"MCU Max Temperature (C)      %d\r\n"
 			"VDDa (V)                     %.3f\r\n"
 			"XT60 Connected               %u\r\n"
 			"Balance Connection State     %u\r\n"
@@ -227,6 +228,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			(float)Get_Three_S_Voltage()/BATTERY_ADC_MULTIPLIER,
 			(float)Get_Four_S_Voltage()/BATTERY_ADC_MULTIPLIER,
 			Get_MCU_Temperature(),
+			Get_MCU_Max_Temperature(),
 			vdda_float,
 			Get_XT60_Connection_State(),
 			Get_Balance_Connection_State(),
