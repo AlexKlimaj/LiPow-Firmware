@@ -52,8 +52,8 @@ typedef struct
 }USBPD_PWR_Port_PDO_Storage_TypeDef;
 
 /* Exported define -----------------------------------------------------------*/
-#define USBPD_PDP_SRC_IN_WATTS          60  /* SRC PD Power in Watts */
-#define USBPD_PDP_SNK_IN_WATTS          60 /* SINK PD Power in Watts */
+#define USBPD_PDP_SRC_IN_WATTS          100  /* SRC PD Power in Watts */
+#define USBPD_PDP_SNK_IN_WATTS          100 /* SINK PD Power in Watts */
 
 /* Define board operating power and max power */
 /* Request 5V and 1500mA in sink mode */
@@ -71,8 +71,8 @@ typedef struct
 #define USBPD_PDO_APDO_5VPROG_MAX_VOLTAGE 5.9 /* Max voltage in V */
 
 /* Definitions of nb of PDO and APDO for each port */
-#define USBPD_CORE_PDO_SRC_FIXED_MAX_CURRENT 3
-#define USBPD_CORE_PDO_SNK_FIXED_MAX_CURRENT 3
+#define USBPD_CORE_PDO_SRC_FIXED_MAX_CURRENT 5
+#define USBPD_CORE_PDO_SNK_FIXED_MAX_CURRENT 5
 
 #define USBPD_PDO_APDO_5VPROG_15W_MAX_CURRENT  3   /* Max Current in A (PDP / 5) */
 
