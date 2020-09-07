@@ -213,6 +213,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			"Max Charge Current           %.3f\r\n"
 			"Vbus Voltage (V)             %.3f\r\n"
 			"Input Current (A)            %.3f\r\n"
+			"Input Current Limit (A)      %u\r\n"
 			"Max Input Power (W)          %u\r\n"
 			"Input Power (W)              %.3f\r\n"
 			"Efficiency (OutputW/InputW)  %.3f\r\n"
@@ -241,6 +242,7 @@ static BaseType_t prvStatsCommand(char *pcWriteBuffer, size_t xWriteBufferLen, c
 			max_charge_current,
 			vbus_voltage,
 			input_current,
+			Get_Input_Current_Limit()/1000,
 			Get_Max_Input_Power()/1000,
 			input_power,
 			efficiency,

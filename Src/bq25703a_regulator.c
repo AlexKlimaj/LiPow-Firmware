@@ -29,6 +29,7 @@ struct Regulator {
 	uint32_t charge_current;
 	uint32_t input_current;
 	uint32_t max_charge_current_ma;
+	uint32_t input_current_limit_ma;
 };
 
 /* Private variables ---------------------------------------------------------*/
@@ -108,6 +109,14 @@ uint32_t Get_Charge_Current_ADC_Reading() {
  */
 uint32_t Get_Max_Charge_Current() {
 	return regulator.max_charge_current_ma;
+}
+
+/**
+ * @brief Gets the input current limit in use
+ * @retval Input Current Limit in miliamps
+ */
+uint32_t Get_Input_Current_Limit() {
+	return regulator.input_current_limit_ma;
 }
 
 /**
@@ -249,6 +258,16 @@ void Read_Charge_Status() {
 }
 
 /**
+ * @brief Reads IIN_DPM register and sets status
+ */
+void Read_Input_Current_Limit() {
+	uint8_t data[1];
+	I2C_Read_Register(IIN_DPM_ADDR, data, 1);
+
+	regulator.input_current_limit_ma = data[0] * IIN_DPM_LSB_VALUE_MA;
+}
+
+/**
  * @brief Sets the Regulators ADC settings
  */
 void Regulator_Set_ADC_Option() {
@@ -368,6 +387,23 @@ void Set_Charge_Current(uint32_t charge_current_limit) {
 }
 
 /**
+ * @brief Sets the input current limit. From 50mA to 6350mA in 50mA steps
+ * @param input_current_limit Input current limit in mA
+ */
+void Set_Input_Current_Limit(uint32_t input_current_limit) {
+
+	if (input_current_limit > MAX_INPUT_CURRENT_MA) {
+		input_current_limit = MAX_INPUT_CURRENT_MA;
+	}
+
+	uint8_t data = input_current_limit/IIN_HOST_LSB_VALUE_MA;
+
+	I2C_Write_Register(IIN_HOST_ADDR, (uint8_t *) &data);
+
+	return;
+}
+
+/**
  * @brief Sets the charging voltage based on the number of cells. 1 - 4.192V, 2 - 8.400V, 3 - 12.592V, 4 - 16.800V
  * @param number_of_cells number of cells connected
  */
@@ -458,6 +494,8 @@ void Control_Charger_Output() {
 
 	TickType_t xDelay = 500 / portTICK_PERIOD_MS;
 
+	Set_Input_Current_Limit(Get_Max_Input_Current());
+
 	//Charging for USB PD enabled supplies
 	if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0) && (Get_Input_Power_Ready() == READY) && (Get_Cell_Over_Voltage_State() == 0)) {
 
@@ -544,6 +582,8 @@ void vRegulator(void const *pvParameters) {
 		Read_Charge_Status();
 
 		Regulator_Read_ADC();
+
+		Read_Input_Current_Limit();
 
 		timer_count++;
 		if (timer_count < 98) {

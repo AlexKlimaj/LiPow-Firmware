@@ -41,6 +41,8 @@ extern "C" {
 #define ICHG_ADC_ADDR				0x29
 #define IDCHG_ADC_ADDR				0x28
 #define IIN_ADC_ADDR				0x2B
+#define IIN_DPM_ADDR				0x25
+#define IIN_HOST_ADDR               0x0F
 
 #define EN_LWPWR					0b0
 #define EN_OOA						0b1
@@ -72,6 +74,9 @@ extern "C" {
 #define MIN_VOLT_ADD_512_MV			0b00000010
 #define MIN_VOLT_ADD_256_MV			0b00000001
 
+#define IIN_DPM_LSB_VALUE_MA		50
+#define IIN_HOST_LSB_VALUE_MA		50
+
 #define REG_ADC_MULTIPLIER			100000
 
 #define VBUS_ADC_SCALE				(uint32_t)( 0.064 * REG_ADC_MULTIPLIER )
@@ -94,6 +99,7 @@ extern "C" {
 #define BATTERY_DISCONNECT_THRESH	(uint32_t)(4.215 * REG_ADC_MULTIPLIER)
 #define MAX_CHARGING_POWER			100000
 #define NON_USB_PD_CHARGE_POWER		2500
+#define MAX_INPUT_CURRENT_MA        5000
 
 #define TEMP_THROTTLE_THRESH_C		60
 #define TEMP_FAN_THRESH_C			40
@@ -107,6 +113,7 @@ uint32_t Get_PSYS_ADC_Reading(void);
 uint32_t Get_Input_Current_ADC_Reading(void);
 uint32_t Get_Charge_Current_ADC_Reading(void);
 uint32_t Get_Max_Charge_Current(void);
+uint32_t Get_Input_Current_Limit(void);
 void vRegulator(void const *pvParameters);
 
 /* Used to guard access to the I2C in case messages are sent to the UART from
