@@ -27,7 +27,8 @@ LiPow uses USB Type C with Power Delivery to charge Lithium Polymer batteries. I
 - Balancing and charging can be active at the same time and both the red and blue LEDs will be on (purple/violet)
 - Charging will only start when both the balance and XT60 plugs are connected
 - If a damaged pack is attached, charging will stop if any cell rises above 4.21V
-- If any cell is below 2.7V it will not charge or balance
+- If any cell is below 3.0V it will not balance
+- If any cell is below 2.0V it will not charge
 
 Everything runs automatically and will charge up to the max capability of the connected USB PD power supply if the max current output limit exceeds the input power supply. Lower current limits can be programmed as well.
 
