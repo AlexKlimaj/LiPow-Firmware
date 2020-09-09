@@ -459,7 +459,7 @@ void Control_Charger_Output() {
 	TickType_t xDelay = 500 / portTICK_PERIOD_MS;
 
 	//Charging for USB PD enabled supplies
-	if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0) && (Get_Input_Power_Ready() == READY) && (Get_Cell_Over_Voltage_State() == 0)) {
+	if ((Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0) && (Get_Input_Power_Ready() == READY) && (Get_Cell_Over_Voltage_State() == 0)) {
 
 		Set_Charge_Voltage(Get_Number_Of_Cells());
 
@@ -477,7 +477,7 @@ void Control_Charger_Output() {
 		}
 	}
 	// Case to handle non USB PD supplies. Limited to 5V 500mA.
-	else if ((Get_XT60_Connection_State() == CONNECTED) && (Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0) && (Get_Input_Power_Ready() == NO_USB_PD_SUPPLY) && (Get_Cell_Over_Voltage_State() == 0)) {
+	else if ((Get_Balance_Connection_State() == CONNECTED) && (Get_Error_State() == 0) && (Get_Input_Power_Ready() == NO_USB_PD_SUPPLY) && (Get_Cell_Over_Voltage_State() == 0)) {
 
 		Set_Charge_Voltage(Get_Number_Of_Cells());
 
