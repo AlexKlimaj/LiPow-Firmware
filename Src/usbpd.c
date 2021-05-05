@@ -41,7 +41,9 @@
 
 /* USER CODE END 1 */
 
-/* Global variables ---------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
+
+/* Private functions ---------------------------------------------------------*/
 
 /* USER CODE BEGIN 2 */
 
@@ -83,7 +85,7 @@ void MX_USBPD_Init(void)
   USBPD_HW_IF_GlobalHwInit();
 
   /* Initialize the Device Policy Manager */
-  if(USBPD_OK != USBPD_DPM_InitCore())
+  if (USBPD_OK != USBPD_DPM_InitCore())
   {
     while(1);
   }
@@ -100,6 +102,16 @@ void MX_USBPD_Init(void)
 	USBPD_User_TaskHandle = osThreadCreate(osThread(usbpd_user_app), NULL);
 
   /* USER CODE END 3 */
+
+  if (USBPD_OK != USBPD_DPM_InitOS())
+  {
+    while(1);
+  }
+
+  /* USER CODE BEGIN EnableIRQ */
+  /* Enable IRQ which has been disabled by FreeRTOS services */
+  __enable_irq();
+  /* USER CODE END EnableIRQ */
 
 }
 
@@ -293,7 +305,7 @@ uint8_t check_if_power_ready() {
 /**
   * @}
   */
- 
+
 /**
   * @}
   */

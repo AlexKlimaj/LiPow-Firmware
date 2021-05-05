@@ -1,12 +1,13 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    usbpd_dpm_conf.h
   * @author  MCD Application Team
   * @brief   Header file for stack/application settings file
   ******************************************************************************
-   * @attention
+  * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2018 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 #ifndef __USBPD_DPM_CONF_H_
 #define __USBPD_DPM_CONF_H_
@@ -26,8 +28,13 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usbpd_pdo_defs.h"
-#include "usbpd_vdm_user.h"
 #include "usbpd_dpm_user.h"
+#include "usbpd_vdm_user.h"
+
+/* USER CODE BEGIN Includes */
+/* Section where include file can be added */
+
+/* USER CODE END Includes */
 
 /* Define   ------------------------------------------------------------------*/
 /* Define VID, PID,... manufacturer parameters */
@@ -35,97 +42,106 @@
 #define USBPD_PID (0x0002u)     /*!< Product ID (assigned by the manufacturer)              */
 #define USBPD_XID (0xF0000003u) /*!< Value provided by the USB-IF assigned to the product   */
 
+/* USER CODE BEGIN Define */
+/* Section where Define can be added */
+
+/* USER CODE END Define */
+
 /* Exported typedef ----------------------------------------------------------*/
+/* USER CODE BEGIN Typedef */
+/* Section where Typedef can be added */
+
+/* USER CODE END Typedef */
+
 /* Private variables ---------------------------------------------------------*/
 #ifndef __USBPD_DPM_CORE_C
 extern USBPD_SettingsTypeDef            DPM_Settings[USBPD_PORT_COUNT];
+extern USBPD_IdSettingsTypeDef          DPM_ID_Settings[USBPD_PORT_COUNT];
 extern USBPD_USER_SettingsTypeDef       DPM_USER_Settings[USBPD_PORT_COUNT];
 #else /* __USBPD_DPM_CORE_C */
 USBPD_SettingsTypeDef       DPM_Settings[USBPD_PORT_COUNT] =
 {
   {
-    .PE_SupportedSOP = USBPD_SUPPORTED_SOP_SOP | USBPD_SUPPORTED_SOP_SOP1 | USBPD_SUPPORTED_SOP_SOP2, /* Supported SOP : SOP, SOP' SOP" SOP'Debug SOP"Debug      */
+    .PE_SupportedSOP = USBPD_SUPPORTED_SOP_SOP    , /* Supported SOP : SOP, SOP' SOP" SOP'Debug SOP"Debug */
     .PE_SpecRevision = USBPD_SPECIFICATION_REV3,/* spec revision value                                     */
     .PE_DefaultRole = USBPD_PORTPOWERROLE_SNK,  /* Default port role                                       */
     .PE_RoleSwap = USBPD_FALSE,                  /* support port role swap                                  */
     .PE_VDMSupport = USBPD_FALSE,
-    .PE_RespondsToDiscovSOP = USBPD_TRUE,      /*!< Can respond successfully to a Discover Identity */
-    .PE_AttemptsDiscovSOP = USBPD_TRUE,        /*!< Can send a Discover Identity */
-    .PE_PingSupport = USBPD_TRUE,             /* support Ping (only for PD3.0)                           */
-    .PE_CapscounterSupport = USBPD_FALSE,       /* support caps counter                                    */
-    .CAD_RoleToggle = USBPD_FALSE,              /* cad role toggle                                         */
-    .CAD_TryFeature = USBPD_FALSE,              /* cad try feature                                         */
-    .CAD_AccesorySupport = USBPD_FALSE,         /* cas accessory support                                   */
+    .PE_RespondsToDiscovSOP = USBPD_FALSE,      /*!< Can respond successfully to a Discover Identity */
+    .PE_AttemptsDiscovSOP = USBPD_FALSE,        /*!< Can send a Discover Identity */
+    .PE_PingSupport = USBPD_FALSE,              /* support Ping (only for PD3.0)                                            */
+    .PE_CapscounterSupport = USBPD_TRUE,       /* support caps counter                                    */
+    .CAD_RoleToggle = USBPD_FALSE,               /* CAD role toggle                                         */
+    .CAD_TryFeature = 0,              /* CAD try feature                                         */
+    .CAD_AccesorySupport = USBPD_FALSE,         /* CAD accessory support                                   */
     .PE_PD3_Support.d =                           /*!< PD3 SUPPORT FEATURE                                              */
     {
-      .PE_UnchunkSupport                = USBPD_FALSE,  /*!< Unchunked mode Support                */
-      .PE_FastRoleSwapSupport           = USBPD_FALSE,  /* support fast role swap only spec revsion 3.0            */
-      .Is_GetPPSStatus_Supported        = USBPD_TRUE,         /*!< PPS message supported or not by DPM */
-      .Is_SrcCapaExt_Supported          = USBPD_TRUE,   /*!< Source_Capabilities_Extended message supported or not by DPM */
-      .Is_Alert_Supported               = USBPD_FALSE,  /*!< Alert message supported or not by DPM */
-      .Is_GetStatus_Supported           = USBPD_TRUE,  /*!< Status message supported or not by DPM (Is_Alert_Supported should be enabled) */
+      .PE_UnchunkSupport                = USBPD_FALSE,  /* support Unchunked mode (valid only spec revision 3.0)   */
+      .PE_FastRoleSwapSupport           = USBPD_FALSE,   /* support fast role swap only spec revision 3.0            */
+      .Is_GetPPSStatus_Supported        = USBPD_FALSE,  /*!< PPS message NOT supported by PE stack */
+      .Is_SrcCapaExt_Supported          = USBPD_FALSE,  /*!< Source_Capabilities_Extended message supported or not by DPM */
+      .Is_Alert_Supported               = USBPD_FALSE,   /*!< Alert message supported or not by DPM */
+      .Is_GetStatus_Supported           = USBPD_FALSE,   /*!< Status message supported or not by DPM (Is_Alert_Supported should be enabled) */
       .Is_GetManufacturerInfo_Supported = USBPD_FALSE,  /*!< Manufacturer_Info message supported or not by DPM */
       .Is_GetCountryCodes_Supported     = USBPD_FALSE,  /*!< Country_Codes message supported or not by DPM */
       .Is_GetCountryInfo_Supported      = USBPD_FALSE,  /*!< Country_Info message supported or not by DPM */
       .Is_SecurityRequest_Supported     = USBPD_FALSE,  /*!< Security_Response message supported or not by DPM */
       .Is_FirmUpdateRequest_Supported   = USBPD_FALSE,  /*!< Firmware update response message supported by PE */
-      .Is_SnkCapaExt_Supported          = USBPD_FALSE,  /*!< Sink_Capabilities_Extended message supported or not by DPM */
+      .Is_GetBattery_Supported          = USBPD_FALSE,  /*!< Get Battery Capabitity and Status messages supported by PE */
     },
-    .CAD_DefaultResistor = vRp_3_0A,
-    .CAD_SRCToggleTime = 40,                    /* uint8_t CAD_SRCToggleTime; */
-    .CAD_SNKToggleTime = 40,                    /* uint8_t CAD_SNKToggleTime; */
+
+    .CAD_SRCToggleTime = 0,                    /* uint8_t CAD_SRCToggleTime; */
+    .CAD_SNKToggleTime = 0,                    /* uint8_t CAD_SNKToggleTime; */
   }
+};
+
+USBPD_IdSettingsTypeDef          DPM_ID_Settings[USBPD_PORT_COUNT] =
+{
+  {
+    .XID = USBPD_XID,     /*!< Value provided by the USB-IF assigned to the product   */
+    .VID = USBPD_VID,     /*!< Vendor ID (assigned by the USB-IF)                     */
+    .PID = USBPD_PID,     /*!< Product ID (assigned by the manufacturer)              */
+  },
 };
 
 USBPD_USER_SettingsTypeDef       DPM_USER_Settings[USBPD_PORT_COUNT] =
 {
   {
-    .DPM_SNKRequestedPower =                        /*!< Requested Power by the sink board                                    */
-    {
-      .MaxOperatingCurrentInmAunits = USBPD_CORE_PDO_SNK_FIXED_MAX_CURRENT,
-      .OperatingVoltageInmVunits    = USBPD_BOARD_REQUESTED_VOLTAGE_MV,
-      .MaxOperatingVoltageInmVunits = USBPD_BOARD_MAX_VOLTAGE_MV,
-      .MinOperatingVoltageInmVunits = USBPD_BOARD_MIN_VOLTAGE_MV_PORT0,
-      .OperatingPowerInmWunits      = (USBPD_CORE_PDO_SNK_FIXED_MAX_CURRENT * USBPD_BOARD_REQUESTED_VOLTAGE_MV)/1000,
-      .MaxOperatingPowerInmWunits   = (USBPD_CORE_PDO_SNK_FIXED_MAX_CURRENT * USBPD_BOARD_MAX_VOLTAGE_MV)/1000
-    },
     .PE_DataSwap = USBPD_FALSE,                  /* support data swap                                       */
     .PE_VconnSwap = USBPD_FALSE,                 /* support VCONN swap                                  */
-    .DPM_SRCExtendedCapa =                        /*!< SRC Extended Capability           */
-      {
-        .VID = USBPD_VID,      /*!< Vendor ID (assigned by the USB-IF)                   */
-        .PID = USBPD_PID,      /*!< Product ID (assigned by the manufacturer)            */
-        .XID = USBPD_XID,      /*!< Value provided by the USB-IF assigned to the product */
-        .FW_revision = 1,      /*!< Firmware version number                              */
-        .HW_revision = 2,      /*!< Hardware version number                              */
-        .Voltage_regulation= 0,/*!< Voltage Regulation                                   */
-        .Holdup_time = 0,      /*!< Holdup Time                                          */
-        .Compliance = 0,       /*!< Compliance                                           */
-        .TouchCurrent = 0,     /*!< Touch Current                                        */
-        .PeakCurrent1 = 0,     /*!< Peak Current1                                        */
-        .PeakCurrent2 = 0,     /*!< Peak Current2                                        */
-        .PeakCurrent3 = 0,     /*!< Peak Current3                                        */
-        .Touchtemp = 0,        /*!< Touch Temp                                           */
-        .Source_inputs = 0,    /*!< Source Inputs                                        */
-        .NbBatteries = 0,      /*!< Number of Batteries/Battery Slots                    */
-        .SourcePDP = (uint8_t)USBPD_PDP_SRC_IN_WATTS,       /*!< Source PDP  5V*3A                                    */
-      },
-
+    .PE_DR_Swap_To_DFP = USBPD_FALSE,                  /*  Support of DR Swap to DFP                                  */
+    .PE_DR_Swap_To_UFP = USBPD_FALSE,                  /*  Support of DR Swap to UFP                                  */
+#if defined(USBPD_REV30_SUPPORT)
+#if _MANU_INFO
     .DPM_ManuInfoPort =                      /*!< Manufacturer information used for the port            */
     {
       .VID = USBPD_VID,                      /*!< Vendor ID (assigned by the USB-IF)        */
       .PID = USBPD_PID,                      /*!< Product ID (assigned by the manufacturer) */
-      .ManuString = "Ark Electronics",    /*!< Vendor defined byte array                 */
+      .ManuString = "STMicroelectronics",    /*!< Vendor defined byte array                 */
     },
+#endif /* _MANU_INFO */
+#endif /* USBPD_REV30_SUPPORT */
   },
 };
+
 #endif /* !__USBPD_DPM_CORE_C */
 
-/* Exported define -----------------------------------------------------------*/
+/* USER CODE BEGIN Variable */
+/* Section where Variable can be added */
+
+/* USER CODE END Variable */
+
 /* Exported constants --------------------------------------------------------*/
+/* USER CODE BEGIN Constant */
+/* Section where Constant can be added */
+
+/* USER CODE END Constant */
+
 /* Exported macro ------------------------------------------------------------*/
-/* Exported variables --------------------------------------------------------*/
-/* Exported functions --------------------------------------------------------*/
+/* USER CODE BEGIN Macro */
+/* Section where Macro can be added */
+
+/* USER CODE END Macro */
 
 #ifdef __cplusplus
 }

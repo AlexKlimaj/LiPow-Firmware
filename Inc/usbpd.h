@@ -29,7 +29,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "usbpd_core.h"
 #include "usbpd_dpm_core.h"
-#include "usbpd_dpm_user.h"
+#include "usbpd_dpm_conf.h"
 #include "usbpd_hw_if.h"
 
 /* USER CODE BEGIN 0 */
@@ -48,11 +48,7 @@
 /* USER CODE END 1 */
 
 /* USBPD init function */
-void MX_USBPD_Init(void);
-uint8_t Get_Input_Power_Ready(void);
-uint32_t Get_Max_Input_Power(void);
-uint32_t Get_Max_Input_Current(void);
-uint32_t Get_Input_Voltage(void);
+void            MX_USBPD_Init(void);
 
 /* USER CODE BEGIN 2 */
 

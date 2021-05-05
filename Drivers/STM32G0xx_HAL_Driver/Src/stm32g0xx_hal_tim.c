@@ -79,8 +79,8 @@
             PWM signal.
        (++) HAL_TIM_IC_Init and HAL_TIM_IC_ConfigChannel: to use the Timer to measure an
             external signal.
-         (++) HAL_TIM_OnePulse_Init and HAL_TIM_OnePulse_ConfigChannel: to use the Timer
-              in One Pulse Mode.
+       (++) HAL_TIM_OnePulse_Init and HAL_TIM_OnePulse_ConfigChannel: to use the Timer
+            in One Pulse Mode.
        (++) HAL_TIM_Encoder_Init: to use the Timer Encoder Interface.
 
      (#) Activate the TIM peripheral using one of the start functions depending from the feature used:
@@ -115,68 +115,68 @@
 
   [..]
   These functions allow to register/unregister following callbacks:
-    (+) Base_MspInitCallback       : TIM Base Msp Init Callback.
-    (+) Base_MspDeInitCallback     : TIM Base Msp DeInit Callback.
-    (+) IC_MspInitCallback         : TIM IC Msp Init Callback.
-    (+) IC_MspDeInitCallback       : TIM IC Msp DeInit Callback.
-    (+) OC_MspInitCallback         : TIM OC Msp Init Callback.
-    (+) OC_MspDeInitCallback       : TIM OC Msp DeInit Callback.
-    (+) PWM_MspInitCallback        : TIM PWM Msp Init Callback.
-    (+) PWM_MspDeInitCallback      : TIM PWM Msp DeInit Callback.
-    (+) OnePulse_MspInitCallback   : TIM One Pulse Msp Init Callback.
-    (+) OnePulse_MspDeInitCallback : TIM One Pulse Msp DeInit Callback.
-    (+) Encoder_MspInitCallback    : TIM Encoder Msp Init Callback.
-    (+) Encoder_MspDeInitCallback  : TIM Encoder Msp DeInit Callback.
+    (+) Base_MspInitCallback              : TIM Base Msp Init Callback.
+    (+) Base_MspDeInitCallback            : TIM Base Msp DeInit Callback.
+    (+) IC_MspInitCallback                : TIM IC Msp Init Callback.
+    (+) IC_MspDeInitCallback              : TIM IC Msp DeInit Callback.
+    (+) OC_MspInitCallback                : TIM OC Msp Init Callback.
+    (+) OC_MspDeInitCallback              : TIM OC Msp DeInit Callback.
+    (+) PWM_MspInitCallback               : TIM PWM Msp Init Callback.
+    (+) PWM_MspDeInitCallback             : TIM PWM Msp DeInit Callback.
+    (+) OnePulse_MspInitCallback          : TIM One Pulse Msp Init Callback.
+    (+) OnePulse_MspDeInitCallback        : TIM One Pulse Msp DeInit Callback.
+    (+) Encoder_MspInitCallback           : TIM Encoder Msp Init Callback.
+    (+) Encoder_MspDeInitCallback         : TIM Encoder Msp DeInit Callback.
     (+) HallSensor_MspInitCallback        : TIM Hall Sensor Msp Init Callback.
     (+) HallSensor_MspDeInitCallback      : TIM Hall Sensor Msp DeInit Callback.
-    (+) PeriodElapsedCallback      : TIM Period Elapsed Callback.
+    (+) PeriodElapsedCallback             : TIM Period Elapsed Callback.
     (+) PeriodElapsedHalfCpltCallback     : TIM Period Elapsed half complete Callback.
-    (+) TriggerCallback            : TIM Trigger Callback.
+    (+) TriggerCallback                   : TIM Trigger Callback.
     (+) TriggerHalfCpltCallback           : TIM Trigger half complete Callback.
-    (+) IC_CaptureCallback         : TIM Input Capture Callback.
+    (+) IC_CaptureCallback                : TIM Input Capture Callback.
     (+) IC_CaptureHalfCpltCallback        : TIM Input Capture half complete Callback.
-    (+) OC_DelayElapsedCallback    : TIM Output Compare Delay Elapsed Callback.
-    (+) PWM_PulseFinishedCallback  : TIM PWM Pulse Finished Callback.
+    (+) OC_DelayElapsedCallback           : TIM Output Compare Delay Elapsed Callback.
+    (+) PWM_PulseFinishedCallback         : TIM PWM Pulse Finished Callback.
     (+) PWM_PulseFinishedHalfCpltCallback : TIM PWM Pulse Finished half complete Callback.
-    (+) ErrorCallback              : TIM Error Callback.
-    (+) CommutationCallback        : TIM Commutation Callback.
+    (+) ErrorCallback                     : TIM Error Callback.
+    (+) CommutationCallback               : TIM Commutation Callback.
     (+) CommutationHalfCpltCallback       : TIM Commutation half complete Callback.
-    (+) BreakCallback              : TIM Break Callback.
+    (+) BreakCallback                     : TIM Break Callback.
     (+) Break2Callback                    : TIM Break2 Callback.
 
   [..]
-  By default, after the Init and when the state is HAL_TIM_STATE_RESET
-  all interrupt callbacks are set to the corresponding weak functions:
+By default, after the Init and when the state is HAL_TIM_STATE_RESET
+all interrupt callbacks are set to the corresponding weak functions:
   examples @ref HAL_TIM_TriggerCallback(), @ref HAL_TIM_ErrorCallback().
 
   [..]
   Exception done for MspInit and MspDeInit functions that are reset to the legacy weak
-  functionalities in the Init/DeInit only when these callbacks are null
-  (not registered beforehand). If not, MspInit or MspDeInit are not null, the Init/DeInit
-  keep and use the user MspInit/MspDeInit callbacks (registered beforehand)
+  functionalities in the Init / DeInit only when these callbacks are null
+  (not registered beforehand). If not, MspInit or MspDeInit are not null, the Init / DeInit
+    keep and use the user MspInit / MspDeInit callbacks(registered beforehand)
 
   [..]
-  Callbacks can be registered/unregistered in HAL_TIM_STATE_READY state only.
-  Exception done MspInit/MspDeInit that can be registered/unregistered
-  in HAL_TIM_STATE_READY or HAL_TIM_STATE_RESET state,
-  thus registered (user) MspInit/DeInit callbacks can be used during the Init/DeInit.
+    Callbacks can be registered / unregistered in HAL_TIM_STATE_READY state only.
+    Exception done MspInit / MspDeInit that can be registered / unregistered
+    in HAL_TIM_STATE_READY or HAL_TIM_STATE_RESET state,
+    thus registered(user) MspInit / DeInit callbacks can be used during the Init / DeInit.
   In that case first register the MspInit/MspDeInit user callbacks
-  using @ref HAL_TIM_RegisterCallback() before calling DeInit or Init function.
+      using @ref HAL_TIM_RegisterCallback() before calling DeInit or Init function.
 
   [..]
-  When The compilation define USE_HAL_TIM_REGISTER_CALLBACKS is set to 0 or
-  not defined, the callback registration feature is not available and all callbacks
-  are set to the corresponding weak functions.
+      When The compilation define USE_HAL_TIM_REGISTER_CALLBACKS is set to 0 or
+      not defined, the callback registration feature is not available and all callbacks
+      are set to the corresponding weak functions.
 
   @endverbatim
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2018 STMicroelectronics. 
+  * <h2><center>&copy; Copyright (c) 2018 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the 
+  * the "License"; You may not use this file except in compliance with the
   * License. You may obtain a copy of the License at:
   *                        opensource.org/licenses/BSD-3-Clause
   *
@@ -207,7 +207,7 @@
   * @}
   */
 
-/* Private macro -------------------------------------------------------------*/
+/* Private macros ------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /** @addtogroup TIM_Private_Functions
@@ -226,13 +226,14 @@ static void TIM_TI3_SetConfig(TIM_TypeDef *TIMx, uint32_t TIM_ICPolarity, uint32
                               uint32_t TIM_ICFilter);
 static void TIM_TI4_SetConfig(TIM_TypeDef *TIMx, uint32_t TIM_ICPolarity, uint32_t TIM_ICSelection,
                               uint32_t TIM_ICFilter);
-static void TIM_ITRx_SetConfig(TIM_TypeDef* TIMx, uint32_t InputTriggerSource);
+static void TIM_ITRx_SetConfig(TIM_TypeDef *TIMx, uint32_t InputTriggerSource);
 static void TIM_DMAPeriodElapsedCplt(DMA_HandleTypeDef *hdma);
 static void TIM_DMAPeriodElapsedHalfCplt(DMA_HandleTypeDef *hdma);
+static void TIM_DMADelayPulseCplt(DMA_HandleTypeDef *hdma);
 static void TIM_DMATriggerCplt(DMA_HandleTypeDef *hdma);
 static void TIM_DMATriggerHalfCplt(DMA_HandleTypeDef *hdma);
 static HAL_StatusTypeDef TIM_SlaveTimer_SetConfig(TIM_HandleTypeDef *htim,
-                                     TIM_SlaveConfigTypeDef * sSlaveConfig);
+                                                  TIM_SlaveConfigTypeDef *sSlaveConfig);
 /**
   * @}
   */
@@ -242,9 +243,9 @@ static HAL_StatusTypeDef TIM_SlaveTimer_SetConfig(TIM_HandleTypeDef *htim,
   * @{
   */
 
-/** @defgroup TIM_Exported_Functions_Group1 Time Base functions
- *  @brief    Time Base functions
- *
+/** @defgroup TIM_Exported_Functions_Group1 TIM Time Base functions
+  *  @brief    Time Base functions
+  *
 @verbatim
   ==============================================================================
               ##### Time Base functions #####
@@ -276,7 +277,7 @@ static HAL_StatusTypeDef TIM_SlaveTimer_SetConfig(TIM_HandleTypeDef *htim,
 HAL_StatusTypeDef HAL_TIM_Base_Init(TIM_HandleTypeDef *htim)
 {
   /* Check the TIM handle allocation */
-  if(htim == NULL)
+  if (htim == NULL)
   {
     return HAL_ERROR;
   }
@@ -287,7 +288,7 @@ HAL_StatusTypeDef HAL_TIM_Base_Init(TIM_HandleTypeDef *htim)
   assert_param(IS_TIM_CLOCKDIVISION_DIV(htim->Init.ClockDivision));
   assert_param(IS_TIM_AUTORELOAD_PRELOAD(htim->Init.AutoReloadPreload));
 
-  if(htim->State == HAL_TIM_STATE_RESET)
+  if (htim->State == HAL_TIM_STATE_RESET)
   {
     /* Allocate lock resource and initialize it */
     htim->Lock = HAL_UNLOCKED;
@@ -296,7 +297,7 @@ HAL_StatusTypeDef HAL_TIM_Base_Init(TIM_HandleTypeDef *htim)
     /* Reset interrupt callbacks to legacy weak callbacks */
     TIM_ResetCallback(htim);
 
-    if(htim->Base_MspInitCallback == NULL)
+    if (htim->Base_MspInitCallback == NULL)
     {
       htim->Base_MspInitCallback = HAL_TIM_Base_MspInit;
     }
@@ -309,13 +310,20 @@ HAL_StatusTypeDef HAL_TIM_Base_Init(TIM_HandleTypeDef *htim)
   }
 
   /* Set the TIM state */
-  htim->State= HAL_TIM_STATE_BUSY;
+  htim->State = HAL_TIM_STATE_BUSY;
 
   /* Set the Time Base configuration */
   TIM_Base_SetConfig(htim->Instance, &htim->Init);
 
+  /* Initialize the DMA burst operation state */
+  htim->DMABurstState = HAL_DMA_BURST_STATE_READY;
+
+  /* Initialize the TIM channels state */
+  TIM_CHANNEL_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_N_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_READY);
+
   /* Initialize the TIM state*/
-  htim->State= HAL_TIM_STATE_READY;
+  htim->State = HAL_TIM_STATE_READY;
 
   return HAL_OK;
 }
@@ -346,6 +354,13 @@ HAL_StatusTypeDef HAL_TIM_Base_DeInit(TIM_HandleTypeDef *htim)
   /* DeInit the low level hardware: GPIO, CLOCK, NVIC */
   HAL_TIM_Base_MspDeInit(htim);
 #endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
+
+  /* Change the DMA burst operation state */
+  htim->DMABurstState = HAL_DMA_BURST_STATE_RESET;
+
+  /* Change the TIM channels state */
+  TIM_CHANNEL_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_RESET);
+  TIM_CHANNEL_N_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_RESET);
 
   /* Change TIM state */
   htim->State = HAL_TIM_STATE_RESET;
@@ -391,7 +406,7 @@ __weak void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef *htim)
   * @brief  Starts the TIM Base generation.
   * @param  htim TIM Base handle
   * @retval HAL status
-*/
+  */
 HAL_StatusTypeDef HAL_TIM_Base_Start(TIM_HandleTypeDef *htim)
 {
   uint32_t tmpsmcr;
@@ -399,18 +414,28 @@ HAL_StatusTypeDef HAL_TIM_Base_Start(TIM_HandleTypeDef *htim)
   /* Check the parameters */
   assert_param(IS_TIM_INSTANCE(htim->Instance));
 
-  /* Set the TIM state */
-  htim->State= HAL_TIM_STATE_BUSY;
-
-  /* Enable the Peripheral, except in trigger mode where enable is automatically done with trigger */
-  tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
-  if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+  /* Check the TIM state */
+  if (htim->State != HAL_TIM_STATE_READY)
   {
-  __HAL_TIM_ENABLE(htim);
+    return HAL_ERROR;
   }
 
-  /* Change the TIM state*/
-  htim->State= HAL_TIM_STATE_READY;
+  /* Set the TIM state */
+  htim->State = HAL_TIM_STATE_BUSY;
+
+  /* Enable the Peripheral, except in trigger mode where enable is automatically done with trigger */
+  if (IS_TIM_SLAVE_INSTANCE(htim->Instance))
+  {
+    tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
+    if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+    {
+      __HAL_TIM_ENABLE(htim);
+    }
+  }
+  else
+  {
+    __HAL_TIM_ENABLE(htim);
+  }
 
   /* Return function status */
   return HAL_OK;
@@ -420,20 +445,17 @@ HAL_StatusTypeDef HAL_TIM_Base_Start(TIM_HandleTypeDef *htim)
   * @brief  Stops the TIM Base generation.
   * @param  htim TIM Base handle
   * @retval HAL status
-*/
+  */
 HAL_StatusTypeDef HAL_TIM_Base_Stop(TIM_HandleTypeDef *htim)
 {
   /* Check the parameters */
   assert_param(IS_TIM_INSTANCE(htim->Instance));
 
-  /* Set the TIM state */
-  htim->State= HAL_TIM_STATE_BUSY;
-
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
 
-  /* Change the TIM state*/
-  htim->State= HAL_TIM_STATE_READY;
+  /* Set the TIM state */
+  htim->State = HAL_TIM_STATE_READY;
 
   /* Return function status */
   return HAL_OK;
@@ -443,7 +465,7 @@ HAL_StatusTypeDef HAL_TIM_Base_Stop(TIM_HandleTypeDef *htim)
   * @brief  Starts the TIM Base generation in interrupt mode.
   * @param  htim TIM Base handle
   * @retval HAL status
-*/
+  */
 HAL_StatusTypeDef HAL_TIM_Base_Start_IT(TIM_HandleTypeDef *htim)
 {
   uint32_t tmpsmcr;
@@ -451,14 +473,30 @@ HAL_StatusTypeDef HAL_TIM_Base_Start_IT(TIM_HandleTypeDef *htim)
   /* Check the parameters */
   assert_param(IS_TIM_INSTANCE(htim->Instance));
 
+  /* Check the TIM state */
+  if (htim->State != HAL_TIM_STATE_READY)
+  {
+    return HAL_ERROR;
+  }
+
+  /* Set the TIM state */
+  htim->State = HAL_TIM_STATE_BUSY;
+
   /* Enable the TIM Update interrupt */
   __HAL_TIM_ENABLE_IT(htim, TIM_IT_UPDATE);
 
   /* Enable the Peripheral, except in trigger mode where enable is automatically done with trigger */
-  tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
-  if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+  if (IS_TIM_SLAVE_INSTANCE(htim->Instance))
   {
-  __HAL_TIM_ENABLE(htim);
+    tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
+    if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+    {
+      __HAL_TIM_ENABLE(htim);
+    }
+  }
+  else
+  {
+    __HAL_TIM_ENABLE(htim);
   }
 
   /* Return function status */
@@ -469,16 +507,20 @@ HAL_StatusTypeDef HAL_TIM_Base_Start_IT(TIM_HandleTypeDef *htim)
   * @brief  Stops the TIM Base generation in interrupt mode.
   * @param  htim TIM Base handle
   * @retval HAL status
-*/
+  */
 HAL_StatusTypeDef HAL_TIM_Base_Stop_IT(TIM_HandleTypeDef *htim)
 {
   /* Check the parameters */
   assert_param(IS_TIM_INSTANCE(htim->Instance));
+
   /* Disable the TIM Update interrupt */
   __HAL_TIM_DISABLE_IT(htim, TIM_IT_UPDATE);
 
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
+
+  /* Set the TIM state */
+  htim->State = HAL_TIM_STATE_READY;
 
   /* Return function status */
   return HAL_OK;
@@ -498,13 +540,14 @@ HAL_StatusTypeDef HAL_TIM_Base_Start_DMA(TIM_HandleTypeDef *htim, uint32_t *pDat
   /* Check the parameters */
   assert_param(IS_TIM_DMA_INSTANCE(htim->Instance));
 
-  if ((htim->State == HAL_TIM_STATE_BUSY))
+  /* Set the TIM state */
+  if (htim->State == HAL_TIM_STATE_BUSY)
   {
     return HAL_BUSY;
   }
-  else if ((htim->State == HAL_TIM_STATE_READY))
+  else if (htim->State == HAL_TIM_STATE_READY)
   {
-    if ((pData == NULL ) && (Length > 0U))
+    if ((pData == NULL) && (Length > 0U))
     {
       return HAL_ERROR;
     }
@@ -515,9 +558,9 @@ HAL_StatusTypeDef HAL_TIM_Base_Start_DMA(TIM_HandleTypeDef *htim, uint32_t *pDat
   }
   else
   {
-    /* nothing to do */
+    return HAL_ERROR;
   }
-  
+
   /* Set the DMA Period elapsed callbacks */
   htim->hdma[TIM_DMA_ID_UPDATE]->XferCpltCallback = TIM_DMAPeriodElapsedCplt;
   htim->hdma[TIM_DMA_ID_UPDATE]->XferHalfCpltCallback = TIM_DMAPeriodElapsedHalfCplt;
@@ -528,6 +571,7 @@ HAL_StatusTypeDef HAL_TIM_Base_Start_DMA(TIM_HandleTypeDef *htim, uint32_t *pDat
   /* Enable the DMA channel */
   if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_UPDATE], (uint32_t)pData, (uint32_t)&htim->Instance->ARR, Length) != HAL_OK)
   {
+    /* Return error status */
     return HAL_ERROR;
   }
 
@@ -535,10 +579,17 @@ HAL_StatusTypeDef HAL_TIM_Base_Start_DMA(TIM_HandleTypeDef *htim, uint32_t *pDat
   __HAL_TIM_ENABLE_DMA(htim, TIM_DMA_UPDATE);
 
   /* Enable the Peripheral, except in trigger mode where enable is automatically done with trigger */
-  tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
-  if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+  if (IS_TIM_SLAVE_INSTANCE(htim->Instance))
   {
-  __HAL_TIM_ENABLE(htim);
+    tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
+    if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+    {
+      __HAL_TIM_ENABLE(htim);
+    }
+  }
+  else
+  {
+    __HAL_TIM_ENABLE(htim);
   }
 
   /* Return function status */
@@ -563,7 +614,7 @@ HAL_StatusTypeDef HAL_TIM_Base_Stop_DMA(TIM_HandleTypeDef *htim)
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
 
-  /* Change the htim state */
+  /* Set the TIM state */
   htim->State = HAL_TIM_STATE_READY;
 
   /* Return function status */
@@ -574,23 +625,23 @@ HAL_StatusTypeDef HAL_TIM_Base_Stop_DMA(TIM_HandleTypeDef *htim)
   * @}
   */
 
-/** @defgroup TIM_Exported_Functions_Group2 Time Output Compare functions
- *  @brief    Time Output Compare functions
- *
+/** @defgroup TIM_Exported_Functions_Group2 TIM Output Compare functions
+  *  @brief    TIM Output Compare functions
+  *
 @verbatim
   ==============================================================================
-                  ##### Time Output Compare functions #####
+                  ##### TIM Output Compare functions #####
   ==============================================================================
   [..]
     This section provides functions allowing to:
     (+) Initialize and configure the TIM Output Compare.
     (+) De-initialize the TIM Output Compare.
-    (+) Start the Time Output Compare.
-    (+) Stop the Time Output Compare.
-    (+) Start the Time Output Compare and enable interrupt.
-    (+) Stop the Time Output Compare and disable interrupt.
-    (+) Start the Time Output Compare and enable DMA transfer.
-    (+) Stop the Time Output Compare and disable DMA transfer.
+    (+) Start the TIM Output Compare.
+    (+) Stop the TIM Output Compare.
+    (+) Start the TIM Output Compare and enable interrupt.
+    (+) Stop the TIM Output Compare and disable interrupt.
+    (+) Start the TIM Output Compare and enable DMA transfer.
+    (+) Stop the TIM Output Compare and disable DMA transfer.
 
 @endverbatim
   * @{
@@ -605,10 +656,10 @@ HAL_StatusTypeDef HAL_TIM_Base_Stop_DMA(TIM_HandleTypeDef *htim)
   * @param  htim TIM Output Compare handle
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_TIM_OC_Init(TIM_HandleTypeDef* htim)
+HAL_StatusTypeDef HAL_TIM_OC_Init(TIM_HandleTypeDef *htim)
 {
   /* Check the TIM handle allocation */
-  if(htim == NULL)
+  if (htim == NULL)
   {
     return HAL_ERROR;
   }
@@ -619,7 +670,7 @@ HAL_StatusTypeDef HAL_TIM_OC_Init(TIM_HandleTypeDef* htim)
   assert_param(IS_TIM_CLOCKDIVISION_DIV(htim->Init.ClockDivision));
   assert_param(IS_TIM_AUTORELOAD_PRELOAD(htim->Init.AutoReloadPreload));
 
-  if(htim->State == HAL_TIM_STATE_RESET)
+  if (htim->State == HAL_TIM_STATE_RESET)
   {
     /* Allocate lock resource and initialize it */
     htim->Lock = HAL_UNLOCKED;
@@ -628,7 +679,7 @@ HAL_StatusTypeDef HAL_TIM_OC_Init(TIM_HandleTypeDef* htim)
     /* Reset interrupt callbacks to legacy weak callbacks */
     TIM_ResetCallback(htim);
 
-    if(htim->OC_MspInitCallback == NULL)
+    if (htim->OC_MspInitCallback == NULL)
     {
       htim->OC_MspInitCallback = HAL_TIM_OC_MspInit;
     }
@@ -641,13 +692,20 @@ HAL_StatusTypeDef HAL_TIM_OC_Init(TIM_HandleTypeDef* htim)
   }
 
   /* Set the TIM state */
-  htim->State= HAL_TIM_STATE_BUSY;
+  htim->State = HAL_TIM_STATE_BUSY;
 
   /* Init the base time for the Output Compare */
   TIM_Base_SetConfig(htim->Instance,  &htim->Init);
 
+  /* Initialize the DMA burst operation state */
+  htim->DMABurstState = HAL_DMA_BURST_STATE_READY;
+
+  /* Initialize the TIM channels state */
+  TIM_CHANNEL_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_N_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_READY);
+
   /* Initialize the TIM state*/
-  htim->State= HAL_TIM_STATE_READY;
+  htim->State = HAL_TIM_STATE_READY;
 
   return HAL_OK;
 }
@@ -668,7 +726,7 @@ HAL_StatusTypeDef HAL_TIM_OC_DeInit(TIM_HandleTypeDef *htim)
   __HAL_TIM_DISABLE(htim);
 
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
-  if(htim->OC_MspDeInitCallback == NULL)
+  if (htim->OC_MspDeInitCallback == NULL)
   {
     htim->OC_MspDeInitCallback = HAL_TIM_OC_MspDeInit;
   }
@@ -678,6 +736,13 @@ HAL_StatusTypeDef HAL_TIM_OC_DeInit(TIM_HandleTypeDef *htim)
   /* DeInit the low level hardware: GPIO, CLOCK, NVIC and DMA */
   HAL_TIM_OC_MspDeInit(htim);
 #endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
+
+  /* Change the DMA burst operation state */
+  htim->DMABurstState = HAL_DMA_BURST_STATE_RESET;
+
+  /* Change the TIM channels state */
+  TIM_CHANNEL_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_RESET);
+  TIM_CHANNEL_N_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_RESET);
 
   /* Change TIM state */
   htim->State = HAL_TIM_STATE_RESET;
@@ -730,7 +795,7 @@ __weak void HAL_TIM_OC_MspDeInit(TIM_HandleTypeDef *htim)
   *            @arg TIM_CHANNEL_5: TIM Channel 5 selected
   *            @arg TIM_CHANNEL_6: TIM Channel 6 selected
   * @retval HAL status
-*/
+  */
 HAL_StatusTypeDef HAL_TIM_OC_Start(TIM_HandleTypeDef *htim, uint32_t Channel)
 {
   uint32_t tmpsmcr;
@@ -738,20 +803,36 @@ HAL_StatusTypeDef HAL_TIM_OC_Start(TIM_HandleTypeDef *htim, uint32_t Channel)
   /* Check the parameters */
   assert_param(IS_TIM_CCX_INSTANCE(htim->Instance, Channel));
 
+  /* Check the TIM channel state */
+  if (TIM_CHANNEL_STATE_GET(htim, Channel) != HAL_TIM_CHANNEL_STATE_READY)
+  {
+    return HAL_ERROR;
+  }
+
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_BUSY);
+
   /* Enable the Output compare channel */
   TIM_CCxChannelCmd(htim->Instance, Channel, TIM_CCx_ENABLE);
 
-  if(IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
+  if (IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
   {
     /* Enable the main output */
     __HAL_TIM_MOE_ENABLE(htim);
   }
 
   /* Enable the Peripheral, except in trigger mode where enable is automatically done with trigger */
-  tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
-  if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+  if (IS_TIM_SLAVE_INSTANCE(htim->Instance))
   {
-  __HAL_TIM_ENABLE(htim);
+    tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
+    if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+    {
+      __HAL_TIM_ENABLE(htim);
+    }
+  }
+  else
+  {
+    __HAL_TIM_ENABLE(htim);
   }
 
   /* Return function status */
@@ -788,6 +869,9 @@ HAL_StatusTypeDef HAL_TIM_OC_Stop(TIM_HandleTypeDef *htim, uint32_t Channel)
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
 
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
+
   /* Return function status */
   return HAL_OK;
 }
@@ -809,6 +893,15 @@ HAL_StatusTypeDef HAL_TIM_OC_Start_IT(TIM_HandleTypeDef *htim, uint32_t Channel)
 
   /* Check the parameters */
   assert_param(IS_TIM_CCX_INSTANCE(htim->Instance, Channel));
+
+  /* Check the TIM channel state */
+  if (TIM_CHANNEL_STATE_GET(htim, Channel) != HAL_TIM_CHANNEL_STATE_READY)
+  {
+    return HAL_ERROR;
+  }
+
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_BUSY);
 
   switch (Channel)
   {
@@ -854,10 +947,17 @@ HAL_StatusTypeDef HAL_TIM_OC_Start_IT(TIM_HandleTypeDef *htim, uint32_t Channel)
   }
 
   /* Enable the Peripheral, except in trigger mode where enable is automatically done with trigger */
-  tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
-  if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+  if (IS_TIM_SLAVE_INSTANCE(htim->Instance))
   {
-  __HAL_TIM_ENABLE(htim);
+    tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
+    if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+    {
+      __HAL_TIM_ENABLE(htim);
+    }
+  }
+  else
+  {
+    __HAL_TIM_ENABLE(htim);
   }
 
   /* Return function status */
@@ -917,7 +1017,7 @@ HAL_StatusTypeDef HAL_TIM_OC_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Channel)
   /* Disable the Output compare channel */
   TIM_CCxChannelCmd(htim->Instance, Channel, TIM_CCx_DISABLE);
 
-  if(IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
+  if (IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
   {
     /* Disable the Main Output */
     __HAL_TIM_MOE_DISABLE(htim);
@@ -925,6 +1025,9 @@ HAL_StatusTypeDef HAL_TIM_OC_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Channel)
 
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
+
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
 
   /* Return function status */
   return HAL_OK;
@@ -945,31 +1048,32 @@ HAL_StatusTypeDef HAL_TIM_OC_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Channel)
   */
 HAL_StatusTypeDef HAL_TIM_OC_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel, uint32_t *pData, uint16_t Length)
 {
-   uint32_t tmpsmcr;
+  uint32_t tmpsmcr;
 
   /* Check the parameters */
   assert_param(IS_TIM_CCX_INSTANCE(htim->Instance, Channel));
 
-  if ((htim->State == HAL_TIM_STATE_BUSY))
+  /* Set the TIM channel state */
+  if (TIM_CHANNEL_STATE_GET(htim, Channel) == HAL_TIM_CHANNEL_STATE_BUSY)
   {
     return HAL_BUSY;
   }
-  else if ((htim->State == HAL_TIM_STATE_READY))
+  else if (TIM_CHANNEL_STATE_GET(htim, Channel) == HAL_TIM_CHANNEL_STATE_READY)
   {
-    if ((pData == NULL ) && (Length > 0U))
+    if ((pData == NULL) && (Length > 0U))
     {
       return HAL_ERROR;
     }
     else
     {
-      htim->State = HAL_TIM_STATE_BUSY;
+      TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_BUSY);
     }
   }
   else
   {
-    /* nothing to do */
+    return HAL_ERROR;
   }
-  
+
   switch (Channel)
   {
     case TIM_CHANNEL_1:
@@ -982,8 +1086,9 @@ HAL_StatusTypeDef HAL_TIM_OC_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
       htim->hdma[TIM_DMA_ID_CC1]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC1], (uint32_t)pData, (uint32_t)&htim->Instance->CCR1, Length)!= HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC1], (uint32_t)pData, (uint32_t)&htim->Instance->CCR1, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
 
@@ -1002,8 +1107,9 @@ HAL_StatusTypeDef HAL_TIM_OC_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
       htim->hdma[TIM_DMA_ID_CC2]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC2], (uint32_t)pData, (uint32_t)&htim->Instance->CCR2, Length)!= HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC2], (uint32_t)pData, (uint32_t)&htim->Instance->CCR2, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
 
@@ -1022,8 +1128,9 @@ HAL_StatusTypeDef HAL_TIM_OC_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
       htim->hdma[TIM_DMA_ID_CC3]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC3], (uint32_t)pData, (uint32_t)&htim->Instance->CCR3,Length)!= HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC3], (uint32_t)pData, (uint32_t)&htim->Instance->CCR3, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       /* Enable the TIM Capture/Compare 3 DMA request */
@@ -1041,8 +1148,9 @@ HAL_StatusTypeDef HAL_TIM_OC_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
       htim->hdma[TIM_DMA_ID_CC4]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC4], (uint32_t)pData, (uint32_t)&htim->Instance->CCR4, Length)!= HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC4], (uint32_t)pData, (uint32_t)&htim->Instance->CCR4, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       /* Enable the TIM Capture/Compare 4 DMA request */
@@ -1057,17 +1165,24 @@ HAL_StatusTypeDef HAL_TIM_OC_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
   /* Enable the Output compare channel */
   TIM_CCxChannelCmd(htim->Instance, Channel, TIM_CCx_ENABLE);
 
-  if(IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
+  if (IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
   {
     /* Enable the main output */
     __HAL_TIM_MOE_ENABLE(htim);
   }
 
   /* Enable the Peripheral, except in trigger mode where enable is automatically done with trigger */
-  tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
-  if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+  if (IS_TIM_SLAVE_INSTANCE(htim->Instance))
   {
-  __HAL_TIM_ENABLE(htim);
+    tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
+    if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+    {
+      __HAL_TIM_ENABLE(htim);
+    }
+  }
+  else
+  {
+    __HAL_TIM_ENABLE(htim);
   }
 
   /* Return function status */
@@ -1084,7 +1199,7 @@ HAL_StatusTypeDef HAL_TIM_OC_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
   *            @arg TIM_CHANNEL_3: TIM Channel 3 selected
   *            @arg TIM_CHANNEL_4: TIM Channel 4 selected
   * @retval HAL status
-*/
+  */
 HAL_StatusTypeDef HAL_TIM_OC_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel)
 {
   /* Check the parameters */
@@ -1140,8 +1255,8 @@ HAL_StatusTypeDef HAL_TIM_OC_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel)
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
 
-  /* Change the htim state */
-  htim->State = HAL_TIM_STATE_READY;
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
 
   /* Return function status */
   return HAL_OK;
@@ -1151,23 +1266,23 @@ HAL_StatusTypeDef HAL_TIM_OC_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel)
   * @}
   */
 
-/** @defgroup TIM_Exported_Functions_Group3 Time PWM functions
- *  @brief    Time PWM functions
- *
+/** @defgroup TIM_Exported_Functions_Group3 TIM PWM functions
+  *  @brief    TIM PWM functions
+  *
 @verbatim
   ==============================================================================
-                          ##### Time PWM functions #####
+                          ##### TIM PWM functions #####
   ==============================================================================
   [..]
     This section provides functions allowing to:
     (+) Initialize and configure the TIM PWM.
     (+) De-initialize the TIM PWM.
-    (+) Start the Time PWM.
-    (+) Stop the Time PWM.
-    (+) Start the Time PWM and enable interrupt.
-    (+) Stop the Time PWM and disable interrupt.
-    (+) Start the Time PWM and enable DMA transfer.
-    (+) Stop the Time PWM and disable DMA transfer.
+    (+) Start the TIM PWM.
+    (+) Stop the TIM PWM.
+    (+) Start the TIM PWM and enable interrupt.
+    (+) Stop the TIM PWM and disable interrupt.
+    (+) Start the TIM PWM and enable DMA transfer.
+    (+) Stop the TIM PWM and disable DMA transfer.
 
 @endverbatim
   * @{
@@ -1185,7 +1300,7 @@ HAL_StatusTypeDef HAL_TIM_OC_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel)
 HAL_StatusTypeDef HAL_TIM_PWM_Init(TIM_HandleTypeDef *htim)
 {
   /* Check the TIM handle allocation */
-  if(htim == NULL)
+  if (htim == NULL)
   {
     return HAL_ERROR;
   }
@@ -1196,7 +1311,7 @@ HAL_StatusTypeDef HAL_TIM_PWM_Init(TIM_HandleTypeDef *htim)
   assert_param(IS_TIM_CLOCKDIVISION_DIV(htim->Init.ClockDivision));
   assert_param(IS_TIM_AUTORELOAD_PRELOAD(htim->Init.AutoReloadPreload));
 
-  if(htim->State == HAL_TIM_STATE_RESET)
+  if (htim->State == HAL_TIM_STATE_RESET)
   {
     /* Allocate lock resource and initialize it */
     htim->Lock = HAL_UNLOCKED;
@@ -1205,7 +1320,7 @@ HAL_StatusTypeDef HAL_TIM_PWM_Init(TIM_HandleTypeDef *htim)
     /* Reset interrupt callbacks to legacy weak callbacks */
     TIM_ResetCallback(htim);
 
-    if(htim->PWM_MspInitCallback == NULL)
+    if (htim->PWM_MspInitCallback == NULL)
     {
       htim->PWM_MspInitCallback = HAL_TIM_PWM_MspInit;
     }
@@ -1218,13 +1333,20 @@ HAL_StatusTypeDef HAL_TIM_PWM_Init(TIM_HandleTypeDef *htim)
   }
 
   /* Set the TIM state */
-  htim->State= HAL_TIM_STATE_BUSY;
+  htim->State = HAL_TIM_STATE_BUSY;
 
   /* Init the base time for the PWM */
   TIM_Base_SetConfig(htim->Instance, &htim->Init);
 
+  /* Initialize the DMA burst operation state */
+  htim->DMABurstState = HAL_DMA_BURST_STATE_READY;
+
+  /* Initialize the TIM channels state */
+  TIM_CHANNEL_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_N_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_READY);
+
   /* Initialize the TIM state*/
-  htim->State= HAL_TIM_STATE_READY;
+  htim->State = HAL_TIM_STATE_READY;
 
   return HAL_OK;
 }
@@ -1245,7 +1367,7 @@ HAL_StatusTypeDef HAL_TIM_PWM_DeInit(TIM_HandleTypeDef *htim)
   __HAL_TIM_DISABLE(htim);
 
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
-  if(htim->PWM_MspDeInitCallback == NULL)
+  if (htim->PWM_MspDeInitCallback == NULL)
   {
     htim->PWM_MspDeInitCallback = HAL_TIM_PWM_MspDeInit;
   }
@@ -1255,6 +1377,13 @@ HAL_StatusTypeDef HAL_TIM_PWM_DeInit(TIM_HandleTypeDef *htim)
   /* DeInit the low level hardware: GPIO, CLOCK, NVIC and DMA */
   HAL_TIM_PWM_MspDeInit(htim);
 #endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
+
+  /* Change the DMA burst operation state */
+  htim->DMABurstState = HAL_DMA_BURST_STATE_RESET;
+
+  /* Change the TIM channels state */
+  TIM_CHANNEL_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_RESET);
+  TIM_CHANNEL_N_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_RESET);
 
   /* Change TIM state */
   htim->State = HAL_TIM_STATE_RESET;
@@ -1307,7 +1436,7 @@ __weak void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *htim)
   *            @arg TIM_CHANNEL_5: TIM Channel 5 selected
   *            @arg TIM_CHANNEL_6: TIM Channel 6 selected
   * @retval HAL status
-*/
+  */
 HAL_StatusTypeDef HAL_TIM_PWM_Start(TIM_HandleTypeDef *htim, uint32_t Channel)
 {
   uint32_t tmpsmcr;
@@ -1315,20 +1444,36 @@ HAL_StatusTypeDef HAL_TIM_PWM_Start(TIM_HandleTypeDef *htim, uint32_t Channel)
   /* Check the parameters */
   assert_param(IS_TIM_CCX_INSTANCE(htim->Instance, Channel));
 
+  /* Check the TIM channel state */
+  if (TIM_CHANNEL_STATE_GET(htim, Channel) != HAL_TIM_CHANNEL_STATE_READY)
+  {
+    return HAL_ERROR;
+  }
+
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_BUSY);
+
   /* Enable the Capture compare channel */
   TIM_CCxChannelCmd(htim->Instance, Channel, TIM_CCx_ENABLE);
 
-  if(IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
+  if (IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
   {
     /* Enable the main output */
     __HAL_TIM_MOE_ENABLE(htim);
   }
 
   /* Enable the Peripheral, except in trigger mode where enable is automatically done with trigger */
-  tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
-  if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+  if (IS_TIM_SLAVE_INSTANCE(htim->Instance))
   {
-  __HAL_TIM_ENABLE(htim);
+    tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
+    if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+    {
+      __HAL_TIM_ENABLE(htim);
+    }
+  }
+  else
+  {
+    __HAL_TIM_ENABLE(htim);
   }
 
   /* Return function status */
@@ -1347,7 +1492,7 @@ HAL_StatusTypeDef HAL_TIM_PWM_Start(TIM_HandleTypeDef *htim, uint32_t Channel)
   *            @arg TIM_CHANNEL_5: TIM Channel 5 selected
   *            @arg TIM_CHANNEL_6: TIM Channel 6 selected
   * @retval HAL status
-*/
+  */
 HAL_StatusTypeDef HAL_TIM_PWM_Stop(TIM_HandleTypeDef *htim, uint32_t Channel)
 {
   /* Check the parameters */
@@ -1356,7 +1501,7 @@ HAL_StatusTypeDef HAL_TIM_PWM_Stop(TIM_HandleTypeDef *htim, uint32_t Channel)
   /* Disable the Capture compare channel */
   TIM_CCxChannelCmd(htim->Instance, Channel, TIM_CCx_DISABLE);
 
-  if(IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
+  if (IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
   {
     /* Disable the Main Output */
     __HAL_TIM_MOE_DISABLE(htim);
@@ -1365,8 +1510,8 @@ HAL_StatusTypeDef HAL_TIM_PWM_Stop(TIM_HandleTypeDef *htim, uint32_t Channel)
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
 
-  /* Change the htim state */
-  htim->State = HAL_TIM_STATE_READY;
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
 
   /* Return function status */
   return HAL_OK;
@@ -1382,12 +1527,21 @@ HAL_StatusTypeDef HAL_TIM_PWM_Stop(TIM_HandleTypeDef *htim, uint32_t Channel)
   *            @arg TIM_CHANNEL_3: TIM Channel 3 selected
   *            @arg TIM_CHANNEL_4: TIM Channel 4 selected
   * @retval HAL status
-*/
+  */
 HAL_StatusTypeDef HAL_TIM_PWM_Start_IT(TIM_HandleTypeDef *htim, uint32_t Channel)
 {
   uint32_t tmpsmcr;
   /* Check the parameters */
   assert_param(IS_TIM_CCX_INSTANCE(htim->Instance, Channel));
+
+  /* Check the TIM channel state */
+  if (TIM_CHANNEL_STATE_GET(htim, Channel) != HAL_TIM_CHANNEL_STATE_READY)
+  {
+    return HAL_ERROR;
+  }
+
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_BUSY);
 
   switch (Channel)
   {
@@ -1433,10 +1587,17 @@ HAL_StatusTypeDef HAL_TIM_PWM_Start_IT(TIM_HandleTypeDef *htim, uint32_t Channel
   }
 
   /* Enable the Peripheral, except in trigger mode where enable is automatically done with trigger */
-  tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
-  if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+  if (IS_TIM_SLAVE_INSTANCE(htim->Instance))
   {
-  __HAL_TIM_ENABLE(htim);
+    tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
+    if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+    {
+      __HAL_TIM_ENABLE(htim);
+    }
+  }
+  else
+  {
+    __HAL_TIM_ENABLE(htim);
   }
 
   /* Return function status */
@@ -1453,8 +1614,8 @@ HAL_StatusTypeDef HAL_TIM_PWM_Start_IT(TIM_HandleTypeDef *htim, uint32_t Channel
   *            @arg TIM_CHANNEL_3: TIM Channel 3 selected
   *            @arg TIM_CHANNEL_4: TIM Channel 4 selected
   * @retval HAL status
-*/
-HAL_StatusTypeDef HAL_TIM_PWM_Stop_IT (TIM_HandleTypeDef *htim, uint32_t Channel)
+  */
+HAL_StatusTypeDef HAL_TIM_PWM_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Channel)
 {
   /* Check the parameters */
   assert_param(IS_TIM_CCX_INSTANCE(htim->Instance, Channel));
@@ -1505,6 +1666,9 @@ HAL_StatusTypeDef HAL_TIM_PWM_Stop_IT (TIM_HandleTypeDef *htim, uint32_t Channel
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
 
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
+
   /* Return function status */
   return HAL_OK;
 }
@@ -1521,7 +1685,7 @@ HAL_StatusTypeDef HAL_TIM_PWM_Stop_IT (TIM_HandleTypeDef *htim, uint32_t Channel
   * @param  pData The source Buffer address.
   * @param  Length The length of data to be transferred from memory to TIM peripheral
   * @retval HAL status
-*/
+  */
 HAL_StatusTypeDef HAL_TIM_PWM_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel, uint32_t *pData, uint16_t Length)
 {
   uint32_t tmpsmcr;
@@ -1529,24 +1693,25 @@ HAL_StatusTypeDef HAL_TIM_PWM_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channe
   /* Check the parameters */
   assert_param(IS_TIM_CCX_INSTANCE(htim->Instance, Channel));
 
-  if((htim->State == HAL_TIM_STATE_BUSY))
+  /* Set the TIM channel state */
+  if (TIM_CHANNEL_STATE_GET(htim, Channel) == HAL_TIM_CHANNEL_STATE_BUSY)
   {
     return HAL_BUSY;
   }
-  else if((htim->State == HAL_TIM_STATE_READY))
+  else if (TIM_CHANNEL_STATE_GET(htim, Channel) == HAL_TIM_CHANNEL_STATE_READY)
   {
-    if((pData == NULL ) && (Length > 0U))
+    if ((pData == NULL) && (Length > 0U))
     {
       return HAL_ERROR;
     }
     else
     {
-      htim->State = HAL_TIM_STATE_BUSY;
+      TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_BUSY);
     }
   }
   else
   {
-    /* nothing to do */
+    return HAL_ERROR;
   }
 
   switch (Channel)
@@ -1563,6 +1728,7 @@ HAL_StatusTypeDef HAL_TIM_PWM_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channe
       /* Enable the DMA channel */
       if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC1], (uint32_t)pData, (uint32_t)&htim->Instance->CCR1, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
 
@@ -1583,6 +1749,7 @@ HAL_StatusTypeDef HAL_TIM_PWM_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channe
       /* Enable the DMA channel */
       if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC2], (uint32_t)pData, (uint32_t)&htim->Instance->CCR2, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       /* Enable the TIM Capture/Compare 2 DMA request */
@@ -1600,8 +1767,9 @@ HAL_StatusTypeDef HAL_TIM_PWM_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channe
       htim->hdma[TIM_DMA_ID_CC3]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC3], (uint32_t)pData, (uint32_t)&htim->Instance->CCR3,Length) != HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC3], (uint32_t)pData, (uint32_t)&htim->Instance->CCR3, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       /* Enable the TIM Output Capture/Compare 3 request */
@@ -1621,6 +1789,7 @@ HAL_StatusTypeDef HAL_TIM_PWM_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channe
       /* Enable the DMA channel */
       if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC4], (uint32_t)pData, (uint32_t)&htim->Instance->CCR4, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       /* Enable the TIM Capture/Compare 4 DMA request */
@@ -1635,17 +1804,24 @@ HAL_StatusTypeDef HAL_TIM_PWM_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channe
   /* Enable the Capture compare channel */
   TIM_CCxChannelCmd(htim->Instance, Channel, TIM_CCx_ENABLE);
 
-  if(IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
+  if (IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
   {
     /* Enable the main output */
     __HAL_TIM_MOE_ENABLE(htim);
   }
 
   /* Enable the Peripheral, except in trigger mode where enable is automatically done with trigger */
-  tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
-  if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+  if (IS_TIM_SLAVE_INSTANCE(htim->Instance))
   {
-  __HAL_TIM_ENABLE(htim);
+    tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
+    if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+    {
+      __HAL_TIM_ENABLE(htim);
+    }
+  }
+  else
+  {
+    __HAL_TIM_ENABLE(htim);
   }
 
   /* Return function status */
@@ -1662,7 +1838,7 @@ HAL_StatusTypeDef HAL_TIM_PWM_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channe
   *            @arg TIM_CHANNEL_3: TIM Channel 3 selected
   *            @arg TIM_CHANNEL_4: TIM Channel 4 selected
   * @retval HAL status
-*/
+  */
 HAL_StatusTypeDef HAL_TIM_PWM_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel)
 {
   /* Check the parameters */
@@ -1709,7 +1885,7 @@ HAL_StatusTypeDef HAL_TIM_PWM_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
   /* Disable the Capture compare channel */
   TIM_CCxChannelCmd(htim->Instance, Channel, TIM_CCx_DISABLE);
 
-  if(IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
+  if (IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
   {
     /* Disable the Main Output */
     __HAL_TIM_MOE_DISABLE(htim);
@@ -1718,8 +1894,8 @@ HAL_StatusTypeDef HAL_TIM_PWM_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
 
-  /* Change the htim state */
-  htim->State = HAL_TIM_STATE_READY;
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
 
   /* Return function status */
   return HAL_OK;
@@ -1729,9 +1905,9 @@ HAL_StatusTypeDef HAL_TIM_PWM_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
   * @}
   */
 
-/** @defgroup TIM_Exported_Functions_Group4 Time Input Capture functions
- *  @brief    Time Input Capture functions
- *
+/** @defgroup TIM_Exported_Functions_Group4 TIM Input Capture functions
+  *  @brief    TIM Input Capture functions
+  *
 @verbatim
   ==============================================================================
               ##### TIM Input Capture functions #####
@@ -1763,7 +1939,7 @@ HAL_StatusTypeDef HAL_TIM_PWM_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
 HAL_StatusTypeDef HAL_TIM_IC_Init(TIM_HandleTypeDef *htim)
 {
   /* Check the TIM handle allocation */
-  if(htim == NULL)
+  if (htim == NULL)
   {
     return HAL_ERROR;
   }
@@ -1774,7 +1950,7 @@ HAL_StatusTypeDef HAL_TIM_IC_Init(TIM_HandleTypeDef *htim)
   assert_param(IS_TIM_CLOCKDIVISION_DIV(htim->Init.ClockDivision));
   assert_param(IS_TIM_AUTORELOAD_PRELOAD(htim->Init.AutoReloadPreload));
 
-  if(htim->State == HAL_TIM_STATE_RESET)
+  if (htim->State == HAL_TIM_STATE_RESET)
   {
     /* Allocate lock resource and initialize it */
     htim->Lock = HAL_UNLOCKED;
@@ -1783,7 +1959,7 @@ HAL_StatusTypeDef HAL_TIM_IC_Init(TIM_HandleTypeDef *htim)
     /* Reset interrupt callbacks to legacy weak callbacks */
     TIM_ResetCallback(htim);
 
-    if(htim->IC_MspInitCallback == NULL)
+    if (htim->IC_MspInitCallback == NULL)
     {
       htim->IC_MspInitCallback = HAL_TIM_IC_MspInit;
     }
@@ -1796,13 +1972,20 @@ HAL_StatusTypeDef HAL_TIM_IC_Init(TIM_HandleTypeDef *htim)
   }
 
   /* Set the TIM state */
-  htim->State= HAL_TIM_STATE_BUSY;
+  htim->State = HAL_TIM_STATE_BUSY;
 
   /* Init the base time for the input capture */
   TIM_Base_SetConfig(htim->Instance, &htim->Init);
 
+  /* Initialize the DMA burst operation state */
+  htim->DMABurstState = HAL_DMA_BURST_STATE_READY;
+
+  /* Initialize the TIM channels state */
+  TIM_CHANNEL_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_N_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_READY);
+
   /* Initialize the TIM state*/
-  htim->State= HAL_TIM_STATE_READY;
+  htim->State = HAL_TIM_STATE_READY;
 
   return HAL_OK;
 }
@@ -1823,7 +2006,7 @@ HAL_StatusTypeDef HAL_TIM_IC_DeInit(TIM_HandleTypeDef *htim)
   __HAL_TIM_DISABLE(htim);
 
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
-  if(htim->IC_MspDeInitCallback == NULL)
+  if (htim->IC_MspDeInitCallback == NULL)
   {
     htim->IC_MspDeInitCallback = HAL_TIM_IC_MspDeInit;
   }
@@ -1833,6 +2016,13 @@ HAL_StatusTypeDef HAL_TIM_IC_DeInit(TIM_HandleTypeDef *htim)
   /* DeInit the low level hardware: GPIO, CLOCK, NVIC and DMA */
   HAL_TIM_IC_MspDeInit(htim);
 #endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
+
+  /* Change the DMA burst operation state */
+  htim->DMABurstState = HAL_DMA_BURST_STATE_RESET;
+
+  /* Change the TIM channels state */
+  TIM_CHANNEL_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_RESET);
+  TIM_CHANNEL_N_STATE_SET_ALL(htim, HAL_TIM_CHANNEL_STATE_RESET);
 
   /* Change TIM state */
   htim->State = HAL_TIM_STATE_RESET;
@@ -1884,21 +2074,41 @@ __weak void HAL_TIM_IC_MspDeInit(TIM_HandleTypeDef *htim)
   *            @arg TIM_CHANNEL_4: TIM Channel 4 selected
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_TIM_IC_Start (TIM_HandleTypeDef *htim, uint32_t Channel)
+HAL_StatusTypeDef HAL_TIM_IC_Start(TIM_HandleTypeDef *htim, uint32_t Channel)
 {
   uint32_t tmpsmcr;
+  HAL_TIM_ChannelStateTypeDef channel_state = TIM_CHANNEL_STATE_GET(htim, Channel);
+  HAL_TIM_ChannelStateTypeDef complementary_channel_state = TIM_CHANNEL_N_STATE_GET(htim, Channel);
 
   /* Check the parameters */
   assert_param(IS_TIM_CCX_INSTANCE(htim->Instance, Channel));
+
+  /* Check the TIM channel state */
+  if ((channel_state != HAL_TIM_CHANNEL_STATE_READY)
+      || (complementary_channel_state != HAL_TIM_CHANNEL_STATE_READY))
+  {
+    return HAL_ERROR;
+  }
+
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_BUSY);
+  TIM_CHANNEL_N_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_BUSY);
 
   /* Enable the Input Capture channel */
   TIM_CCxChannelCmd(htim->Instance, Channel, TIM_CCx_ENABLE);
 
   /* Enable the Peripheral, except in trigger mode where enable is automatically done with trigger */
-  tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
-  if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+  if (IS_TIM_SLAVE_INSTANCE(htim->Instance))
   {
-  __HAL_TIM_ENABLE(htim);
+    tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
+    if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+    {
+      __HAL_TIM_ENABLE(htim);
+    }
+  }
+  else
+  {
+    __HAL_TIM_ENABLE(htim);
   }
 
   /* Return function status */
@@ -1927,6 +2137,10 @@ HAL_StatusTypeDef HAL_TIM_IC_Stop(TIM_HandleTypeDef *htim, uint32_t Channel)
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
 
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_N_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
+
   /* Return function status */
   return HAL_OK;
 }
@@ -1942,12 +2156,25 @@ HAL_StatusTypeDef HAL_TIM_IC_Stop(TIM_HandleTypeDef *htim, uint32_t Channel)
   *            @arg TIM_CHANNEL_4: TIM Channel 4 selected
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_TIM_IC_Start_IT (TIM_HandleTypeDef *htim, uint32_t Channel)
+HAL_StatusTypeDef HAL_TIM_IC_Start_IT(TIM_HandleTypeDef *htim, uint32_t Channel)
 {
   uint32_t tmpsmcr;
+  HAL_TIM_ChannelStateTypeDef channel_state = TIM_CHANNEL_STATE_GET(htim, Channel);
+  HAL_TIM_ChannelStateTypeDef complementary_channel_state = TIM_CHANNEL_N_STATE_GET(htim, Channel);
 
   /* Check the parameters */
   assert_param(IS_TIM_CCX_INSTANCE(htim->Instance, Channel));
+
+  /* Check the TIM channel state */
+  if ((channel_state != HAL_TIM_CHANNEL_STATE_READY)
+      || (complementary_channel_state != HAL_TIM_CHANNEL_STATE_READY))
+  {
+    return HAL_ERROR;
+  }
+
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_BUSY);
+  TIM_CHANNEL_N_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_BUSY);
 
   switch (Channel)
   {
@@ -1969,14 +2196,14 @@ HAL_StatusTypeDef HAL_TIM_IC_Start_IT (TIM_HandleTypeDef *htim, uint32_t Channel
     {
       /* Enable the TIM Capture/Compare 3 interrupt */
       __HAL_TIM_ENABLE_IT(htim, TIM_IT_CC3);
-    break;
+      break;
     }
 
     case TIM_CHANNEL_4:
     {
       /* Enable the TIM Capture/Compare 4 interrupt */
       __HAL_TIM_ENABLE_IT(htim, TIM_IT_CC4);
-    break;
+      break;
     }
 
     default:
@@ -1986,10 +2213,17 @@ HAL_StatusTypeDef HAL_TIM_IC_Start_IT (TIM_HandleTypeDef *htim, uint32_t Channel
   TIM_CCxChannelCmd(htim->Instance, Channel, TIM_CCx_ENABLE);
 
   /* Enable the Peripheral, except in trigger mode where enable is automatically done with trigger */
-  tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
-  if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+  if (IS_TIM_SLAVE_INSTANCE(htim->Instance))
   {
-  __HAL_TIM_ENABLE(htim);
+    tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
+    if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+    {
+      __HAL_TIM_ENABLE(htim);
+    }
+  }
+  else
+  {
+    __HAL_TIM_ENABLE(htim);
   }
 
   /* Return function status */
@@ -2006,7 +2240,7 @@ HAL_StatusTypeDef HAL_TIM_IC_Start_IT (TIM_HandleTypeDef *htim, uint32_t Channel
   *            @arg TIM_CHANNEL_3: TIM Channel 3 selected
   *            @arg TIM_CHANNEL_4: TIM Channel 4 selected
   * @retval HAL status
-*/
+  */
 HAL_StatusTypeDef HAL_TIM_IC_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Channel)
 {
   /* Check the parameters */
@@ -2052,6 +2286,10 @@ HAL_StatusTypeDef HAL_TIM_IC_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Channel)
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
 
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_N_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
+
   /* Return function status */
   return HAL_OK;
 }
@@ -2072,29 +2310,35 @@ HAL_StatusTypeDef HAL_TIM_IC_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Channel)
 HAL_StatusTypeDef HAL_TIM_IC_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel, uint32_t *pData, uint16_t Length)
 {
   uint32_t tmpsmcr;
+  HAL_TIM_ChannelStateTypeDef channel_state = TIM_CHANNEL_STATE_GET(htim, Channel);
+  HAL_TIM_ChannelStateTypeDef complementary_channel_state = TIM_CHANNEL_N_STATE_GET(htim, Channel);
 
   /* Check the parameters */
   assert_param(IS_TIM_CCX_INSTANCE(htim->Instance, Channel));
   assert_param(IS_TIM_DMA_CC_INSTANCE(htim->Instance));
 
-  if((htim->State == HAL_TIM_STATE_BUSY))
+  /* Set the TIM channel state */
+  if ((channel_state == HAL_TIM_CHANNEL_STATE_BUSY)
+      || (complementary_channel_state == HAL_TIM_CHANNEL_STATE_BUSY))
   {
     return HAL_BUSY;
   }
-  else if((htim->State == HAL_TIM_STATE_READY))
+  else if ((channel_state == HAL_TIM_CHANNEL_STATE_READY)
+           && (complementary_channel_state == HAL_TIM_CHANNEL_STATE_READY))
   {
-    if((pData == NULL ) && (Length > 0U))
+    if ((pData == NULL) && (Length > 0U))
     {
       return HAL_ERROR;
     }
     else
     {
-      htim->State = HAL_TIM_STATE_BUSY;
+      TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_BUSY);
+      TIM_CHANNEL_N_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_BUSY);
     }
   }
   else
   {
-    /* nothing to do */
+    return HAL_ERROR;
   }
 
   switch (Channel)
@@ -2111,6 +2355,7 @@ HAL_StatusTypeDef HAL_TIM_IC_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
       /* Enable the DMA channel */
       if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC1], (uint32_t)&htim->Instance->CCR1, (uint32_t)pData, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       /* Enable the TIM Capture/Compare 1 DMA request */
@@ -2130,6 +2375,7 @@ HAL_StatusTypeDef HAL_TIM_IC_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
       /* Enable the DMA channel */
       if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC2], (uint32_t)&htim->Instance->CCR2, (uint32_t)pData, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       /* Enable the TIM Capture/Compare 2  DMA request */
@@ -2149,6 +2395,7 @@ HAL_StatusTypeDef HAL_TIM_IC_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
       /* Enable the DMA channel */
       if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC3], (uint32_t)&htim->Instance->CCR3, (uint32_t)pData, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       /* Enable the TIM Capture/Compare 3  DMA request */
@@ -2168,6 +2415,7 @@ HAL_StatusTypeDef HAL_TIM_IC_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
       /* Enable the DMA channel */
       if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC4], (uint32_t)&htim->Instance->CCR4, (uint32_t)pData, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       /* Enable the TIM Capture/Compare 4  DMA request */
@@ -2183,10 +2431,17 @@ HAL_StatusTypeDef HAL_TIM_IC_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
   TIM_CCxChannelCmd(htim->Instance, Channel, TIM_CCx_ENABLE);
 
   /* Enable the Peripheral, except in trigger mode where enable is automatically done with trigger */
-  tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
-  if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+  if (IS_TIM_SLAVE_INSTANCE(htim->Instance))
   {
-  __HAL_TIM_ENABLE(htim);
+    tmpsmcr = htim->Instance->SMCR & TIM_SMCR_SMS;
+    if (!IS_TIM_SLAVEMODE_TRIGGER_ENABLED(tmpsmcr))
+    {
+      __HAL_TIM_ENABLE(htim);
+    }
+  }
+  else
+  {
+    __HAL_TIM_ENABLE(htim);
   }
 
   /* Return function status */
@@ -2209,6 +2464,9 @@ HAL_StatusTypeDef HAL_TIM_IC_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel)
   /* Check the parameters */
   assert_param(IS_TIM_CCX_INSTANCE(htim->Instance, Channel));
   assert_param(IS_TIM_DMA_CC_INSTANCE(htim->Instance));
+
+  /* Disable the Input Capture channel */
+  TIM_CCxChannelCmd(htim->Instance, Channel, TIM_CCx_DISABLE);
 
   switch (Channel)
   {
@@ -2248,14 +2506,12 @@ HAL_StatusTypeDef HAL_TIM_IC_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel)
       break;
   }
 
-  /* Disable the Input Capture channel */
-  TIM_CCxChannelCmd(htim->Instance, Channel, TIM_CCx_DISABLE);
-
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
 
-  /* Change the htim state */
-  htim->State = HAL_TIM_STATE_READY;
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_N_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
 
   /* Return function status */
   return HAL_OK;
@@ -2264,9 +2520,9 @@ HAL_StatusTypeDef HAL_TIM_IC_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel)
   * @}
   */
 
-/** @defgroup TIM_Exported_Functions_Group5 Time One Pulse functions
- *  @brief    TIM One Pulse functions
- *
+/** @defgroup TIM_Exported_Functions_Group5 TIM One Pulse functions
+  *  @brief    TIM One Pulse functions
+  *
 @verbatim
   ==============================================================================
                         ##### TIM One Pulse functions #####
@@ -2292,7 +2548,10 @@ HAL_StatusTypeDef HAL_TIM_IC_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel)
   *         requires a timer reset to avoid unexpected direction
   *         due to DIR bit readonly in center aligned mode.
   *         Ex: call @ref HAL_TIM_OnePulse_DeInit() before HAL_TIM_OnePulse_Init()
-  * @param  htim TIM OnePulse handle
+  * @note   When the timer instance is initialized in One Pulse mode, timer
+  *         channels 1 and channel 2 are reserved and cannot be used for other
+  *         purpose.
+  * @param  htim TIM One Pulse handle
   * @param  OnePulseMode Select the One pulse mode.
   *         This parameter can be one of the following values:
   *            @arg TIM_OPMODE_SINGLE: Only one pulse will be generated.
@@ -2302,7 +2561,7 @@ HAL_StatusTypeDef HAL_TIM_IC_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel)
 HAL_StatusTypeDef HAL_TIM_OnePulse_Init(TIM_HandleTypeDef *htim, uint32_t OnePulseMode)
 {
   /* Check the TIM handle allocation */
-  if(htim == NULL)
+  if (htim == NULL)
   {
     return HAL_ERROR;
   }
@@ -2314,7 +2573,7 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_Init(TIM_HandleTypeDef *htim, uint32_t OnePul
   assert_param(IS_TIM_OPM_MODE(OnePulseMode));
   assert_param(IS_TIM_AUTORELOAD_PRELOAD(htim->Init.AutoReloadPreload));
 
-  if(htim->State == HAL_TIM_STATE_RESET)
+  if (htim->State == HAL_TIM_STATE_RESET)
   {
     /* Allocate lock resource and initialize it */
     htim->Lock = HAL_UNLOCKED;
@@ -2323,7 +2582,7 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_Init(TIM_HandleTypeDef *htim, uint32_t OnePul
     /* Reset interrupt callbacks to legacy weak callbacks */
     TIM_ResetCallback(htim);
 
-    if(htim->OnePulse_MspInitCallback == NULL)
+    if (htim->OnePulse_MspInitCallback == NULL)
     {
       htim->OnePulse_MspInitCallback = HAL_TIM_OnePulse_MspInit;
     }
@@ -2336,7 +2595,7 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_Init(TIM_HandleTypeDef *htim, uint32_t OnePul
   }
 
   /* Set the TIM state */
-  htim->State= HAL_TIM_STATE_BUSY;
+  htim->State = HAL_TIM_STATE_BUSY;
 
   /* Configure the Time base in the One Pulse Mode */
   TIM_Base_SetConfig(htim->Instance, &htim->Init);
@@ -2347,8 +2606,17 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_Init(TIM_HandleTypeDef *htim, uint32_t OnePul
   /* Configure the OPM Mode */
   htim->Instance->CR1 |= OnePulseMode;
 
+  /* Initialize the DMA burst operation state */
+  htim->DMABurstState = HAL_DMA_BURST_STATE_READY;
+
+  /* Initialize the TIM channels state */
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+
   /* Initialize the TIM state*/
-  htim->State= HAL_TIM_STATE_READY;
+  htim->State = HAL_TIM_STATE_READY;
 
   return HAL_OK;
 }
@@ -2369,7 +2637,7 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_DeInit(TIM_HandleTypeDef *htim)
   __HAL_TIM_DISABLE(htim);
 
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
-  if(htim->OnePulse_MspDeInitCallback == NULL)
+  if (htim->OnePulse_MspDeInitCallback == NULL)
   {
     htim->OnePulse_MspDeInitCallback = HAL_TIM_OnePulse_MspDeInit;
   }
@@ -2379,6 +2647,15 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_DeInit(TIM_HandleTypeDef *htim)
   /* DeInit the low level hardware: GPIO, CLOCK, NVIC */
   HAL_TIM_OnePulse_MspDeInit(htim);
 #endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
+
+  /* Change the DMA burst operation state */
+  htim->DMABurstState = HAL_DMA_BURST_STATE_RESET;
+
+  /* Set the TIM channel state */
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_RESET);
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_RESET);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_RESET);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_RESET);
 
   /* Change TIM state */
   htim->State = HAL_TIM_STATE_RESET;
@@ -2430,8 +2707,28 @@ __weak void HAL_TIM_OnePulse_MspDeInit(TIM_HandleTypeDef *htim)
   */
 HAL_StatusTypeDef HAL_TIM_OnePulse_Start(TIM_HandleTypeDef *htim, uint32_t OutputChannel)
 {
+  HAL_TIM_ChannelStateTypeDef channel_1_state = TIM_CHANNEL_STATE_GET(htim, TIM_CHANNEL_1);
+  HAL_TIM_ChannelStateTypeDef channel_2_state = TIM_CHANNEL_STATE_GET(htim, TIM_CHANNEL_2);
+  HAL_TIM_ChannelStateTypeDef complementary_channel_1_state = TIM_CHANNEL_N_STATE_GET(htim, TIM_CHANNEL_1);
+  HAL_TIM_ChannelStateTypeDef complementary_channel_2_state = TIM_CHANNEL_N_STATE_GET(htim, TIM_CHANNEL_2);
+
   /* Prevent unused argument(s) compilation warning */
   UNUSED(OutputChannel);
+
+  /* Check the TIM channels state */
+  if ((channel_1_state != HAL_TIM_CHANNEL_STATE_READY)
+      || (channel_2_state != HAL_TIM_CHANNEL_STATE_READY)
+      || (complementary_channel_1_state != HAL_TIM_CHANNEL_STATE_READY)
+      || (complementary_channel_2_state != HAL_TIM_CHANNEL_STATE_READY))
+  {
+    return HAL_ERROR;
+  }
+
+  /* Set the TIM channels state */
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
 
   /* Enable the Capture compare and the Input Capture channels
     (in the OPM Mode the two possible channels that can be used are TIM_CHANNEL_1 and TIM_CHANNEL_2)
@@ -2445,7 +2742,7 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_Start(TIM_HandleTypeDef *htim, uint32_t Outpu
   TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_1, TIM_CCx_ENABLE);
   TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_2, TIM_CCx_ENABLE);
 
-  if(IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
+  if (IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
   {
     /* Enable the main output */
     __HAL_TIM_MOE_ENABLE(htim);
@@ -2478,7 +2775,7 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_Stop(TIM_HandleTypeDef *htim, uint32_t Output
   TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_1, TIM_CCx_DISABLE);
   TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_2, TIM_CCx_DISABLE);
 
-  if(IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
+  if (IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
   {
     /* Disable the Main Output */
     __HAL_TIM_MOE_DISABLE(htim);
@@ -2486,6 +2783,12 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_Stop(TIM_HandleTypeDef *htim, uint32_t Output
 
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
+
+  /* Set the TIM channels state */
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
 
   /* Return function status */
   return HAL_OK;
@@ -2502,8 +2805,28 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_Stop(TIM_HandleTypeDef *htim, uint32_t Output
   */
 HAL_StatusTypeDef HAL_TIM_OnePulse_Start_IT(TIM_HandleTypeDef *htim, uint32_t OutputChannel)
 {
+  HAL_TIM_ChannelStateTypeDef channel_1_state = TIM_CHANNEL_STATE_GET(htim, TIM_CHANNEL_1);
+  HAL_TIM_ChannelStateTypeDef channel_2_state = TIM_CHANNEL_STATE_GET(htim, TIM_CHANNEL_2);
+  HAL_TIM_ChannelStateTypeDef complementary_channel_1_state = TIM_CHANNEL_N_STATE_GET(htim, TIM_CHANNEL_1);
+  HAL_TIM_ChannelStateTypeDef complementary_channel_2_state = TIM_CHANNEL_N_STATE_GET(htim, TIM_CHANNEL_2);
+
   /* Prevent unused argument(s) compilation warning */
   UNUSED(OutputChannel);
+
+  /* Check the TIM channels state */
+  if ((channel_1_state != HAL_TIM_CHANNEL_STATE_READY)
+      || (channel_2_state != HAL_TIM_CHANNEL_STATE_READY)
+      || (complementary_channel_1_state != HAL_TIM_CHANNEL_STATE_READY)
+      || (complementary_channel_2_state != HAL_TIM_CHANNEL_STATE_READY))
+  {
+    return HAL_ERROR;
+  }
+
+  /* Set the TIM channels state */
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
 
   /* Enable the Capture compare and the Input Capture channels
     (in the OPM Mode the two possible channels that can be used are TIM_CHANNEL_1 and TIM_CHANNEL_2)
@@ -2523,7 +2846,7 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_Start_IT(TIM_HandleTypeDef *htim, uint32_t Ou
   TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_1, TIM_CCx_ENABLE);
   TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_2, TIM_CCx_ENABLE);
 
-  if(IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
+  if (IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
   {
     /* Enable the main output */
     __HAL_TIM_MOE_ENABLE(htim);
@@ -2561,7 +2884,7 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Out
   TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_1, TIM_CCx_DISABLE);
   TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_2, TIM_CCx_DISABLE);
 
-  if(IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
+  if (IS_TIM_BREAK_INSTANCE(htim->Instance) != RESET)
   {
     /* Disable the Main Output */
     __HAL_TIM_MOE_DISABLE(htim);
@@ -2569,6 +2892,12 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Out
 
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
+
+  /* Set the TIM channels state */
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
 
   /* Return function status */
   return HAL_OK;
@@ -2578,9 +2907,9 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Out
   * @}
   */
 
-/** @defgroup TIM_Exported_Functions_Group6 Time Encoder functions
- *  @brief    Time Encoder functions
- *
+/** @defgroup TIM_Exported_Functions_Group6 TIM Encoder functions
+  *  @brief    TIM Encoder functions
+  *
 @verbatim
   ==============================================================================
                           ##### TIM Encoder functions #####
@@ -2608,38 +2937,41 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Out
   * @note   Encoder mode and External clock mode 2 are not compatible and must not be selected together
   *         Ex: A call for @ref HAL_TIM_Encoder_Init will erase the settings of @ref HAL_TIM_ConfigClockSource
   *         using TIM_CLOCKSOURCE_ETRMODE2 and vice versa
+  * @note   When the timer instance is initialized in Encoder mode, timer
+  *         channels 1 and channel 2 are reserved and cannot be used for other
+  *         purpose.
   * @param  htim TIM Encoder Interface handle
   * @param  sConfig TIM Encoder Interface configuration structure
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_TIM_Encoder_Init(TIM_HandleTypeDef *htim,  TIM_Encoder_InitTypeDef* sConfig)
+HAL_StatusTypeDef HAL_TIM_Encoder_Init(TIM_HandleTypeDef *htim,  TIM_Encoder_InitTypeDef *sConfig)
 {
   uint32_t tmpsmcr;
   uint32_t tmpccmr1;
   uint32_t tmpccer;
 
   /* Check the TIM handle allocation */
-  if(htim == NULL)
+  if (htim == NULL)
   {
     return HAL_ERROR;
   }
 
   /* Check the parameters */
+  assert_param(IS_TIM_ENCODER_INTERFACE_INSTANCE(htim->Instance));
   assert_param(IS_TIM_COUNTER_MODE(htim->Init.CounterMode));
   assert_param(IS_TIM_CLOCKDIVISION_DIV(htim->Init.ClockDivision));
   assert_param(IS_TIM_AUTORELOAD_PRELOAD(htim->Init.AutoReloadPreload));
-  assert_param(IS_TIM_CC2_INSTANCE(htim->Instance));
   assert_param(IS_TIM_ENCODER_MODE(sConfig->EncoderMode));
   assert_param(IS_TIM_IC_SELECTION(sConfig->IC1Selection));
   assert_param(IS_TIM_IC_SELECTION(sConfig->IC2Selection));
-  assert_param(IS_TIM_IC_POLARITY(sConfig->IC1Polarity));
-  assert_param(IS_TIM_IC_POLARITY(sConfig->IC2Polarity));
+  assert_param(IS_TIM_ENCODERINPUT_POLARITY(sConfig->IC1Polarity));
+  assert_param(IS_TIM_ENCODERINPUT_POLARITY(sConfig->IC2Polarity));
   assert_param(IS_TIM_IC_PRESCALER(sConfig->IC1Prescaler));
   assert_param(IS_TIM_IC_PRESCALER(sConfig->IC2Prescaler));
   assert_param(IS_TIM_IC_FILTER(sConfig->IC1Filter));
   assert_param(IS_TIM_IC_FILTER(sConfig->IC2Filter));
 
-  if(htim->State == HAL_TIM_STATE_RESET)
+  if (htim->State == HAL_TIM_STATE_RESET)
   {
     /* Allocate lock resource and initialize it */
     htim->Lock = HAL_UNLOCKED;
@@ -2648,7 +2980,7 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Init(TIM_HandleTypeDef *htim,  TIM_Encoder_Ini
     /* Reset interrupt callbacks to legacy weak callbacks */
     TIM_ResetCallback(htim);
 
-    if(htim->Encoder_MspInitCallback == NULL)
+    if (htim->Encoder_MspInitCallback == NULL)
     {
       htim->Encoder_MspInitCallback = HAL_TIM_Encoder_MspInit;
     }
@@ -2661,7 +2993,7 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Init(TIM_HandleTypeDef *htim,  TIM_Encoder_Ini
   }
 
   /* Set the TIM state */
-  htim->State= HAL_TIM_STATE_BUSY;
+  htim->State = HAL_TIM_STATE_BUSY;
 
   /* Reset the SMS and ECE bits */
   htim->Instance->SMCR &= ~(TIM_SMCR_SMS | TIM_SMCR_ECE);
@@ -2705,8 +3037,17 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Init(TIM_HandleTypeDef *htim,  TIM_Encoder_Ini
   /* Write to TIMx CCER */
   htim->Instance->CCER = tmpccer;
 
+  /* Initialize the DMA burst operation state */
+  htim->DMABurstState = HAL_DMA_BURST_STATE_READY;
+
+  /* Set the TIM channels state */
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+
   /* Initialize the TIM state*/
-  htim->State= HAL_TIM_STATE_READY;
+  htim->State = HAL_TIM_STATE_READY;
 
   return HAL_OK;
 }
@@ -2728,7 +3069,7 @@ HAL_StatusTypeDef HAL_TIM_Encoder_DeInit(TIM_HandleTypeDef *htim)
   __HAL_TIM_DISABLE(htim);
 
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
-  if(htim->Encoder_MspDeInitCallback == NULL)
+  if (htim->Encoder_MspDeInitCallback == NULL)
   {
     htim->Encoder_MspDeInitCallback = HAL_TIM_Encoder_MspDeInit;
   }
@@ -2738,6 +3079,15 @@ HAL_StatusTypeDef HAL_TIM_Encoder_DeInit(TIM_HandleTypeDef *htim)
   /* DeInit the low level hardware: GPIO, CLOCK, NVIC */
   HAL_TIM_Encoder_MspDeInit(htim);
 #endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
+
+  /* Change the DMA burst operation state */
+  htim->DMABurstState = HAL_DMA_BURST_STATE_RESET;
+
+  /* Set the TIM channels state */
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_RESET);
+  TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_RESET);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_RESET);
+  TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_RESET);
 
   /* Change TIM state */
   htim->State = HAL_TIM_STATE_RESET;
@@ -2790,8 +3140,58 @@ __weak void HAL_TIM_Encoder_MspDeInit(TIM_HandleTypeDef *htim)
   */
 HAL_StatusTypeDef HAL_TIM_Encoder_Start(TIM_HandleTypeDef *htim, uint32_t Channel)
 {
+  HAL_TIM_ChannelStateTypeDef channel_1_state = TIM_CHANNEL_STATE_GET(htim, TIM_CHANNEL_1);
+  HAL_TIM_ChannelStateTypeDef channel_2_state = TIM_CHANNEL_STATE_GET(htim, TIM_CHANNEL_2);
+  HAL_TIM_ChannelStateTypeDef complementary_channel_1_state = TIM_CHANNEL_N_STATE_GET(htim, TIM_CHANNEL_1);
+  HAL_TIM_ChannelStateTypeDef complementary_channel_2_state = TIM_CHANNEL_N_STATE_GET(htim, TIM_CHANNEL_2);
+
   /* Check the parameters */
-  assert_param(IS_TIM_CC2_INSTANCE(htim->Instance));
+  assert_param(IS_TIM_ENCODER_INTERFACE_INSTANCE(htim->Instance));
+
+  /* Set the TIM channel(s) state */
+  if (Channel == TIM_CHANNEL_1)
+  {
+    if ((channel_1_state != HAL_TIM_CHANNEL_STATE_READY)
+        || (complementary_channel_1_state != HAL_TIM_CHANNEL_STATE_READY))
+    {
+      return HAL_ERROR;
+    }
+    else
+    {
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+      TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+    }
+  }
+  else if (Channel == TIM_CHANNEL_2)
+  {
+    if ((channel_2_state != HAL_TIM_CHANNEL_STATE_READY)
+        || (complementary_channel_2_state != HAL_TIM_CHANNEL_STATE_READY))
+    {
+      return HAL_ERROR;
+    }
+    else
+    {
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
+      TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
+    }
+  }
+  else
+  {
+    if ((channel_1_state != HAL_TIM_CHANNEL_STATE_READY)
+        || (channel_2_state != HAL_TIM_CHANNEL_STATE_READY)
+        || (complementary_channel_1_state != HAL_TIM_CHANNEL_STATE_READY)
+        || (complementary_channel_2_state != HAL_TIM_CHANNEL_STATE_READY))
+    {
+      return HAL_ERROR;
+    }
+    else
+    {
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
+      TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+      TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
+    }
+  }
 
   /* Enable the encoder interface channels */
   switch (Channel)
@@ -2807,7 +3207,7 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Start(TIM_HandleTypeDef *htim, uint32_t Channe
       TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_2, TIM_CCx_ENABLE);
       break;
     }
-    
+
     default :
     {
       TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_1, TIM_CCx_ENABLE);
@@ -2835,7 +3235,7 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Start(TIM_HandleTypeDef *htim, uint32_t Channe
 HAL_StatusTypeDef HAL_TIM_Encoder_Stop(TIM_HandleTypeDef *htim, uint32_t Channel)
 {
   /* Check the parameters */
-  assert_param(IS_TIM_CC2_INSTANCE(htim->Instance));
+  assert_param(IS_TIM_ENCODER_INTERFACE_INSTANCE(htim->Instance));
 
   /* Disable the Input Capture channels 1 and 2
     (in the EncoderInterface the two possible channels that can be used are TIM_CHANNEL_1 and TIM_CHANNEL_2) */
@@ -2846,13 +3246,13 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Stop(TIM_HandleTypeDef *htim, uint32_t Channel
       TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_1, TIM_CCx_DISABLE);
       break;
     }
-    
+
     case TIM_CHANNEL_2:
     {
       TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_2, TIM_CCx_DISABLE);
       break;
     }
-    
+
     default :
     {
       TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_1, TIM_CCx_DISABLE);
@@ -2863,6 +3263,20 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Stop(TIM_HandleTypeDef *htim, uint32_t Channel
 
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
+
+  /* Set the TIM channel(s) state */
+  if ((Channel == TIM_CHANNEL_1) || (Channel == TIM_CHANNEL_2))
+  {
+    TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
+    TIM_CHANNEL_N_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
+  }
+  else
+  {
+    TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+    TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+    TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+    TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+  }
 
   /* Return function status */
   return HAL_OK;
@@ -2880,8 +3294,58 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Stop(TIM_HandleTypeDef *htim, uint32_t Channel
   */
 HAL_StatusTypeDef HAL_TIM_Encoder_Start_IT(TIM_HandleTypeDef *htim, uint32_t Channel)
 {
+  HAL_TIM_ChannelStateTypeDef channel_1_state = TIM_CHANNEL_STATE_GET(htim, TIM_CHANNEL_1);
+  HAL_TIM_ChannelStateTypeDef channel_2_state = TIM_CHANNEL_STATE_GET(htim, TIM_CHANNEL_2);
+  HAL_TIM_ChannelStateTypeDef complementary_channel_1_state = TIM_CHANNEL_N_STATE_GET(htim, TIM_CHANNEL_1);
+  HAL_TIM_ChannelStateTypeDef complementary_channel_2_state = TIM_CHANNEL_N_STATE_GET(htim, TIM_CHANNEL_2);
+
   /* Check the parameters */
-  assert_param(IS_TIM_CC2_INSTANCE(htim->Instance));
+  assert_param(IS_TIM_ENCODER_INTERFACE_INSTANCE(htim->Instance));
+
+  /* Set the TIM channel(s) state */
+  if (Channel == TIM_CHANNEL_1)
+  {
+    if ((channel_1_state != HAL_TIM_CHANNEL_STATE_READY)
+        || (complementary_channel_1_state != HAL_TIM_CHANNEL_STATE_READY))
+    {
+      return HAL_ERROR;
+    }
+    else
+    {
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+      TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+    }
+  }
+  else if (Channel == TIM_CHANNEL_2)
+  {
+    if ((channel_2_state != HAL_TIM_CHANNEL_STATE_READY)
+        || (complementary_channel_2_state != HAL_TIM_CHANNEL_STATE_READY))
+    {
+      return HAL_ERROR;
+    }
+    else
+    {
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
+      TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
+    }
+  }
+  else
+  {
+    if ((channel_1_state != HAL_TIM_CHANNEL_STATE_READY)
+        || (channel_2_state != HAL_TIM_CHANNEL_STATE_READY)
+        || (complementary_channel_1_state != HAL_TIM_CHANNEL_STATE_READY)
+        || (complementary_channel_2_state != HAL_TIM_CHANNEL_STATE_READY))
+    {
+      return HAL_ERROR;
+    }
+    else
+    {
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
+      TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+      TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
+    }
+  }
 
   /* Enable the encoder interface channels */
   /* Enable the capture compare Interrupts 1 and/or 2 */
@@ -2893,14 +3357,14 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Start_IT(TIM_HandleTypeDef *htim, uint32_t Cha
       __HAL_TIM_ENABLE_IT(htim, TIM_IT_CC1);
       break;
     }
-    
+
     case TIM_CHANNEL_2:
     {
       TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_2, TIM_CCx_ENABLE);
       __HAL_TIM_ENABLE_IT(htim, TIM_IT_CC2);
       break;
     }
-    
+
     default :
     {
       TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_1, TIM_CCx_ENABLE);
@@ -2931,18 +3395,18 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Start_IT(TIM_HandleTypeDef *htim, uint32_t Cha
 HAL_StatusTypeDef HAL_TIM_Encoder_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Channel)
 {
   /* Check the parameters */
-  assert_param(IS_TIM_CC2_INSTANCE(htim->Instance));
+  assert_param(IS_TIM_ENCODER_INTERFACE_INSTANCE(htim->Instance));
 
   /* Disable the Input Capture channels 1 and 2
     (in the EncoderInterface the two possible channels that can be used are TIM_CHANNEL_1 and TIM_CHANNEL_2) */
-  if(Channel == TIM_CHANNEL_1)
+  if (Channel == TIM_CHANNEL_1)
   {
     TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_1, TIM_CCx_DISABLE);
 
     /* Disable the capture compare Interrupts 1 */
     __HAL_TIM_DISABLE_IT(htim, TIM_IT_CC1);
   }
-  else if(Channel == TIM_CHANNEL_2)
+  else if (Channel == TIM_CHANNEL_2)
   {
     TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_2, TIM_CCx_DISABLE);
 
@@ -2962,8 +3426,19 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Chan
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
 
-  /* Change the htim state */
-  htim->State = HAL_TIM_STATE_READY;
+  /* Set the TIM channel(s) state */
+  if ((Channel == TIM_CHANNEL_1) || (Channel == TIM_CHANNEL_2))
+  {
+    TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
+    TIM_CHANNEL_N_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
+  }
+  else
+  {
+    TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+    TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+    TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+    TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+  }
 
   /* Return function status */
   return HAL_OK;
@@ -2982,29 +3457,98 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Chan
   * @param  Length The length of data to be transferred from TIM peripheral to memory.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_TIM_Encoder_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel, uint32_t *pData1, uint32_t *pData2, uint16_t Length)
+HAL_StatusTypeDef HAL_TIM_Encoder_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel, uint32_t *pData1,
+                                            uint32_t *pData2, uint16_t Length)
 {
-  /* Check the parameters */
-  assert_param(IS_TIM_DMA_CC_INSTANCE(htim->Instance));
+  HAL_TIM_ChannelStateTypeDef channel_1_state = TIM_CHANNEL_STATE_GET(htim, TIM_CHANNEL_1);
+  HAL_TIM_ChannelStateTypeDef channel_2_state = TIM_CHANNEL_STATE_GET(htim, TIM_CHANNEL_2);
+  HAL_TIM_ChannelStateTypeDef complementary_channel_1_state = TIM_CHANNEL_N_STATE_GET(htim, TIM_CHANNEL_1);
+  HAL_TIM_ChannelStateTypeDef complementary_channel_2_state = TIM_CHANNEL_N_STATE_GET(htim, TIM_CHANNEL_2);
 
-  if((htim->State == HAL_TIM_STATE_BUSY))
+  /* Check the parameters */
+  assert_param(IS_TIM_ENCODER_INTERFACE_INSTANCE(htim->Instance));
+
+  /* Set the TIM channel(s) state */
+  if (Channel == TIM_CHANNEL_1)
   {
-    return HAL_BUSY;
-  }
-  else if((htim->State == HAL_TIM_STATE_READY))
-  {
-    if((((pData1 == NULL) || (pData2 == NULL) )) && (Length > 0U))
+    if ((channel_1_state == HAL_TIM_CHANNEL_STATE_BUSY)
+        || (complementary_channel_1_state == HAL_TIM_CHANNEL_STATE_BUSY))
     {
-      return HAL_ERROR;
+      return HAL_BUSY;
+    }
+    else if ((channel_1_state == HAL_TIM_CHANNEL_STATE_READY)
+             && (complementary_channel_1_state == HAL_TIM_CHANNEL_STATE_READY))
+    {
+      if ((pData1 == NULL) && (Length > 0U))
+      {
+        return HAL_ERROR;
+      }
+      else
+      {
+        TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+        TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+      }
     }
     else
     {
-      htim->State = HAL_TIM_STATE_BUSY;
+      return HAL_ERROR;
+    }
+  }
+  else if (Channel == TIM_CHANNEL_2)
+  {
+    if ((channel_2_state == HAL_TIM_CHANNEL_STATE_BUSY)
+        || (complementary_channel_2_state == HAL_TIM_CHANNEL_STATE_BUSY))
+    {
+      return HAL_BUSY;
+    }
+    else if ((channel_2_state == HAL_TIM_CHANNEL_STATE_READY)
+             && (complementary_channel_2_state == HAL_TIM_CHANNEL_STATE_READY))
+    {
+      if ((pData2 == NULL) && (Length > 0U))
+      {
+        return HAL_ERROR;
+      }
+      else
+      {
+        TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
+        TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
+      }
+    }
+    else
+    {
+      return HAL_ERROR;
     }
   }
   else
   {
-    /* nothing to do */
+    if ((channel_1_state == HAL_TIM_CHANNEL_STATE_BUSY)
+        || (channel_2_state == HAL_TIM_CHANNEL_STATE_BUSY)
+        || (complementary_channel_1_state == HAL_TIM_CHANNEL_STATE_BUSY)
+        || (complementary_channel_2_state == HAL_TIM_CHANNEL_STATE_BUSY))
+    {
+      return HAL_BUSY;
+    }
+    else if ((channel_1_state == HAL_TIM_CHANNEL_STATE_READY)
+             && (channel_2_state == HAL_TIM_CHANNEL_STATE_READY)
+             && (complementary_channel_1_state == HAL_TIM_CHANNEL_STATE_READY)
+             && (complementary_channel_2_state == HAL_TIM_CHANNEL_STATE_READY))
+    {
+      if ((((pData1 == NULL) || (pData2 == NULL))) && (Length > 0U))
+      {
+        return HAL_ERROR;
+      }
+      else
+      {
+        TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+        TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
+        TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_BUSY);
+        TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_BUSY);
+      }
+    }
+    else
+    {
+      return HAL_ERROR;
+    }
   }
 
   switch (Channel)
@@ -3019,8 +3563,9 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Ch
       htim->hdma[TIM_DMA_ID_CC1]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC1], (uint32_t)&htim->Instance->CCR1, (uint32_t )pData1, Length) != HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC1], (uint32_t)&htim->Instance->CCR1, (uint32_t)pData1, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       /* Enable the TIM Input Capture DMA request */
@@ -3045,6 +3590,7 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Ch
       /* Enable the DMA channel */
       if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC2], (uint32_t)&htim->Instance->CCR2, (uint32_t)pData2, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       /* Enable the TIM Input Capture  DMA request */
@@ -3070,6 +3616,7 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Ch
       /* Enable the DMA channel */
       if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC1], (uint32_t)&htim->Instance->CCR1, (uint32_t)pData1, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
 
@@ -3083,6 +3630,7 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Ch
       /* Enable the DMA channel */
       if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC2], (uint32_t)&htim->Instance->CCR2, (uint32_t)pData2, Length) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       /* Enable the Peripheral */
@@ -3102,6 +3650,7 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Ch
     default:
       break;
   }
+
   /* Return function status */
   return HAL_OK;
 }
@@ -3119,11 +3668,11 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Ch
 HAL_StatusTypeDef HAL_TIM_Encoder_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel)
 {
   /* Check the parameters */
-  assert_param(IS_TIM_DMA_CC_INSTANCE(htim->Instance));
+  assert_param(IS_TIM_ENCODER_INTERFACE_INSTANCE(htim->Instance));
 
   /* Disable the Input Capture channels 1 and 2
     (in the EncoderInterface the two possible channels that can be used are TIM_CHANNEL_1 and TIM_CHANNEL_2) */
-  if(Channel == TIM_CHANNEL_1)
+  if (Channel == TIM_CHANNEL_1)
   {
     TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_1, TIM_CCx_DISABLE);
 
@@ -3131,7 +3680,7 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Cha
     __HAL_TIM_DISABLE_DMA(htim, TIM_DMA_CC1);
     (void)HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC1]);
   }
-  else if(Channel == TIM_CHANNEL_2)
+  else if (Channel == TIM_CHANNEL_2)
   {
     TIM_CCxChannelCmd(htim->Instance, TIM_CHANNEL_2, TIM_CCx_DISABLE);
 
@@ -3154,8 +3703,19 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Cha
   /* Disable the Peripheral */
   __HAL_TIM_DISABLE(htim);
 
-  /* Change the htim state */
-  htim->State = HAL_TIM_STATE_READY;
+  /* Set the TIM channel(s) state */
+  if ((Channel == TIM_CHANNEL_1) || (Channel == TIM_CHANNEL_2))
+  {
+    TIM_CHANNEL_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
+    TIM_CHANNEL_N_STATE_SET(htim, Channel, HAL_TIM_CHANNEL_STATE_READY);
+  }
+  else
+  {
+    TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+    TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+    TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+    TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+  }
 
   /* Return function status */
   return HAL_OK;
@@ -3165,8 +3725,8 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Cha
   * @}
   */
 /** @defgroup TIM_Exported_Functions_Group7 TIM IRQ handler management
- *  @brief    TIM IRQ handler management
- *
+  *  @brief    TIM IRQ handler management
+  *
 @verbatim
   ==============================================================================
                         ##### IRQ handler management #####
@@ -3185,16 +3745,16 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Cha
 void HAL_TIM_IRQHandler(TIM_HandleTypeDef *htim)
 {
   /* Capture compare 1 event */
-  if(__HAL_TIM_GET_FLAG(htim, TIM_FLAG_CC1) != RESET)
+  if (__HAL_TIM_GET_FLAG(htim, TIM_FLAG_CC1) != RESET)
   {
-    if(__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_CC1) != RESET)
+    if (__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_CC1) != RESET)
     {
       {
         __HAL_TIM_CLEAR_IT(htim, TIM_IT_CC1);
         htim->Channel = HAL_TIM_ACTIVE_CHANNEL_1;
 
         /* Input capture event */
-        if((htim->Instance->CCMR1 & TIM_CCMR1_CC1S) != 0x00U)
+        if ((htim->Instance->CCMR1 & TIM_CCMR1_CC1S) != 0x00U)
         {
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
           htim->IC_CaptureCallback(htim);
@@ -3218,14 +3778,14 @@ void HAL_TIM_IRQHandler(TIM_HandleTypeDef *htim)
     }
   }
   /* Capture compare 2 event */
-  if(__HAL_TIM_GET_FLAG(htim, TIM_FLAG_CC2) != RESET)
+  if (__HAL_TIM_GET_FLAG(htim, TIM_FLAG_CC2) != RESET)
   {
-    if(__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_CC2) != RESET)
+    if (__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_CC2) != RESET)
     {
       __HAL_TIM_CLEAR_IT(htim, TIM_IT_CC2);
       htim->Channel = HAL_TIM_ACTIVE_CHANNEL_2;
       /* Input capture event */
-      if((htim->Instance->CCMR1 & TIM_CCMR1_CC2S) != 0x00U)
+      if ((htim->Instance->CCMR1 & TIM_CCMR1_CC2S) != 0x00U)
       {
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
         htim->IC_CaptureCallback(htim);
@@ -3248,14 +3808,14 @@ void HAL_TIM_IRQHandler(TIM_HandleTypeDef *htim)
     }
   }
   /* Capture compare 3 event */
-  if(__HAL_TIM_GET_FLAG(htim, TIM_FLAG_CC3) != RESET)
+  if (__HAL_TIM_GET_FLAG(htim, TIM_FLAG_CC3) != RESET)
   {
-    if(__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_CC3) != RESET)
+    if (__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_CC3) != RESET)
     {
       __HAL_TIM_CLEAR_IT(htim, TIM_IT_CC3);
       htim->Channel = HAL_TIM_ACTIVE_CHANNEL_3;
       /* Input capture event */
-      if((htim->Instance->CCMR2 & TIM_CCMR2_CC3S) != 0x00U)
+      if ((htim->Instance->CCMR2 & TIM_CCMR2_CC3S) != 0x00U)
       {
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
         htim->IC_CaptureCallback(htim);
@@ -3278,14 +3838,14 @@ void HAL_TIM_IRQHandler(TIM_HandleTypeDef *htim)
     }
   }
   /* Capture compare 4 event */
-  if(__HAL_TIM_GET_FLAG(htim, TIM_FLAG_CC4) != RESET)
+  if (__HAL_TIM_GET_FLAG(htim, TIM_FLAG_CC4) != RESET)
   {
-    if(__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_CC4) != RESET)
+    if (__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_CC4) != RESET)
     {
       __HAL_TIM_CLEAR_IT(htim, TIM_IT_CC4);
       htim->Channel = HAL_TIM_ACTIVE_CHANNEL_4;
       /* Input capture event */
-      if((htim->Instance->CCMR2 & TIM_CCMR2_CC4S) != 0x00U)
+      if ((htim->Instance->CCMR2 & TIM_CCMR2_CC4S) != 0x00U)
       {
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
         htim->IC_CaptureCallback(htim);
@@ -3308,9 +3868,9 @@ void HAL_TIM_IRQHandler(TIM_HandleTypeDef *htim)
     }
   }
   /* TIM Update event */
-  if(__HAL_TIM_GET_FLAG(htim, TIM_FLAG_UPDATE) != RESET)
+  if (__HAL_TIM_GET_FLAG(htim, TIM_FLAG_UPDATE) != RESET)
   {
-    if(__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_UPDATE) != RESET)
+    if (__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_UPDATE) != RESET)
     {
       __HAL_TIM_CLEAR_IT(htim, TIM_IT_UPDATE);
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
@@ -3321,9 +3881,9 @@ void HAL_TIM_IRQHandler(TIM_HandleTypeDef *htim)
     }
   }
   /* TIM Break input event */
-  if(__HAL_TIM_GET_FLAG(htim, TIM_FLAG_BREAK) != RESET)
+  if (__HAL_TIM_GET_FLAG(htim, TIM_FLAG_BREAK) != RESET)
   {
-    if(__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_BREAK) != RESET)
+    if (__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_BREAK) != RESET)
     {
       __HAL_TIM_CLEAR_IT(htim, TIM_IT_BREAK);
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
@@ -3347,9 +3907,9 @@ void HAL_TIM_IRQHandler(TIM_HandleTypeDef *htim)
     }
   }
   /* TIM Trigger detection event */
-  if(__HAL_TIM_GET_FLAG(htim, TIM_FLAG_TRIGGER) != RESET)
+  if (__HAL_TIM_GET_FLAG(htim, TIM_FLAG_TRIGGER) != RESET)
   {
-    if(__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_TRIGGER) != RESET)
+    if (__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_TRIGGER) != RESET)
     {
       __HAL_TIM_CLEAR_IT(htim, TIM_IT_TRIGGER);
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
@@ -3360,9 +3920,9 @@ void HAL_TIM_IRQHandler(TIM_HandleTypeDef *htim)
     }
   }
   /* TIM commutation event */
-  if(__HAL_TIM_GET_FLAG(htim, TIM_FLAG_COM) != RESET)
+  if (__HAL_TIM_GET_FLAG(htim, TIM_FLAG_COM) != RESET)
   {
-    if(__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_COM) != RESET)
+    if (__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_COM) != RESET)
     {
       __HAL_TIM_CLEAR_IT(htim, TIM_FLAG_COM);
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
@@ -3378,9 +3938,9 @@ void HAL_TIM_IRQHandler(TIM_HandleTypeDef *htim)
   * @}
   */
 
-/** @defgroup TIM_Exported_Functions_Group8 Peripheral Control functions
- *  @brief    Peripheral Control functions
- *
+/** @defgroup TIM_Exported_Functions_Group8 TIM Peripheral Control functions
+  *  @brief    TIM Peripheral Control functions
+  *
 @verbatim
   ==============================================================================
                    ##### Peripheral Control functions #####
@@ -3413,7 +3973,7 @@ void HAL_TIM_IRQHandler(TIM_HandleTypeDef *htim)
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_TIM_OC_ConfigChannel(TIM_HandleTypeDef *htim,
-                                           TIM_OC_InitTypeDef* sConfig,
+                                           TIM_OC_InitTypeDef *sConfig,
                                            uint32_t Channel)
 {
   /* Check the parameters */
@@ -3423,8 +3983,6 @@ HAL_StatusTypeDef HAL_TIM_OC_ConfigChannel(TIM_HandleTypeDef *htim,
 
   /* Process Locked */
   __HAL_LOCK(htim);
-
-  htim->State = HAL_TIM_STATE_BUSY;
 
   switch (Channel)
   {
@@ -3492,8 +4050,6 @@ HAL_StatusTypeDef HAL_TIM_OC_ConfigChannel(TIM_HandleTypeDef *htim,
       break;
   }
 
-  htim->State = HAL_TIM_STATE_READY;
-
   __HAL_UNLOCK(htim);
 
   return HAL_OK;
@@ -3512,7 +4068,7 @@ HAL_StatusTypeDef HAL_TIM_OC_ConfigChannel(TIM_HandleTypeDef *htim,
   *            @arg TIM_CHANNEL_4: TIM Channel 4 selected
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_TIM_IC_ConfigChannel(TIM_HandleTypeDef *htim, TIM_IC_InitTypeDef* sConfig, uint32_t Channel)
+HAL_StatusTypeDef HAL_TIM_IC_ConfigChannel(TIM_HandleTypeDef *htim, TIM_IC_InitTypeDef *sConfig, uint32_t Channel)
 {
   /* Check the parameters */
   assert_param(IS_TIM_CC1_INSTANCE(htim->Instance));
@@ -3523,8 +4079,6 @@ HAL_StatusTypeDef HAL_TIM_IC_ConfigChannel(TIM_HandleTypeDef *htim, TIM_IC_InitT
 
   /* Process Locked */
   __HAL_LOCK(htim);
-
-  htim->State = HAL_TIM_STATE_BUSY;
 
   if (Channel == TIM_CHANNEL_1)
   {
@@ -3589,8 +4143,6 @@ HAL_StatusTypeDef HAL_TIM_IC_ConfigChannel(TIM_HandleTypeDef *htim, TIM_IC_InitT
     htim->Instance->CCMR2 |= (sConfig->ICPrescaler << 8U);
   }
 
-  htim->State = HAL_TIM_STATE_READY;
-
   __HAL_UNLOCK(htim);
 
   return HAL_OK;
@@ -3612,7 +4164,7 @@ HAL_StatusTypeDef HAL_TIM_IC_ConfigChannel(TIM_HandleTypeDef *htim, TIM_IC_InitT
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_TIM_PWM_ConfigChannel(TIM_HandleTypeDef *htim,
-                                            TIM_OC_InitTypeDef* sConfig,
+                                            TIM_OC_InitTypeDef *sConfig,
                                             uint32_t Channel)
 {
   /* Check the parameters */
@@ -3623,8 +4175,6 @@ HAL_StatusTypeDef HAL_TIM_PWM_ConfigChannel(TIM_HandleTypeDef *htim,
 
   /* Process Locked */
   __HAL_LOCK(htim);
-
-  htim->State = HAL_TIM_STATE_BUSY;
 
   switch (Channel)
   {
@@ -3734,8 +4284,6 @@ HAL_StatusTypeDef HAL_TIM_PWM_ConfigChannel(TIM_HandleTypeDef *htim,
       break;
   }
 
-  htim->State = HAL_TIM_STATE_READY;
-
   __HAL_UNLOCK(htim);
 
   return HAL_OK;
@@ -3754,9 +4302,14 @@ HAL_StatusTypeDef HAL_TIM_PWM_ConfigChannel(TIM_HandleTypeDef *htim,
   *          This parameter can be one of the following values:
   *            @arg TIM_CHANNEL_1: TIM Channel 1 selected
   *            @arg TIM_CHANNEL_2: TIM Channel 2 selected
+  * @note  To output a waveform with a minimum delay user can enable the fast
+  *        mode by calling the @ref __HAL_TIM_ENABLE_OCxFAST macro. Then CCx
+  *        output is forced in response to the edge detection on TIx input,
+  *        without taking in account the comparison.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_TIM_OnePulse_ConfigChannel(TIM_HandleTypeDef *htim,  TIM_OnePulse_InitTypeDef* sConfig, uint32_t OutputChannel,  uint32_t InputChannel)
+HAL_StatusTypeDef HAL_TIM_OnePulse_ConfigChannel(TIM_HandleTypeDef *htim,  TIM_OnePulse_InitTypeDef *sConfig,
+                                                 uint32_t OutputChannel,  uint32_t InputChannel)
 {
   TIM_OC_InitTypeDef temp1;
 
@@ -3764,7 +4317,7 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_ConfigChannel(TIM_HandleTypeDef *htim,  TIM_O
   assert_param(IS_TIM_OPM_CHANNELS(OutputChannel));
   assert_param(IS_TIM_OPM_CHANNELS(InputChannel));
 
-  if(OutputChannel != InputChannel)
+  if (OutputChannel != InputChannel)
   {
     /* Process Locked */
     __HAL_LOCK(htim);
@@ -3883,8 +4436,8 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_ConfigChannel(TIM_HandleTypeDef *htim,  TIM_O
   *            @arg TIM_DMABASE_CCMR3 
   *            @arg TIM_DMABASE_CCR5 
   *            @arg TIM_DMABASE_CCR6 
-  *            @arg TIM_DMABASE_AF1  
-  *            @arg TIM_DMABASE_AF2  
+  *            @arg TIM_DMABASE_AF1
+  *            @arg TIM_DMABASE_AF2
   *            @arg TIM_DMABASE_TISEL
   * @param  BurstRequestSrc TIM DMA Request sources
   *         This parameter can be one of the following values:
@@ -3901,35 +4454,90 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_ConfigChannel(TIM_HandleTypeDef *htim,  TIM_O
   * @note   This function should be used only when BurstLength is equal to DMA data transfer length.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStart(TIM_HandleTypeDef *htim, uint32_t BurstBaseAddress, uint32_t BurstRequestSrc,
-                                              uint32_t* BurstBuffer, uint32_t  BurstLength)
+HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStart(TIM_HandleTypeDef *htim, uint32_t BurstBaseAddress,
+                                              uint32_t BurstRequestSrc, uint32_t *BurstBuffer, uint32_t  BurstLength)
+{
+  return HAL_TIM_DMABurst_MultiWriteStart(htim, BurstBaseAddress, BurstRequestSrc, BurstBuffer, BurstLength,
+                                          ((BurstLength) >> 8U) + 1U);
+}
+
+/**
+  * @brief  Configure the DMA Burst to transfer multiple Data from the memory to the TIM peripheral
+  * @param  htim TIM handle
+  * @param  BurstBaseAddress TIM Base address from where the DMA will start the Data write
+  *         This parameter can be one of the following values:
+  *            @arg TIM_DMABASE_CR1
+  *            @arg TIM_DMABASE_CR2
+  *            @arg TIM_DMABASE_SMCR
+  *            @arg TIM_DMABASE_DIER
+  *            @arg TIM_DMABASE_SR
+  *            @arg TIM_DMABASE_EGR
+  *            @arg TIM_DMABASE_CCMR1
+  *            @arg TIM_DMABASE_CCMR2
+  *            @arg TIM_DMABASE_CCER
+  *            @arg TIM_DMABASE_CNT
+  *            @arg TIM_DMABASE_PSC
+  *            @arg TIM_DMABASE_ARR
+  *            @arg TIM_DMABASE_RCR
+  *            @arg TIM_DMABASE_CCR1
+  *            @arg TIM_DMABASE_CCR2
+  *            @arg TIM_DMABASE_CCR3
+  *            @arg TIM_DMABASE_CCR4
+  *            @arg TIM_DMABASE_BDTR
+  *            @arg TIM_DMABASE_OR1
+  *            @arg TIM_DMABASE_CCMR3 
+  *            @arg TIM_DMABASE_CCR5 
+  *            @arg TIM_DMABASE_CCR6 
+  *            @arg TIM_DMABASE_AF1
+  *            @arg TIM_DMABASE_AF2
+  *            @arg TIM_DMABASE_TISEL
+  * @param  BurstRequestSrc TIM DMA Request sources
+  *         This parameter can be one of the following values:
+  *            @arg TIM_DMA_UPDATE: TIM update Interrupt source
+  *            @arg TIM_DMA_CC1: TIM Capture Compare 1 DMA source
+  *            @arg TIM_DMA_CC2: TIM Capture Compare 2 DMA source
+  *            @arg TIM_DMA_CC3: TIM Capture Compare 3 DMA source
+  *            @arg TIM_DMA_CC4: TIM Capture Compare 4 DMA source
+  *            @arg TIM_DMA_COM: TIM Commutation DMA source
+  *            @arg TIM_DMA_TRIGGER: TIM Trigger DMA source
+  * @param  BurstBuffer The Buffer address.
+  * @param  BurstLength DMA Burst length. This parameter can be one value
+  *         between: TIM_DMABURSTLENGTH_1TRANSFER and TIM_DMABURSTLENGTH_18TRANSFERS.
+  * @param  DataLength Data length. This parameter can be one value
+  *         between 1 and 0xFFFF.
+  * @retval HAL status
+  */
+HAL_StatusTypeDef HAL_TIM_DMABurst_MultiWriteStart(TIM_HandleTypeDef *htim, uint32_t BurstBaseAddress,
+                                                   uint32_t BurstRequestSrc, uint32_t *BurstBuffer,
+                                                   uint32_t  BurstLength,  uint32_t  DataLength)
 {
   /* Check the parameters */
   assert_param(IS_TIM_DMABURST_INSTANCE(htim->Instance));
   assert_param(IS_TIM_DMA_BASE(BurstBaseAddress));
   assert_param(IS_TIM_DMA_SOURCE(BurstRequestSrc));
   assert_param(IS_TIM_DMA_LENGTH(BurstLength));
+  assert_param(IS_TIM_DMA_DATA_LENGTH(DataLength));
 
-  if((htim->State == HAL_TIM_STATE_BUSY))
+  if (htim->DMABurstState == HAL_DMA_BURST_STATE_BUSY)
   {
     return HAL_BUSY;
   }
-  else if((htim->State == HAL_TIM_STATE_READY))
+  else if (htim->DMABurstState == HAL_DMA_BURST_STATE_READY)
   {
-    if((BurstBuffer == NULL ) && (BurstLength > 0U))
+    if ((BurstBuffer == NULL) && (BurstLength > 0U))
     {
       return HAL_ERROR;
     }
     else
     {
-      htim->State = HAL_TIM_STATE_BUSY;
+      htim->DMABurstState = HAL_DMA_BURST_STATE_BUSY;
     }
   }
   else
   {
     /* nothing to do */
   }
-  switch(BurstRequestSrc)
+  switch (BurstRequestSrc)
   {
     case TIM_DMA_UPDATE:
     {
@@ -3941,8 +4549,10 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStart(TIM_HandleTypeDef *htim, uint32_t 
       htim->hdma[TIM_DMA_ID_UPDATE]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_UPDATE], (uint32_t)BurstBuffer, (uint32_t)&htim->Instance->DMAR, ((BurstLength) >> 8U) + 1U) != HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_UPDATE], (uint32_t)BurstBuffer,
+                         (uint32_t)&htim->Instance->DMAR, DataLength) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       break;
@@ -3950,15 +4560,17 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStart(TIM_HandleTypeDef *htim, uint32_t 
     case TIM_DMA_CC1:
     {
       /* Set the DMA compare callbacks */
-      htim->hdma[TIM_DMA_ID_CC1]->XferCpltCallback =  TIM_DMADelayPulseCplt;
+      htim->hdma[TIM_DMA_ID_CC1]->XferCpltCallback = TIM_DMADelayPulseCplt;
       htim->hdma[TIM_DMA_ID_CC1]->XferHalfCpltCallback = TIM_DMADelayPulseHalfCplt;
 
       /* Set the DMA error callback */
       htim->hdma[TIM_DMA_ID_CC1]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC1], (uint32_t)BurstBuffer, (uint32_t)&htim->Instance->DMAR, ((BurstLength) >> 8U) + 1U) != HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC1], (uint32_t)BurstBuffer,
+                         (uint32_t)&htim->Instance->DMAR, DataLength) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       break;
@@ -3966,15 +4578,17 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStart(TIM_HandleTypeDef *htim, uint32_t 
     case TIM_DMA_CC2:
     {
       /* Set the DMA compare callbacks */
-      htim->hdma[TIM_DMA_ID_CC2]->XferCpltCallback =  TIM_DMADelayPulseCplt;
+      htim->hdma[TIM_DMA_ID_CC2]->XferCpltCallback = TIM_DMADelayPulseCplt;
       htim->hdma[TIM_DMA_ID_CC2]->XferHalfCpltCallback = TIM_DMADelayPulseHalfCplt;
 
       /* Set the DMA error callback */
       htim->hdma[TIM_DMA_ID_CC2]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC2], (uint32_t)BurstBuffer, (uint32_t)&htim->Instance->DMAR, ((BurstLength) >> 8U) + 1U) != HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC2], (uint32_t)BurstBuffer,
+                         (uint32_t)&htim->Instance->DMAR, DataLength) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       break;
@@ -3982,15 +4596,17 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStart(TIM_HandleTypeDef *htim, uint32_t 
     case TIM_DMA_CC3:
     {
       /* Set the DMA compare callbacks */
-      htim->hdma[TIM_DMA_ID_CC3]->XferCpltCallback =  TIM_DMADelayPulseCplt;
+      htim->hdma[TIM_DMA_ID_CC3]->XferCpltCallback = TIM_DMADelayPulseCplt;
       htim->hdma[TIM_DMA_ID_CC3]->XferHalfCpltCallback = TIM_DMADelayPulseHalfCplt;
 
       /* Set the DMA error callback */
       htim->hdma[TIM_DMA_ID_CC3]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC3], (uint32_t)BurstBuffer, (uint32_t)&htim->Instance->DMAR, ((BurstLength) >> 8U) + 1U) != HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC3], (uint32_t)BurstBuffer,
+                         (uint32_t)&htim->Instance->DMAR, DataLength) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       break;
@@ -3998,15 +4614,17 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStart(TIM_HandleTypeDef *htim, uint32_t 
     case TIM_DMA_CC4:
     {
       /* Set the DMA compare callbacks */
-      htim->hdma[TIM_DMA_ID_CC4]->XferCpltCallback =  TIM_DMADelayPulseCplt;
+      htim->hdma[TIM_DMA_ID_CC4]->XferCpltCallback = TIM_DMADelayPulseCplt;
       htim->hdma[TIM_DMA_ID_CC4]->XferHalfCpltCallback = TIM_DMADelayPulseHalfCplt;
 
       /* Set the DMA error callback */
       htim->hdma[TIM_DMA_ID_CC4]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC4], (uint32_t)BurstBuffer, (uint32_t)&htim->Instance->DMAR, ((BurstLength) >> 8U) + 1U) != HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC4], (uint32_t)BurstBuffer,
+                         (uint32_t)&htim->Instance->DMAR, DataLength) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       break;
@@ -4021,8 +4639,10 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStart(TIM_HandleTypeDef *htim, uint32_t 
       htim->hdma[TIM_DMA_ID_COMMUTATION]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_COMMUTATION], (uint32_t)BurstBuffer, (uint32_t)&htim->Instance->DMAR, ((BurstLength) >> 8U) + 1U) != HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_COMMUTATION], (uint32_t)BurstBuffer,
+                         (uint32_t)&htim->Instance->DMAR, DataLength) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       break;
@@ -4037,8 +4657,10 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStart(TIM_HandleTypeDef *htim, uint32_t 
       htim->hdma[TIM_DMA_ID_TRIGGER]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_TRIGGER], (uint32_t)BurstBuffer, (uint32_t)&htim->Instance->DMAR, ((BurstLength) >> 8U) + 1U) != HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_TRIGGER], (uint32_t)BurstBuffer,
+                         (uint32_t)&htim->Instance->DMAR, DataLength) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       break;
@@ -4046,13 +4668,11 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStart(TIM_HandleTypeDef *htim, uint32_t 
     default:
       break;
   }
-  /* configure the DMA Burst Mode */
-  htim->Instance->DCR = (BurstBaseAddress | BurstLength);
 
+  /* Configure the DMA Burst Mode */
+  htim->Instance->DCR = (BurstBaseAddress | BurstLength);
   /* Enable the TIM DMA Request */
   __HAL_TIM_ENABLE_DMA(htim, BurstRequestSrc);
-
-  htim->State = HAL_TIM_STATE_READY;
 
   /* Return function status */
   return HAL_OK;
@@ -4066,60 +4686,59 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStart(TIM_HandleTypeDef *htim, uint32_t 
   */
 HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStop(TIM_HandleTypeDef *htim, uint32_t BurstRequestSrc)
 {
-  HAL_StatusTypeDef status = HAL_OK;
   /* Check the parameters */
   assert_param(IS_TIM_DMA_SOURCE(BurstRequestSrc));
 
   /* Abort the DMA transfer (at least disable the DMA channel) */
-  switch(BurstRequestSrc)
+  switch (BurstRequestSrc)
   {
     case TIM_DMA_UPDATE:
     {
-      status = HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_UPDATE]);
+      (void)HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_UPDATE]);
       break;
     }
     case TIM_DMA_CC1:
     {
-      status = HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC1]);
+      (void)HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC1]);
       break;
     }
     case TIM_DMA_CC2:
     {
-      status = HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC2]);
+      (void)HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC2]);
       break;
     }
     case TIM_DMA_CC3:
     {
-      status =  HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC3]);
+      (void)HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC3]);
       break;
     }
     case TIM_DMA_CC4:
     {
-      status = HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC4]);
+      (void)HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC4]);
       break;
     }
     case TIM_DMA_COM:
     {
-      status = HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_COMMUTATION]);
+      (void)HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_COMMUTATION]);
       break;
     }
     case TIM_DMA_TRIGGER:
     {
-      status = HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_TRIGGER]);
+      (void)HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_TRIGGER]);
       break;
     }
     default:
       break;
   }
 
-  if (HAL_OK == status)
-  {
   /* Disable the TIM Update DMA request */
   __HAL_TIM_DISABLE_DMA(htim, BurstRequestSrc);
-  }
+
+  /* Change the DMA burst operation state */
+  htim->DMABurstState = HAL_DMA_BURST_STATE_READY;
 
   /* Return function status */
-  return status;
+  return HAL_OK;
 }
 
 /**
@@ -4149,8 +4768,8 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStop(TIM_HandleTypeDef *htim, uint32_t B
   *            @arg TIM_DMABASE_CCMR3 
   *            @arg TIM_DMABASE_CCR5 
   *            @arg TIM_DMABASE_CCR6 
-  *            @arg TIM_DMABASE_AF1  
-  *            @arg TIM_DMABASE_AF2  
+  *            @arg TIM_DMABASE_AF1
+  *            @arg TIM_DMABASE_AF2
   *            @arg TIM_DMABASE_TISEL
   * @param  BurstRequestSrc TIM DMA Request sources
   *         This parameter can be one of the following values:
@@ -4167,35 +4786,90 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStop(TIM_HandleTypeDef *htim, uint32_t B
   * @note   This function should be used only when BurstLength is equal to DMA data transfer length.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_TIM_DMABurst_ReadStart(TIM_HandleTypeDef *htim, uint32_t BurstBaseAddress, uint32_t BurstRequestSrc,
-                                             uint32_t  *BurstBuffer, uint32_t  BurstLength)
+HAL_StatusTypeDef HAL_TIM_DMABurst_ReadStart(TIM_HandleTypeDef *htim, uint32_t BurstBaseAddress,
+                                             uint32_t BurstRequestSrc, uint32_t  *BurstBuffer, uint32_t  BurstLength)
+{
+  return HAL_TIM_DMABurst_MultiReadStart(htim, BurstBaseAddress, BurstRequestSrc, BurstBuffer, BurstLength,
+                                         ((BurstLength) >> 8U) + 1U);
+}
+
+/**
+  * @brief  Configure the DMA Burst to transfer Data from the TIM peripheral to the memory
+  * @param  htim TIM handle
+  * @param  BurstBaseAddress TIM Base address from where the DMA  will start the Data read
+  *         This parameter can be one of the following values:
+  *            @arg TIM_DMABASE_CR1
+  *            @arg TIM_DMABASE_CR2
+  *            @arg TIM_DMABASE_SMCR
+  *            @arg TIM_DMABASE_DIER
+  *            @arg TIM_DMABASE_SR
+  *            @arg TIM_DMABASE_EGR
+  *            @arg TIM_DMABASE_CCMR1
+  *            @arg TIM_DMABASE_CCMR2
+  *            @arg TIM_DMABASE_CCER
+  *            @arg TIM_DMABASE_CNT
+  *            @arg TIM_DMABASE_PSC
+  *            @arg TIM_DMABASE_ARR
+  *            @arg TIM_DMABASE_RCR
+  *            @arg TIM_DMABASE_CCR1
+  *            @arg TIM_DMABASE_CCR2
+  *            @arg TIM_DMABASE_CCR3
+  *            @arg TIM_DMABASE_CCR4
+  *            @arg TIM_DMABASE_BDTR
+  *            @arg TIM_DMABASE_OR1
+  *            @arg TIM_DMABASE_CCMR3 
+  *            @arg TIM_DMABASE_CCR5 
+  *            @arg TIM_DMABASE_CCR6 
+  *            @arg TIM_DMABASE_AF1
+  *            @arg TIM_DMABASE_AF2
+  *            @arg TIM_DMABASE_TISEL
+  * @param  BurstRequestSrc TIM DMA Request sources
+  *         This parameter can be one of the following values:
+  *            @arg TIM_DMA_UPDATE: TIM update Interrupt source
+  *            @arg TIM_DMA_CC1: TIM Capture Compare 1 DMA source
+  *            @arg TIM_DMA_CC2: TIM Capture Compare 2 DMA source
+  *            @arg TIM_DMA_CC3: TIM Capture Compare 3 DMA source
+  *            @arg TIM_DMA_CC4: TIM Capture Compare 4 DMA source
+  *            @arg TIM_DMA_COM: TIM Commutation DMA source
+  *            @arg TIM_DMA_TRIGGER: TIM Trigger DMA source
+  * @param  BurstBuffer The Buffer address.
+  * @param  BurstLength DMA Burst length. This parameter can be one value
+  *         between: TIM_DMABURSTLENGTH_1TRANSFER and TIM_DMABURSTLENGTH_18TRANSFERS.
+  * @param  DataLength Data length. This parameter can be one value
+  *         between 1 and 0xFFFF.
+  * @retval HAL status
+  */
+HAL_StatusTypeDef HAL_TIM_DMABurst_MultiReadStart(TIM_HandleTypeDef *htim, uint32_t BurstBaseAddress,
+                                                  uint32_t BurstRequestSrc, uint32_t  *BurstBuffer,
+                                                  uint32_t  BurstLength, uint32_t  DataLength)
 {
   /* Check the parameters */
   assert_param(IS_TIM_DMABURST_INSTANCE(htim->Instance));
   assert_param(IS_TIM_DMA_BASE(BurstBaseAddress));
   assert_param(IS_TIM_DMA_SOURCE(BurstRequestSrc));
   assert_param(IS_TIM_DMA_LENGTH(BurstLength));
+  assert_param(IS_TIM_DMA_DATA_LENGTH(DataLength));
 
-  if((htim->State == HAL_TIM_STATE_BUSY))
+  if (htim->DMABurstState == HAL_DMA_BURST_STATE_BUSY)
   {
     return HAL_BUSY;
   }
-  else if((htim->State == HAL_TIM_STATE_READY))
+  else if (htim->DMABurstState == HAL_DMA_BURST_STATE_READY)
   {
-    if((BurstBuffer == NULL ) && (BurstLength > 0U))
+    if ((BurstBuffer == NULL) && (BurstLength > 0U))
     {
       return HAL_ERROR;
     }
     else
     {
-      htim->State = HAL_TIM_STATE_BUSY;
+      htim->DMABurstState = HAL_DMA_BURST_STATE_BUSY;
     }
   }
   else
   {
     /* nothing to do */
-  }  
-  switch(BurstRequestSrc)
+  }
+  switch (BurstRequestSrc)
   {
     case TIM_DMA_UPDATE:
     {
@@ -4207,8 +4881,10 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_ReadStart(TIM_HandleTypeDef *htim, uint32_t B
       htim->hdma[TIM_DMA_ID_UPDATE]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_UPDATE], (uint32_t)&htim->Instance->DMAR, (uint32_t)BurstBuffer, ((BurstLength) >> 8U) + 1U)!= HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_UPDATE], (uint32_t)&htim->Instance->DMAR, (uint32_t)BurstBuffer,
+                         DataLength) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       break;
@@ -4216,31 +4892,35 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_ReadStart(TIM_HandleTypeDef *htim, uint32_t B
     case TIM_DMA_CC1:
     {
       /* Set the DMA capture callbacks */
-      htim->hdma[TIM_DMA_ID_CC1]->XferCpltCallback =  TIM_DMACaptureCplt;
+      htim->hdma[TIM_DMA_ID_CC1]->XferCpltCallback = TIM_DMACaptureCplt;
       htim->hdma[TIM_DMA_ID_CC1]->XferHalfCpltCallback = TIM_DMACaptureHalfCplt;
 
       /* Set the DMA error callback */
       htim->hdma[TIM_DMA_ID_CC1]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC1], (uint32_t)&htim->Instance->DMAR, (uint32_t)BurstBuffer, ((BurstLength) >> 8U) + 1U)!= HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC1], (uint32_t)&htim->Instance->DMAR, (uint32_t)BurstBuffer,
+                         DataLength) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       break;
     }
     case TIM_DMA_CC2:
     {
-      /* Set the DMA capture/compare callbacks */
-      htim->hdma[TIM_DMA_ID_CC2]->XferCpltCallback =  TIM_DMACaptureCplt;
+      /* Set the DMA capture callbacks */
+      htim->hdma[TIM_DMA_ID_CC2]->XferCpltCallback = TIM_DMACaptureCplt;
       htim->hdma[TIM_DMA_ID_CC2]->XferHalfCpltCallback = TIM_DMACaptureHalfCplt;
 
       /* Set the DMA error callback */
       htim->hdma[TIM_DMA_ID_CC2]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC2], (uint32_t)&htim->Instance->DMAR, (uint32_t)BurstBuffer, ((BurstLength) >> 8U) + 1U)!= HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC2], (uint32_t)&htim->Instance->DMAR, (uint32_t)BurstBuffer,
+                         DataLength) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       break;
@@ -4248,15 +4928,17 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_ReadStart(TIM_HandleTypeDef *htim, uint32_t B
     case TIM_DMA_CC3:
     {
       /* Set the DMA capture callbacks */
-      htim->hdma[TIM_DMA_ID_CC3]->XferCpltCallback =  TIM_DMACaptureCplt;
+      htim->hdma[TIM_DMA_ID_CC3]->XferCpltCallback = TIM_DMACaptureCplt;
       htim->hdma[TIM_DMA_ID_CC3]->XferHalfCpltCallback = TIM_DMACaptureHalfCplt;
 
       /* Set the DMA error callback */
       htim->hdma[TIM_DMA_ID_CC3]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC3], (uint32_t)&htim->Instance->DMAR, (uint32_t)BurstBuffer, ((BurstLength) >> 8U) + 1U)!= HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC3], (uint32_t)&htim->Instance->DMAR, (uint32_t)BurstBuffer,
+                         DataLength) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       break;
@@ -4264,15 +4946,17 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_ReadStart(TIM_HandleTypeDef *htim, uint32_t B
     case TIM_DMA_CC4:
     {
       /* Set the DMA capture callbacks */
-      htim->hdma[TIM_DMA_ID_CC4]->XferCpltCallback =  TIM_DMACaptureCplt;
+      htim->hdma[TIM_DMA_ID_CC4]->XferCpltCallback = TIM_DMACaptureCplt;
       htim->hdma[TIM_DMA_ID_CC4]->XferHalfCpltCallback = TIM_DMACaptureHalfCplt;
 
       /* Set the DMA error callback */
       htim->hdma[TIM_DMA_ID_CC4]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC4], (uint32_t)&htim->Instance->DMAR, (uint32_t)BurstBuffer, ((BurstLength) >> 8U) + 1U)!= HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_CC4], (uint32_t)&htim->Instance->DMAR, (uint32_t)BurstBuffer,
+                         DataLength) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       break;
@@ -4287,8 +4971,10 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_ReadStart(TIM_HandleTypeDef *htim, uint32_t B
       htim->hdma[TIM_DMA_ID_COMMUTATION]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_COMMUTATION], (uint32_t)&htim->Instance->DMAR, (uint32_t)BurstBuffer, ((BurstLength) >> 8U) + 1U)!= HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_COMMUTATION], (uint32_t)&htim->Instance->DMAR, (uint32_t)BurstBuffer,
+                         DataLength) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       break;
@@ -4303,8 +4989,10 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_ReadStart(TIM_HandleTypeDef *htim, uint32_t B
       htim->hdma[TIM_DMA_ID_TRIGGER]->XferErrorCallback = TIM_DMAError ;
 
       /* Enable the DMA channel */
-      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_TRIGGER], (uint32_t)&htim->Instance->DMAR, (uint32_t)BurstBuffer, ((BurstLength) >> 8U) + 1U)!= HAL_OK)
+      if (HAL_DMA_Start_IT(htim->hdma[TIM_DMA_ID_TRIGGER], (uint32_t)&htim->Instance->DMAR, (uint32_t)BurstBuffer,
+                         DataLength) != HAL_OK)
       {
+        /* Return error status */
         return HAL_ERROR;
       }
       break;
@@ -4313,13 +5001,11 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_ReadStart(TIM_HandleTypeDef *htim, uint32_t B
       break;
   }
 
-  /* configure the DMA Burst Mode */
+  /* Configure the DMA Burst Mode */
   htim->Instance->DCR = (BurstBaseAddress | BurstLength);
 
   /* Enable the TIM DMA Request */
   __HAL_TIM_ENABLE_DMA(htim, BurstRequestSrc);
-
-  htim->State = HAL_TIM_STATE_READY;
 
   /* Return function status */
   return HAL_OK;
@@ -4333,60 +5019,59 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_ReadStart(TIM_HandleTypeDef *htim, uint32_t B
   */
 HAL_StatusTypeDef HAL_TIM_DMABurst_ReadStop(TIM_HandleTypeDef *htim, uint32_t BurstRequestSrc)
 {
-  HAL_StatusTypeDef status = HAL_OK;
   /* Check the parameters */
   assert_param(IS_TIM_DMA_SOURCE(BurstRequestSrc));
 
   /* Abort the DMA transfer (at least disable the DMA channel) */
-  switch(BurstRequestSrc)
+  switch (BurstRequestSrc)
   {
     case TIM_DMA_UPDATE:
     {
-      status = HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_UPDATE]);
+      (void)HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_UPDATE]);
       break;
     }
     case TIM_DMA_CC1:
     {
-      status = HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC1]);
+      (void)HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC1]);
       break;
     }
     case TIM_DMA_CC2:
     {
-      status = HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC2]);
+      (void)HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC2]);
       break;
     }
     case TIM_DMA_CC3:
     {
-      status = HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC3]);
+      (void)HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC3]);
       break;
     }
     case TIM_DMA_CC4:
     {
-      status = HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC4]);
+      (void)HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_CC4]);
       break;
     }
     case TIM_DMA_COM:
     {
-      status = HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_COMMUTATION]);
+      (void)HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_COMMUTATION]);
       break;
     }
     case TIM_DMA_TRIGGER:
     {
-      status = HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_TRIGGER]);
+      (void)HAL_DMA_Abort_IT(htim->hdma[TIM_DMA_ID_TRIGGER]);
       break;
     }
     default:
       break;
   }
 
-  if (HAL_OK == status)
-  {
   /* Disable the TIM Update DMA request */
   __HAL_TIM_DISABLE_DMA(htim, BurstRequestSrc);
-  }
+
+  /* Change the DMA burst operation state */
+  htim->DMABurstState = HAL_DMA_BURST_STATE_READY;
 
   /* Return function status */
-  return status;
+  return HAL_OK;
 }
 
 /**
@@ -4459,7 +5144,7 @@ HAL_StatusTypeDef HAL_TIM_ConfigOCrefClear(TIM_HandleTypeDef *htim,
 
   /* Process Locked */
   __HAL_LOCK(htim);
-  
+
   htim->State = HAL_TIM_STATE_BUSY;
 
   switch (sClearInputConfig->ClearInputSource)
@@ -4468,32 +5153,29 @@ HAL_StatusTypeDef HAL_TIM_ConfigOCrefClear(TIM_HandleTypeDef *htim,
     {
       /* Clear the OCREF clear selection bit and the the ETR Bits */
       CLEAR_BIT(htim->Instance->SMCR, (TIM_SMCR_OCCS | TIM_SMCR_ETF | TIM_SMCR_ETPS | TIM_SMCR_ECE | TIM_SMCR_ETP));
-      
+
       /* Clear TIMx_OR1_OCREF_CLR (reset value) */
       CLEAR_BIT(htim->Instance->OR1, TIMx_OR1_OCREF_CLR);
       break;
     }
+#if defined(COMP1) || defined(COMP2) || defined(COMP3)
 #if defined(COMP1) && defined(COMP2)
     case TIM_CLEARINPUTSOURCE_COMP1:
-    {
-      /* Clear the OCREF clear selection bit */
-      CLEAR_BIT(htim->Instance->SMCR, TIM_SMCR_OCCS);
-
-      /* OCREF_CLR_INT is connected to COMP1 output */
-      CLEAR_BIT(htim->Instance->OR1, TIMx_OR1_OCREF_CLR);
-      break;
-    }
     case TIM_CLEARINPUTSOURCE_COMP2:
-    {
-      /* Clear the OCREF clear selection bit */
-      CLEAR_BIT(htim->Instance->SMCR, TIM_SMCR_OCCS);
-
-      /* OCREF_CLR_INT is connected to COMP2 output */
-      SET_BIT(htim->Instance->OR1, TIMx_OR1_OCREF_CLR);
-      break;
-    }
 #endif /* COMP1 && COMP2 */
-    
+#if defined(COMP3)
+    case TIM_CLEARINPUTSOURCE_COMP3:
+#endif /* COMP3 */
+      {
+        /* Clear the OCREF clear selection bit */
+        CLEAR_BIT(htim->Instance->SMCR, TIM_SMCR_OCCS);
+
+        /* OCREF_CLR_INT is connected to COMPx output */
+        MODIFY_REG(htim->Instance->OR1, TIMx_OR1_OCREF_CLR, sClearInputConfig->ClearInputSource);
+        break;
+      }
+#endif /* COMP1 || COMP2 || COMP3 */
+
     case TIM_CLEARINPUTSOURCE_ETR:
     {
       /* Check the parameters */
@@ -4504,7 +5186,7 @@ HAL_StatusTypeDef HAL_TIM_ConfigOCrefClear(TIM_HandleTypeDef *htim,
       /* When OCRef clear feature is used with ETR source, ETR prescaler must be off */
       if (sClearInputConfig->ClearInputPrescaler != TIM_CLEARINPUTPRESCALER_DIV1)
       {
-          htim->State = HAL_TIM_STATE_READY;
+        htim->State = HAL_TIM_STATE_READY;
         __HAL_UNLOCK(htim);
         return HAL_ERROR;
       }
@@ -4516,12 +5198,12 @@ HAL_StatusTypeDef HAL_TIM_ConfigOCrefClear(TIM_HandleTypeDef *htim,
 
       /* Set the OCREF clear selection bit */
       SET_BIT(htim->Instance->SMCR, TIM_SMCR_OCCS);
-      
+
       /* Clear TIMx_OR1_OCREF_CLR (reset value) */
       CLEAR_BIT(htim->Instance->OR1, TIMx_OR1_OCREF_CLR);
       break;
     }
-    
+
     default:
       break;
   }
@@ -4530,7 +5212,7 @@ HAL_StatusTypeDef HAL_TIM_ConfigOCrefClear(TIM_HandleTypeDef *htim,
   {
     case TIM_CHANNEL_1:
     {
-      if(sClearInputConfig->ClearInputState != (uint32_t)DISABLE)
+      if (sClearInputConfig->ClearInputState != (uint32_t)DISABLE)
       {
         /* Enable the OCREF clear feature for Channel 1 */
         SET_BIT(htim->Instance->CCMR1, TIM_CCMR1_OC1CE);
@@ -4544,7 +5226,7 @@ HAL_StatusTypeDef HAL_TIM_ConfigOCrefClear(TIM_HandleTypeDef *htim,
     }
     case TIM_CHANNEL_2:
     {
-      if(sClearInputConfig->ClearInputState != (uint32_t)DISABLE)
+      if (sClearInputConfig->ClearInputState != (uint32_t)DISABLE)
       {
         /* Enable the OCREF clear feature for Channel 2 */
         SET_BIT(htim->Instance->CCMR1, TIM_CCMR1_OC2CE);
@@ -4558,7 +5240,7 @@ HAL_StatusTypeDef HAL_TIM_ConfigOCrefClear(TIM_HandleTypeDef *htim,
     }
     case TIM_CHANNEL_3:
     {
-      if(sClearInputConfig->ClearInputState != (uint32_t)DISABLE)
+      if (sClearInputConfig->ClearInputState != (uint32_t)DISABLE)
       {
         /* Enable the OCREF clear feature for Channel 3 */
         SET_BIT(htim->Instance->CCMR2, TIM_CCMR2_OC3CE);
@@ -4572,7 +5254,7 @@ HAL_StatusTypeDef HAL_TIM_ConfigOCrefClear(TIM_HandleTypeDef *htim,
     }
     case TIM_CHANNEL_4:
     {
-      if(sClearInputConfig->ClearInputState != (uint32_t)DISABLE)
+      if (sClearInputConfig->ClearInputState != (uint32_t)DISABLE)
       {
         /* Enable the OCREF clear feature for Channel 4 */
         SET_BIT(htim->Instance->CCMR2, TIM_CCMR2_OC4CE);
@@ -4586,7 +5268,7 @@ HAL_StatusTypeDef HAL_TIM_ConfigOCrefClear(TIM_HandleTypeDef *htim,
     }
     case TIM_CHANNEL_5:
     {
-        if(sClearInputConfig->ClearInputState != (uint32_t)DISABLE)
+      if (sClearInputConfig->ClearInputState != (uint32_t)DISABLE)
       {
         /* Enable the OCREF clear feature for Channel 5 */
         SET_BIT(htim->Instance->CCMR3, TIM_CCMR3_OC5CE);
@@ -4600,7 +5282,7 @@ HAL_StatusTypeDef HAL_TIM_ConfigOCrefClear(TIM_HandleTypeDef *htim,
     }
     case TIM_CHANNEL_6:
     {
-        if(sClearInputConfig->ClearInputState != (uint32_t)DISABLE)
+      if (sClearInputConfig->ClearInputState != (uint32_t)DISABLE)
       {
         /* Enable the OCREF clear feature for Channel 6 */
         SET_BIT(htim->Instance->CCMR3, TIM_CCMR3_OC6CE);
@@ -4617,7 +5299,7 @@ HAL_StatusTypeDef HAL_TIM_ConfigOCrefClear(TIM_HandleTypeDef *htim,
   }
 
   htim->State = HAL_TIM_STATE_READY;
-  
+
   __HAL_UNLOCK(htim);
 
   return HAL_OK;
@@ -4630,7 +5312,7 @@ HAL_StatusTypeDef HAL_TIM_ConfigOCrefClear(TIM_HandleTypeDef *htim,
   *         contains the clock source information for the TIM peripheral.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_TIM_ConfigClockSource(TIM_HandleTypeDef *htim, TIM_ClockConfigTypeDef * sClockSourceConfig)
+HAL_StatusTypeDef HAL_TIM_ConfigClockSource(TIM_HandleTypeDef *htim, TIM_ClockConfigTypeDef *sClockSourceConfig)
 {
   uint32_t tmpsmcr;
 
@@ -4708,7 +5390,7 @@ HAL_StatusTypeDef HAL_TIM_ConfigClockSource(TIM_HandleTypeDef *htim, TIM_ClockCo
       /* Check TI1 input conditioning related parameters */
       assert_param(IS_TIM_CLOCKPOLARITY(sClockSourceConfig->ClockPolarity));
       assert_param(IS_TIM_CLOCKFILTER(sClockSourceConfig->ClockFilter));
-	  
+
       TIM_TI1_ConfigInputStage(htim->Instance,
                                sClockSourceConfig->ClockPolarity,
                                sClockSourceConfig->ClockFilter);
@@ -4752,13 +5434,13 @@ HAL_StatusTypeDef HAL_TIM_ConfigClockSource(TIM_HandleTypeDef *htim, TIM_ClockCo
     case TIM_CLOCKSOURCE_ITR1:
     case TIM_CLOCKSOURCE_ITR2:
     case TIM_CLOCKSOURCE_ITR3:
-    {
-      /* Check whether or not the timer instance supports internal trigger input */
-      assert_param(IS_TIM_CLOCKSOURCE_ITRX_INSTANCE(htim->Instance));
+      {
+        /* Check whether or not the timer instance supports internal trigger input */
+        assert_param(IS_TIM_CLOCKSOURCE_ITRX_INSTANCE(htim->Instance));
 
-      TIM_ITRx_SetConfig(htim->Instance, sClockSourceConfig->ClockSource);
-      break;
-    }
+        TIM_ITRx_SetConfig(htim->Instance, sClockSourceConfig->ClockSource);
+        break;
+      }
 
     default:
       break;
@@ -4825,9 +5507,9 @@ HAL_StatusTypeDef HAL_TIM_SlaveConfigSynchro(TIM_HandleTypeDef *htim, TIM_SlaveC
 
   htim->State = HAL_TIM_STATE_BUSY;
 
-  if(TIM_SlaveTimer_SetConfig(htim, sSlaveConfig) != HAL_OK)
+  if (TIM_SlaveTimer_SetConfig(htim, sSlaveConfig) != HAL_OK)
   {
-      htim->State = HAL_TIM_STATE_READY;
+    htim->State = HAL_TIM_STATE_READY;
     __HAL_UNLOCK(htim);
     return HAL_ERROR;
   }
@@ -4855,20 +5537,20 @@ HAL_StatusTypeDef HAL_TIM_SlaveConfigSynchro(TIM_HandleTypeDef *htim, TIM_SlaveC
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_TIM_SlaveConfigSynchro_IT(TIM_HandleTypeDef *htim,
-                                                        TIM_SlaveConfigTypeDef * sSlaveConfig)
-    {
+                                                TIM_SlaveConfigTypeDef *sSlaveConfig)
+{
   /* Check the parameters */
   assert_param(IS_TIM_SLAVE_INSTANCE(htim->Instance));
   assert_param(IS_TIM_SLAVE_MODE(sSlaveConfig->SlaveMode));
   assert_param(IS_TIM_TRIGGER_SELECTION(sSlaveConfig->InputTrigger));
-  
+
   __HAL_LOCK(htim);
 
   htim->State = HAL_TIM_STATE_BUSY;
 
-  if(TIM_SlaveTimer_SetConfig(htim, sSlaveConfig) != HAL_OK)
+  if (TIM_SlaveTimer_SetConfig(htim, sSlaveConfig) != HAL_OK)
   {
-      htim->State = HAL_TIM_STATE_READY;
+    htim->State = HAL_TIM_STATE_READY;
     __HAL_UNLOCK(htim);
     return HAL_ERROR;
   }
@@ -4958,19 +5640,19 @@ uint32_t HAL_TIM_ReadCapturedValue(TIM_HandleTypeDef *htim, uint32_t Channel)
   */
 
 /** @defgroup TIM_Exported_Functions_Group9 TIM Callbacks functions
- *  @brief    TIM Callbacks functions
- *
+  *  @brief    TIM Callbacks functions
+  *
 @verbatim
   ==============================================================================
                         ##### TIM Callbacks functions #####
   ==============================================================================
  [..]
    This section provides TIM callback functions:
-   (+) Timer Period elapsed callback
-   (+) Timer Output Compare callback
-   (+) Timer Input capture callback
-   (+) Timer Trigger callback
-   (+) Timer Error callback
+   (+) TIM Period elapsed callback
+   (+) TIM Output Compare callback
+   (+) TIM Input capture callback
+   (+) TIM Trigger callback
+   (+) TIM Error callback
 
 @endverbatim
   * @{
@@ -5160,206 +5842,207 @@ __weak void HAL_TIM_ErrorCallback(TIM_HandleTypeDef *htim)
   *          @arg @ref HAL_TIM_COMMUTATION_HALF_CB_ID Commutation half complete Callback ID
   *          @arg @ref HAL_TIM_BREAK_CB_ID Break Callback ID
   *          @arg @ref HAL_TIM_BREAK2_CB_ID Break2 Callback ID
-  * @param pCallback pointer to the callback function
-  * @retval status
+  *          @param pCallback pointer to the callback function
+  *          @retval status
   */
-HAL_StatusTypeDef HAL_TIM_RegisterCallback(TIM_HandleTypeDef *htim, HAL_TIM_CallbackIDTypeDef CallbackID, pTIM_CallbackTypeDef pCallback)
+HAL_StatusTypeDef HAL_TIM_RegisterCallback(TIM_HandleTypeDef *htim, HAL_TIM_CallbackIDTypeDef CallbackID,
+                                           pTIM_CallbackTypeDef pCallback)
 {
   HAL_StatusTypeDef status = HAL_OK;
 
-  if(pCallback == NULL)
+  if (pCallback == NULL)
   {
     return HAL_ERROR;
   }
   /* Process locked */
   __HAL_LOCK(htim);
 
-  if(htim->State == HAL_TIM_STATE_READY)
+  if (htim->State == HAL_TIM_STATE_READY)
   {
     switch (CallbackID)
     {
-    case HAL_TIM_BASE_MSPINIT_CB_ID :
-      htim->Base_MspInitCallback         = pCallback;
-      break;
+      case HAL_TIM_BASE_MSPINIT_CB_ID :
+        htim->Base_MspInitCallback                 = pCallback;
+        break;
 
-    case HAL_TIM_BASE_MSPDEINIT_CB_ID :
-      htim->Base_MspDeInitCallback       = pCallback;
-      break;
+      case HAL_TIM_BASE_MSPDEINIT_CB_ID :
+        htim->Base_MspDeInitCallback               = pCallback;
+        break;
 
-    case HAL_TIM_IC_MSPINIT_CB_ID :
-      htim->IC_MspInitCallback           = pCallback;
-      break;
+      case HAL_TIM_IC_MSPINIT_CB_ID :
+        htim->IC_MspInitCallback                   = pCallback;
+        break;
 
-    case HAL_TIM_IC_MSPDEINIT_CB_ID :
-      htim->IC_MspDeInitCallback         = pCallback;
-      break;
+      case HAL_TIM_IC_MSPDEINIT_CB_ID :
+        htim->IC_MspDeInitCallback                 = pCallback;
+        break;
 
-    case HAL_TIM_OC_MSPINIT_CB_ID :
-      htim->OC_MspInitCallback           = pCallback;
-      break;
+      case HAL_TIM_OC_MSPINIT_CB_ID :
+        htim->OC_MspInitCallback                   = pCallback;
+        break;
 
-    case HAL_TIM_OC_MSPDEINIT_CB_ID :
-      htim->OC_MspDeInitCallback         = pCallback;
-      break;
+      case HAL_TIM_OC_MSPDEINIT_CB_ID :
+        htim->OC_MspDeInitCallback                 = pCallback;
+        break;
 
-    case HAL_TIM_PWM_MSPINIT_CB_ID :
-      htim->PWM_MspInitCallback          = pCallback;
-      break;
+      case HAL_TIM_PWM_MSPINIT_CB_ID :
+        htim->PWM_MspInitCallback                  = pCallback;
+        break;
 
-    case HAL_TIM_PWM_MSPDEINIT_CB_ID :
-      htim->PWM_MspDeInitCallback        = pCallback;
-      break;
+      case HAL_TIM_PWM_MSPDEINIT_CB_ID :
+        htim->PWM_MspDeInitCallback                = pCallback;
+        break;
 
-    case HAL_TIM_ONE_PULSE_MSPINIT_CB_ID :
-      htim->OnePulse_MspInitCallback     = pCallback;
-      break;
+      case HAL_TIM_ONE_PULSE_MSPINIT_CB_ID :
+        htim->OnePulse_MspInitCallback             = pCallback;
+        break;
 
-    case HAL_TIM_ONE_PULSE_MSPDEINIT_CB_ID :
-      htim->OnePulse_MspDeInitCallback   = pCallback;
-      break;
+      case HAL_TIM_ONE_PULSE_MSPDEINIT_CB_ID :
+        htim->OnePulse_MspDeInitCallback           = pCallback;
+        break;
 
-    case HAL_TIM_ENCODER_MSPINIT_CB_ID :
-      htim->Encoder_MspInitCallback      = pCallback;
-      break;
+      case HAL_TIM_ENCODER_MSPINIT_CB_ID :
+        htim->Encoder_MspInitCallback              = pCallback;
+        break;
 
-    case HAL_TIM_ENCODER_MSPDEINIT_CB_ID :
-      htim->Encoder_MspDeInitCallback    = pCallback;
-      break;
+      case HAL_TIM_ENCODER_MSPDEINIT_CB_ID :
+        htim->Encoder_MspDeInitCallback            = pCallback;
+        break;
 
-    case HAL_TIM_HALL_SENSOR_MSPINIT_CB_ID :
-      htim->HallSensor_MspInitCallback   = pCallback;
-      break;
+      case HAL_TIM_HALL_SENSOR_MSPINIT_CB_ID :
+        htim->HallSensor_MspInitCallback           = pCallback;
+        break;
 
-    case HAL_TIM_HALL_SENSOR_MSPDEINIT_CB_ID :
-      htim->HallSensor_MspDeInitCallback = pCallback;
-      break;
+      case HAL_TIM_HALL_SENSOR_MSPDEINIT_CB_ID :
+        htim->HallSensor_MspDeInitCallback         = pCallback;
+        break;
 
-    case HAL_TIM_PERIOD_ELAPSED_CB_ID :
-      htim->PeriodElapsedCallback        = pCallback;
-      break;
+      case HAL_TIM_PERIOD_ELAPSED_CB_ID :
+        htim->PeriodElapsedCallback                = pCallback;
+        break;
 
       case HAL_TIM_PERIOD_ELAPSED_HALF_CB_ID :
         htim->PeriodElapsedHalfCpltCallback        = pCallback;
         break;
 
-    case HAL_TIM_TRIGGER_CB_ID :
-      htim->TriggerCallback              = pCallback;
-      break;
+      case HAL_TIM_TRIGGER_CB_ID :
+        htim->TriggerCallback                      = pCallback;
+        break;
 
       case HAL_TIM_TRIGGER_HALF_CB_ID :
         htim->TriggerHalfCpltCallback              = pCallback;
         break;
 
-    case HAL_TIM_IC_CAPTURE_CB_ID :
-      htim->IC_CaptureCallback           = pCallback;
-      break;
+      case HAL_TIM_IC_CAPTURE_CB_ID :
+        htim->IC_CaptureCallback                   = pCallback;
+        break;
 
       case HAL_TIM_IC_CAPTURE_HALF_CB_ID :
         htim->IC_CaptureHalfCpltCallback           = pCallback;
         break;
 
-    case HAL_TIM_OC_DELAY_ELAPSED_CB_ID :
-      htim->OC_DelayElapsedCallback      = pCallback;
-      break;
+      case HAL_TIM_OC_DELAY_ELAPSED_CB_ID :
+        htim->OC_DelayElapsedCallback              = pCallback;
+        break;
 
-    case HAL_TIM_PWM_PULSE_FINISHED_CB_ID :
-      htim->PWM_PulseFinishedCallback    = pCallback;
-      break;
+      case HAL_TIM_PWM_PULSE_FINISHED_CB_ID :
+        htim->PWM_PulseFinishedCallback            = pCallback;
+        break;
 
       case HAL_TIM_PWM_PULSE_FINISHED_HALF_CB_ID :
         htim->PWM_PulseFinishedHalfCpltCallback    = pCallback;
         break;
 
-    case HAL_TIM_ERROR_CB_ID :
-      htim->ErrorCallback                = pCallback;
-      break;
+      case HAL_TIM_ERROR_CB_ID :
+        htim->ErrorCallback                        = pCallback;
+        break;
 
-    case HAL_TIM_COMMUTATION_CB_ID :
-      htim->CommutationCallback          = pCallback;
-      break;
+      case HAL_TIM_COMMUTATION_CB_ID :
+        htim->CommutationCallback                  = pCallback;
+        break;
 
       case HAL_TIM_COMMUTATION_HALF_CB_ID :
         htim->CommutationHalfCpltCallback          = pCallback;
         break;
 
-    case HAL_TIM_BREAK_CB_ID :
-      htim->BreakCallback                = pCallback;
-      break;
+      case HAL_TIM_BREAK_CB_ID :
+        htim->BreakCallback                        = pCallback;
+        break;
 
       case HAL_TIM_BREAK2_CB_ID :
         htim->Break2Callback                       = pCallback;
         break;
 
-    default :
-      /* Return error status */
-      status =  HAL_ERROR;
-      break;
+      default :
+        /* Return error status */
+        status =  HAL_ERROR;
+        break;
     }
   }
-  else if(htim->State == HAL_TIM_STATE_RESET)
+  else if (htim->State == HAL_TIM_STATE_RESET)
   {
     switch (CallbackID)
     {
-    case HAL_TIM_BASE_MSPINIT_CB_ID :
-      htim->Base_MspInitCallback         = pCallback;
-      break;
+      case HAL_TIM_BASE_MSPINIT_CB_ID :
+        htim->Base_MspInitCallback         = pCallback;
+        break;
 
-    case HAL_TIM_BASE_MSPDEINIT_CB_ID :
-      htim->Base_MspDeInitCallback       = pCallback;
-      break;
+      case HAL_TIM_BASE_MSPDEINIT_CB_ID :
+        htim->Base_MspDeInitCallback       = pCallback;
+        break;
 
-    case HAL_TIM_IC_MSPINIT_CB_ID :
-      htim->IC_MspInitCallback           = pCallback;
-      break;
+      case HAL_TIM_IC_MSPINIT_CB_ID :
+        htim->IC_MspInitCallback           = pCallback;
+        break;
 
-    case HAL_TIM_IC_MSPDEINIT_CB_ID :
-      htim->IC_MspDeInitCallback         = pCallback;
-      break;
+      case HAL_TIM_IC_MSPDEINIT_CB_ID :
+        htim->IC_MspDeInitCallback         = pCallback;
+        break;
 
-    case HAL_TIM_OC_MSPINIT_CB_ID :
-      htim->OC_MspInitCallback           = pCallback;
-      break;
+      case HAL_TIM_OC_MSPINIT_CB_ID :
+        htim->OC_MspInitCallback           = pCallback;
+        break;
 
-    case HAL_TIM_OC_MSPDEINIT_CB_ID :
-      htim->OC_MspDeInitCallback         = pCallback;
-      break;
+      case HAL_TIM_OC_MSPDEINIT_CB_ID :
+        htim->OC_MspDeInitCallback         = pCallback;
+        break;
 
-    case HAL_TIM_PWM_MSPINIT_CB_ID :
-      htim->PWM_MspInitCallback          = pCallback;
-      break;
+      case HAL_TIM_PWM_MSPINIT_CB_ID :
+        htim->PWM_MspInitCallback          = pCallback;
+        break;
 
-    case HAL_TIM_PWM_MSPDEINIT_CB_ID :
-      htim->PWM_MspDeInitCallback        = pCallback;
-      break;
+      case HAL_TIM_PWM_MSPDEINIT_CB_ID :
+        htim->PWM_MspDeInitCallback        = pCallback;
+        break;
 
-    case HAL_TIM_ONE_PULSE_MSPINIT_CB_ID :
-      htim->OnePulse_MspInitCallback     = pCallback;
-      break;
+      case HAL_TIM_ONE_PULSE_MSPINIT_CB_ID :
+        htim->OnePulse_MspInitCallback     = pCallback;
+        break;
 
-    case HAL_TIM_ONE_PULSE_MSPDEINIT_CB_ID :
-      htim->OnePulse_MspDeInitCallback   = pCallback;
-      break;
+      case HAL_TIM_ONE_PULSE_MSPDEINIT_CB_ID :
+        htim->OnePulse_MspDeInitCallback   = pCallback;
+        break;
 
-    case HAL_TIM_ENCODER_MSPINIT_CB_ID :
-      htim->Encoder_MspInitCallback      = pCallback;
-      break;
+      case HAL_TIM_ENCODER_MSPINIT_CB_ID :
+        htim->Encoder_MspInitCallback      = pCallback;
+        break;
 
-    case HAL_TIM_ENCODER_MSPDEINIT_CB_ID :
-      htim->Encoder_MspDeInitCallback    = pCallback;
-      break;
+      case HAL_TIM_ENCODER_MSPDEINIT_CB_ID :
+        htim->Encoder_MspDeInitCallback    = pCallback;
+        break;
 
-    case HAL_TIM_HALL_SENSOR_MSPINIT_CB_ID :
-      htim->HallSensor_MspInitCallback   = pCallback;
-      break;
+      case HAL_TIM_HALL_SENSOR_MSPINIT_CB_ID :
+        htim->HallSensor_MspInitCallback   = pCallback;
+        break;
 
-    case HAL_TIM_HALL_SENSOR_MSPDEINIT_CB_ID :
-      htim->HallSensor_MspDeInitCallback = pCallback;
-      break;
+      case HAL_TIM_HALL_SENSOR_MSPDEINIT_CB_ID :
+        htim->HallSensor_MspDeInitCallback = pCallback;
+        break;
 
-    default :
-      /* Return error status */
-      status =  HAL_ERROR;
-      break;
+      default :
+        /* Return error status */
+        status =  HAL_ERROR;
+        break;
     }
   }
   else
@@ -5408,7 +6091,7 @@ HAL_StatusTypeDef HAL_TIM_RegisterCallback(TIM_HandleTypeDef *htim, HAL_TIM_Call
   *          @arg @ref HAL_TIM_COMMUTATION_HALF_CB_ID Commutation half complete Callback ID
   *          @arg @ref HAL_TIM_BREAK_CB_ID Break Callback ID
   *          @arg @ref HAL_TIM_BREAK2_CB_ID Break2 Callback ID
-  * @retval status
+  *          @retval status
   */
 HAL_StatusTypeDef HAL_TIM_UnRegisterCallback(TIM_HandleTypeDef *htim, HAL_TIM_CallbackIDTypeDef CallbackID)
 {
@@ -5417,192 +6100,192 @@ HAL_StatusTypeDef HAL_TIM_UnRegisterCallback(TIM_HandleTypeDef *htim, HAL_TIM_Ca
   /* Process locked */
   __HAL_LOCK(htim);
 
-  if(htim->State == HAL_TIM_STATE_READY)
+  if (htim->State == HAL_TIM_STATE_READY)
   {
     switch (CallbackID)
     {
-    case HAL_TIM_BASE_MSPINIT_CB_ID :
-      htim->Base_MspInitCallback         = HAL_TIM_Base_MspInit;              /* Legacy weak Base MspInit Callback */
-      break;
+      case HAL_TIM_BASE_MSPINIT_CB_ID :
+        htim->Base_MspInitCallback              = HAL_TIM_Base_MspInit;                      /* Legacy weak Base MspInit Callback */
+        break;
 
-    case HAL_TIM_BASE_MSPDEINIT_CB_ID :
-      htim->Base_MspDeInitCallback       = HAL_TIM_Base_MspDeInit;            /* Legacy weak Base Msp DeInit Callback */
-      break;
+      case HAL_TIM_BASE_MSPDEINIT_CB_ID :
+        htim->Base_MspDeInitCallback            = HAL_TIM_Base_MspDeInit;                    /* Legacy weak Base Msp DeInit Callback */
+        break;
 
-    case HAL_TIM_IC_MSPINIT_CB_ID :
-      htim->IC_MspInitCallback           = HAL_TIM_IC_MspInit;                /* Legacy weak IC Msp Init Callback */
-      break;
+      case HAL_TIM_IC_MSPINIT_CB_ID :
+        htim->IC_MspInitCallback                = HAL_TIM_IC_MspInit;                        /* Legacy weak IC Msp Init Callback */
+        break;
 
-    case HAL_TIM_IC_MSPDEINIT_CB_ID :
-      htim->IC_MspDeInitCallback         = HAL_TIM_IC_MspDeInit;              /* Legacy weak IC Msp DeInit Callback */
-      break;
+      case HAL_TIM_IC_MSPDEINIT_CB_ID :
+        htim->IC_MspDeInitCallback              = HAL_TIM_IC_MspDeInit;                      /* Legacy weak IC Msp DeInit Callback */
+        break;
 
-    case HAL_TIM_OC_MSPINIT_CB_ID :
-      htim->OC_MspInitCallback           = HAL_TIM_OC_MspInit;                /* Legacy weak OC Msp Init Callback */
-      break;
+      case HAL_TIM_OC_MSPINIT_CB_ID :
+        htim->OC_MspInitCallback                = HAL_TIM_OC_MspInit;                        /* Legacy weak OC Msp Init Callback */
+        break;
 
-    case HAL_TIM_OC_MSPDEINIT_CB_ID :
-      htim->OC_MspDeInitCallback         = HAL_TIM_OC_MspDeInit;              /* Legacy weak OC Msp DeInit Callback */
-      break;
+      case HAL_TIM_OC_MSPDEINIT_CB_ID :
+        htim->OC_MspDeInitCallback              = HAL_TIM_OC_MspDeInit;                      /* Legacy weak OC Msp DeInit Callback */
+        break;
 
-    case HAL_TIM_PWM_MSPINIT_CB_ID :
-      htim->PWM_MspInitCallback          = HAL_TIM_PWM_MspInit;               /* Legacy weak PWM Msp Init Callback */
-      break;
+      case HAL_TIM_PWM_MSPINIT_CB_ID :
+        htim->PWM_MspInitCallback               = HAL_TIM_PWM_MspInit;                       /* Legacy weak PWM Msp Init Callback */
+        break;
 
-    case HAL_TIM_PWM_MSPDEINIT_CB_ID :
-      htim->PWM_MspDeInitCallback        = HAL_TIM_PWM_MspDeInit;             /* Legacy weak PWM Msp DeInit Callback */
-      break;
+      case HAL_TIM_PWM_MSPDEINIT_CB_ID :
+        htim->PWM_MspDeInitCallback             = HAL_TIM_PWM_MspDeInit;                     /* Legacy weak PWM Msp DeInit Callback */
+        break;
 
-    case HAL_TIM_ONE_PULSE_MSPINIT_CB_ID :
-      htim->OnePulse_MspInitCallback     = HAL_TIM_OnePulse_MspInit;          /* Legacy weak One Pulse Msp Init Callback */
-      break;
+      case HAL_TIM_ONE_PULSE_MSPINIT_CB_ID :
+        htim->OnePulse_MspInitCallback          = HAL_TIM_OnePulse_MspInit;                  /* Legacy weak One Pulse Msp Init Callback */
+        break;
 
-    case HAL_TIM_ONE_PULSE_MSPDEINIT_CB_ID :
-      htim->OnePulse_MspDeInitCallback   = HAL_TIM_OnePulse_MspDeInit;        /* Legacy weak One Pulse Msp DeInit Callback */
-      break;
+      case HAL_TIM_ONE_PULSE_MSPDEINIT_CB_ID :
+        htim->OnePulse_MspDeInitCallback        = HAL_TIM_OnePulse_MspDeInit;                /* Legacy weak One Pulse Msp DeInit Callback */
+        break;
 
-    case HAL_TIM_ENCODER_MSPINIT_CB_ID :
-      htim->Encoder_MspInitCallback      = HAL_TIM_Encoder_MspInit;           /* Legacy weak Encoder Msp Init Callback */
-      break;
+      case HAL_TIM_ENCODER_MSPINIT_CB_ID :
+        htim->Encoder_MspInitCallback           = HAL_TIM_Encoder_MspInit;                   /* Legacy weak Encoder Msp Init Callback */
+        break;
 
-    case HAL_TIM_ENCODER_MSPDEINIT_CB_ID :
-      htim->Encoder_MspDeInitCallback    = HAL_TIM_Encoder_MspDeInit;         /* Legacy weak Encoder Msp DeInit Callback */
-      break;
+      case HAL_TIM_ENCODER_MSPDEINIT_CB_ID :
+        htim->Encoder_MspDeInitCallback         = HAL_TIM_Encoder_MspDeInit;                 /* Legacy weak Encoder Msp DeInit Callback */
+        break;
 
-    case HAL_TIM_HALL_SENSOR_MSPINIT_CB_ID :
-      htim->HallSensor_MspInitCallback   = HAL_TIMEx_HallSensor_MspInit;      /* Legacy weak Hall Sensor Msp Init Callback */
-      break;
+      case HAL_TIM_HALL_SENSOR_MSPINIT_CB_ID :
+        htim->HallSensor_MspInitCallback        = HAL_TIMEx_HallSensor_MspInit;              /* Legacy weak Hall Sensor Msp Init Callback */
+        break;
 
-    case HAL_TIM_HALL_SENSOR_MSPDEINIT_CB_ID :
-      htim->HallSensor_MspDeInitCallback = HAL_TIMEx_HallSensor_MspDeInit;    /* Legacy weak Hall Sensor Msp DeInit Callback */
-      break;
+      case HAL_TIM_HALL_SENSOR_MSPDEINIT_CB_ID :
+        htim->HallSensor_MspDeInitCallback      = HAL_TIMEx_HallSensor_MspDeInit;            /* Legacy weak Hall Sensor Msp DeInit Callback */
+        break;
 
-    case HAL_TIM_PERIOD_ELAPSED_CB_ID :
-      htim->PeriodElapsedCallback        = HAL_TIM_PeriodElapsedCallback;     /* Legacy weak Period Elapsed Callback */
-      break;
+      case HAL_TIM_PERIOD_ELAPSED_CB_ID :
+        htim->PeriodElapsedCallback             = HAL_TIM_PeriodElapsedCallback;             /* Legacy weak Period Elapsed Callback */
+        break;
 
       case HAL_TIM_PERIOD_ELAPSED_HALF_CB_ID :
         htim->PeriodElapsedHalfCpltCallback     = HAL_TIM_PeriodElapsedHalfCpltCallback;     /* Legacy weak Period Elapsed half complete Callback */
         break;
 
-    case HAL_TIM_TRIGGER_CB_ID :
-      htim->TriggerCallback              = HAL_TIM_TriggerCallback;           /* Legacy weak Trigger Callback */
-      break;
+      case HAL_TIM_TRIGGER_CB_ID :
+        htim->TriggerCallback                   = HAL_TIM_TriggerCallback;                   /* Legacy weak Trigger Callback */
+        break;
 
       case HAL_TIM_TRIGGER_HALF_CB_ID :
         htim->TriggerHalfCpltCallback           = HAL_TIM_TriggerHalfCpltCallback;           /* Legacy weak Trigger half complete Callback */
         break;
 
-    case HAL_TIM_IC_CAPTURE_CB_ID :
-      htim->IC_CaptureCallback           = HAL_TIM_IC_CaptureCallback;        /* Legacy weak IC Capture Callback */
-      break;
+      case HAL_TIM_IC_CAPTURE_CB_ID :
+        htim->IC_CaptureCallback                = HAL_TIM_IC_CaptureCallback;                /* Legacy weak IC Capture Callback */
+        break;
 
       case HAL_TIM_IC_CAPTURE_HALF_CB_ID :
         htim->IC_CaptureHalfCpltCallback        = HAL_TIM_IC_CaptureHalfCpltCallback;        /* Legacy weak IC Capture half complete Callback */
         break;
 
-    case HAL_TIM_OC_DELAY_ELAPSED_CB_ID :
-      htim->OC_DelayElapsedCallback      = HAL_TIM_OC_DelayElapsedCallback;   /* Legacy weak OC Delay Elapsed Callback */
-      break;
+      case HAL_TIM_OC_DELAY_ELAPSED_CB_ID :
+        htim->OC_DelayElapsedCallback           = HAL_TIM_OC_DelayElapsedCallback;           /* Legacy weak OC Delay Elapsed Callback */
+        break;
 
-    case HAL_TIM_PWM_PULSE_FINISHED_CB_ID :
-      htim->PWM_PulseFinishedCallback    = HAL_TIM_PWM_PulseFinishedCallback; /* Legacy weak PWM Pulse Finished Callback */
-      break;
+      case HAL_TIM_PWM_PULSE_FINISHED_CB_ID :
+        htim->PWM_PulseFinishedCallback         = HAL_TIM_PWM_PulseFinishedCallback;         /* Legacy weak PWM Pulse Finished Callback */
+        break;
 
       case HAL_TIM_PWM_PULSE_FINISHED_HALF_CB_ID :
         htim->PWM_PulseFinishedHalfCpltCallback = HAL_TIM_PWM_PulseFinishedHalfCpltCallback; /* Legacy weak PWM Pulse Finished half complete Callback */
         break;
 
-    case HAL_TIM_ERROR_CB_ID :
-      htim->ErrorCallback                = HAL_TIM_ErrorCallback;             /* Legacy weak Error Callback */
-      break;
+      case HAL_TIM_ERROR_CB_ID :
+        htim->ErrorCallback                     = HAL_TIM_ErrorCallback;                     /* Legacy weak Error Callback */
+        break;
 
-    case HAL_TIM_COMMUTATION_CB_ID :
+      case HAL_TIM_COMMUTATION_CB_ID :
         htim->CommutationCallback               = HAL_TIMEx_CommutCallback;                  /* Legacy weak Commutation Callback */
         break;
 
       case HAL_TIM_COMMUTATION_HALF_CB_ID :
         htim->CommutationHalfCpltCallback       = HAL_TIMEx_CommutHalfCpltCallback;          /* Legacy weak Commutation half complete Callback */
-      break;
+        break;
 
-    case HAL_TIM_BREAK_CB_ID :
-      htim->BreakCallback                = HAL_TIMEx_BreakCallback;           /* Legacy weak Break Callback */
-      break;
+      case HAL_TIM_BREAK_CB_ID :
+        htim->BreakCallback                     = HAL_TIMEx_BreakCallback;                   /* Legacy weak Break Callback */
+        break;
 
       case HAL_TIM_BREAK2_CB_ID :
         htim->Break2Callback                    = HAL_TIMEx_Break2Callback;                  /* Legacy weak Break2 Callback */
         break;
 
-    default :
-     /* Return error status */
-      status =  HAL_ERROR;
-      break;
+      default :
+        /* Return error status */
+        status =  HAL_ERROR;
+        break;
     }
   }
-  else if(htim->State == HAL_TIM_STATE_RESET)
+  else if (htim->State == HAL_TIM_STATE_RESET)
   {
     switch (CallbackID)
     {
-    case HAL_TIM_BASE_MSPINIT_CB_ID :
-      htim->Base_MspInitCallback         = HAL_TIM_Base_MspInit;              /* Legacy weak Base MspInit Callback */
-      break;
+      case HAL_TIM_BASE_MSPINIT_CB_ID :
+        htim->Base_MspInitCallback         = HAL_TIM_Base_MspInit;              /* Legacy weak Base MspInit Callback */
+        break;
 
-    case HAL_TIM_BASE_MSPDEINIT_CB_ID :
-      htim->Base_MspDeInitCallback       = HAL_TIM_Base_MspDeInit;            /* Legacy weak Base Msp DeInit Callback */
-      break;
+      case HAL_TIM_BASE_MSPDEINIT_CB_ID :
+        htim->Base_MspDeInitCallback       = HAL_TIM_Base_MspDeInit;            /* Legacy weak Base Msp DeInit Callback */
+        break;
 
-    case HAL_TIM_IC_MSPINIT_CB_ID :
-      htim->IC_MspInitCallback           = HAL_TIM_IC_MspInit;                /* Legacy weak IC Msp Init Callback */
-      break;
+      case HAL_TIM_IC_MSPINIT_CB_ID :
+        htim->IC_MspInitCallback           = HAL_TIM_IC_MspInit;                /* Legacy weak IC Msp Init Callback */
+        break;
 
-    case HAL_TIM_IC_MSPDEINIT_CB_ID :
-      htim->IC_MspDeInitCallback         = HAL_TIM_IC_MspDeInit;              /* Legacy weak IC Msp DeInit Callback */
-      break;
+      case HAL_TIM_IC_MSPDEINIT_CB_ID :
+        htim->IC_MspDeInitCallback         = HAL_TIM_IC_MspDeInit;              /* Legacy weak IC Msp DeInit Callback */
+        break;
 
-    case HAL_TIM_OC_MSPINIT_CB_ID :
-      htim->OC_MspInitCallback           = HAL_TIM_OC_MspInit;                /* Legacy weak OC Msp Init Callback */
-      break;
+      case HAL_TIM_OC_MSPINIT_CB_ID :
+        htim->OC_MspInitCallback           = HAL_TIM_OC_MspInit;                /* Legacy weak OC Msp Init Callback */
+        break;
 
-    case HAL_TIM_OC_MSPDEINIT_CB_ID :
-      htim->OC_MspDeInitCallback         = HAL_TIM_OC_MspDeInit;              /* Legacy weak OC Msp DeInit Callback */
-      break;
+      case HAL_TIM_OC_MSPDEINIT_CB_ID :
+        htim->OC_MspDeInitCallback         = HAL_TIM_OC_MspDeInit;              /* Legacy weak OC Msp DeInit Callback */
+        break;
 
-    case HAL_TIM_PWM_MSPINIT_CB_ID :
-      htim->PWM_MspInitCallback          = HAL_TIM_PWM_MspInit;               /* Legacy weak PWM Msp Init Callback */
-      break;
+      case HAL_TIM_PWM_MSPINIT_CB_ID :
+        htim->PWM_MspInitCallback          = HAL_TIM_PWM_MspInit;               /* Legacy weak PWM Msp Init Callback */
+        break;
 
-    case HAL_TIM_PWM_MSPDEINIT_CB_ID :
-      htim->PWM_MspDeInitCallback        = HAL_TIM_PWM_MspDeInit;             /* Legacy weak PWM Msp DeInit Callback */
-      break;
+      case HAL_TIM_PWM_MSPDEINIT_CB_ID :
+        htim->PWM_MspDeInitCallback        = HAL_TIM_PWM_MspDeInit;             /* Legacy weak PWM Msp DeInit Callback */
+        break;
 
-    case HAL_TIM_ONE_PULSE_MSPINIT_CB_ID :
-      htim->OnePulse_MspInitCallback     = HAL_TIM_OnePulse_MspInit;          /* Legacy weak One Pulse Msp Init Callback */
-      break;
+      case HAL_TIM_ONE_PULSE_MSPINIT_CB_ID :
+        htim->OnePulse_MspInitCallback     = HAL_TIM_OnePulse_MspInit;          /* Legacy weak One Pulse Msp Init Callback */
+        break;
 
-    case HAL_TIM_ONE_PULSE_MSPDEINIT_CB_ID :
-      htim->OnePulse_MspDeInitCallback   = HAL_TIM_OnePulse_MspDeInit;        /* Legacy weak One Pulse Msp DeInit Callback */
-      break;
+      case HAL_TIM_ONE_PULSE_MSPDEINIT_CB_ID :
+        htim->OnePulse_MspDeInitCallback   = HAL_TIM_OnePulse_MspDeInit;        /* Legacy weak One Pulse Msp DeInit Callback */
+        break;
 
-    case HAL_TIM_ENCODER_MSPINIT_CB_ID :
-      htim->Encoder_MspInitCallback      = HAL_TIM_Encoder_MspInit;           /* Legacy weak Encoder Msp Init Callback */
-      break;
+      case HAL_TIM_ENCODER_MSPINIT_CB_ID :
+        htim->Encoder_MspInitCallback      = HAL_TIM_Encoder_MspInit;           /* Legacy weak Encoder Msp Init Callback */
+        break;
 
-    case HAL_TIM_ENCODER_MSPDEINIT_CB_ID :
-      htim->Encoder_MspDeInitCallback    = HAL_TIM_Encoder_MspDeInit;         /* Legacy weak Encoder Msp DeInit Callback */
-      break;
+      case HAL_TIM_ENCODER_MSPDEINIT_CB_ID :
+        htim->Encoder_MspDeInitCallback    = HAL_TIM_Encoder_MspDeInit;         /* Legacy weak Encoder Msp DeInit Callback */
+        break;
 
-    case HAL_TIM_HALL_SENSOR_MSPINIT_CB_ID :
-      htim->HallSensor_MspInitCallback   = HAL_TIMEx_HallSensor_MspInit;      /* Legacy weak Hall Sensor Msp Init Callback */
-      break;
+      case HAL_TIM_HALL_SENSOR_MSPINIT_CB_ID :
+        htim->HallSensor_MspInitCallback   = HAL_TIMEx_HallSensor_MspInit;      /* Legacy weak Hall Sensor Msp Init Callback */
+        break;
 
-    case HAL_TIM_HALL_SENSOR_MSPDEINIT_CB_ID :
-      htim->HallSensor_MspDeInitCallback = HAL_TIMEx_HallSensor_MspDeInit;    /* Legacy weak Hall Sensor Msp DeInit Callback */
-      break;
+      case HAL_TIM_HALL_SENSOR_MSPDEINIT_CB_ID :
+        htim->HallSensor_MspDeInitCallback = HAL_TIMEx_HallSensor_MspDeInit;    /* Legacy weak Hall Sensor Msp DeInit Callback */
+        break;
 
-    default :
-     /* Return error status */
-      status =  HAL_ERROR;
-      break;
+      default :
+        /* Return error status */
+        status =  HAL_ERROR;
+        break;
     }
   }
   else
@@ -5622,9 +6305,9 @@ HAL_StatusTypeDef HAL_TIM_UnRegisterCallback(TIM_HandleTypeDef *htim, HAL_TIM_Ca
   * @}
   */
 
-/** @defgroup TIM_Exported_Functions_Group10 Peripheral State functions
- *  @brief   Peripheral State functions
- *
+/** @defgroup TIM_Exported_Functions_Group10 TIM Peripheral State functions
+  *  @brief   TIM Peripheral State functions
+  *
 @verbatim
   ==============================================================================
                         ##### Peripheral State functions #####
@@ -5698,6 +6381,54 @@ HAL_TIM_StateTypeDef HAL_TIM_Encoder_GetState(TIM_HandleTypeDef *htim)
 }
 
 /**
+  * @brief  Return the TIM Encoder Mode handle state.
+  * @param  htim TIM handle
+  * @retval Active channel
+  */
+HAL_TIM_ActiveChannel HAL_TIM_GetActiveChannel(TIM_HandleTypeDef *htim)
+{
+  return htim->Channel;
+}
+
+/**
+  * @brief  Return actual state of the TIM channel.
+  * @param  htim TIM handle
+  * @param  Channel TIM Channel
+  *          This parameter can be one of the following values:
+  *            @arg TIM_CHANNEL_1: TIM Channel 1
+  *            @arg TIM_CHANNEL_2: TIM Channel 2
+  *            @arg TIM_CHANNEL_3: TIM Channel 3
+  *            @arg TIM_CHANNEL_4: TIM Channel 4
+  *            @arg TIM_CHANNEL_5: TIM Channel 5
+  *            @arg TIM_CHANNEL_6: TIM Channel 6
+  * @retval TIM Channel state
+  */
+HAL_TIM_ChannelStateTypeDef HAL_TIM_GetChannelState(TIM_HandleTypeDef *htim,  uint32_t Channel)
+{
+  HAL_TIM_ChannelStateTypeDef channel_state;
+
+  /* Check the parameters */
+  assert_param(IS_TIM_CCX_INSTANCE(htim->Instance, Channel));
+
+  channel_state = TIM_CHANNEL_STATE_GET(htim, Channel);
+
+  return channel_state;
+}
+
+/**
+  * @brief  Return actual state of a DMA burst operation.
+  * @param  htim TIM handle
+  * @retval DMA burst state
+  */
+HAL_TIM_DMABurstStateTypeDef HAL_TIM_DMABurstState(TIM_HandleTypeDef *htim)
+{
+  /* Check the parameters */
+  assert_param(IS_TIM_DMABURST_INSTANCE(htim->Instance));
+
+  return htim->DMABurstState;
+}
+
+/**
   * @}
   */
 
@@ -5716,15 +6447,40 @@ HAL_TIM_StateTypeDef HAL_TIM_Encoder_GetState(TIM_HandleTypeDef *htim)
   */
 void TIM_DMAError(DMA_HandleTypeDef *hdma)
 {
-  TIM_HandleTypeDef* htim = ( TIM_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
+  TIM_HandleTypeDef *htim = (TIM_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
 
-  htim->State= HAL_TIM_STATE_READY;
+  if (hdma == htim->hdma[TIM_DMA_ID_CC1])
+  {
+    htim->Channel = HAL_TIM_ACTIVE_CHANNEL_1;
+    TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+  }
+  else if (hdma == htim->hdma[TIM_DMA_ID_CC2])
+  {
+    htim->Channel = HAL_TIM_ACTIVE_CHANNEL_2;
+    TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+  }
+  else if (hdma == htim->hdma[TIM_DMA_ID_CC3])
+  {
+    htim->Channel = HAL_TIM_ACTIVE_CHANNEL_3;
+    TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_3, HAL_TIM_CHANNEL_STATE_READY);
+  }
+  else if (hdma == htim->hdma[TIM_DMA_ID_CC4])
+  {
+    htim->Channel = HAL_TIM_ACTIVE_CHANNEL_4;
+    TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_4, HAL_TIM_CHANNEL_STATE_READY);
+  }
+  else
+  {
+    htim->State = HAL_TIM_STATE_READY;
+  }
 
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
-   htim->ErrorCallback(htim);
+  htim->ErrorCallback(htim);
 #else
   HAL_TIM_ErrorCallback(htim);
 #endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
+
+  htim->Channel = HAL_TIM_ACTIVE_CHANNEL_CLEARED;
 }
 
 /**
@@ -5732,27 +6488,45 @@ void TIM_DMAError(DMA_HandleTypeDef *hdma)
   * @param  hdma pointer to DMA handle.
   * @retval None
   */
-void TIM_DMADelayPulseCplt(DMA_HandleTypeDef *hdma)
+static void TIM_DMADelayPulseCplt(DMA_HandleTypeDef *hdma)
 {
-  TIM_HandleTypeDef* htim = ( TIM_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
-
-  htim->State= HAL_TIM_STATE_READY;
+  TIM_HandleTypeDef *htim = (TIM_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
 
   if (hdma == htim->hdma[TIM_DMA_ID_CC1])
   {
     htim->Channel = HAL_TIM_ACTIVE_CHANNEL_1;
+
+    if (hdma->Init.Mode == DMA_NORMAL)
+    {
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+    }
   }
   else if (hdma == htim->hdma[TIM_DMA_ID_CC2])
   {
     htim->Channel = HAL_TIM_ACTIVE_CHANNEL_2;
+
+    if (hdma->Init.Mode == DMA_NORMAL)
+    {
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+    }
   }
   else if (hdma == htim->hdma[TIM_DMA_ID_CC3])
   {
     htim->Channel = HAL_TIM_ACTIVE_CHANNEL_3;
+
+    if (hdma->Init.Mode == DMA_NORMAL)
+    {
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_3, HAL_TIM_CHANNEL_STATE_READY);
+    }
   }
   else if (hdma == htim->hdma[TIM_DMA_ID_CC4])
   {
     htim->Channel = HAL_TIM_ACTIVE_CHANNEL_4;
+
+    if (hdma->Init.Mode == DMA_NORMAL)
+    {
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_4, HAL_TIM_CHANNEL_STATE_READY);
+    }
   }
   else
   {
@@ -5776,8 +6550,6 @@ void TIM_DMADelayPulseCplt(DMA_HandleTypeDef *hdma)
 void TIM_DMADelayPulseHalfCplt(DMA_HandleTypeDef *hdma)
 {
   TIM_HandleTypeDef *htim = (TIM_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
-
-  htim->State = HAL_TIM_STATE_READY;
 
   if (hdma == htim->hdma[TIM_DMA_ID_CC1])
   {
@@ -5816,25 +6588,47 @@ void TIM_DMADelayPulseHalfCplt(DMA_HandleTypeDef *hdma)
   */
 void TIM_DMACaptureCplt(DMA_HandleTypeDef *hdma)
 {
-  TIM_HandleTypeDef* htim = ( TIM_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
-
-  htim->State= HAL_TIM_STATE_READY;
+  TIM_HandleTypeDef *htim = (TIM_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
 
   if (hdma == htim->hdma[TIM_DMA_ID_CC1])
   {
     htim->Channel = HAL_TIM_ACTIVE_CHANNEL_1;
+
+    if (hdma->Init.Mode == DMA_NORMAL)
+    {
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+      TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_1, HAL_TIM_CHANNEL_STATE_READY);
+    }
   }
   else if (hdma == htim->hdma[TIM_DMA_ID_CC2])
   {
     htim->Channel = HAL_TIM_ACTIVE_CHANNEL_2;
+
+    if (hdma->Init.Mode == DMA_NORMAL)
+    {
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+      TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_2, HAL_TIM_CHANNEL_STATE_READY);
+    }
   }
   else if (hdma == htim->hdma[TIM_DMA_ID_CC3])
   {
     htim->Channel = HAL_TIM_ACTIVE_CHANNEL_3;
+
+    if (hdma->Init.Mode == DMA_NORMAL)
+    {
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_3, HAL_TIM_CHANNEL_STATE_READY);
+      TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_3, HAL_TIM_CHANNEL_STATE_READY);
+    }
   }
   else if (hdma == htim->hdma[TIM_DMA_ID_CC4])
   {
     htim->Channel = HAL_TIM_ACTIVE_CHANNEL_4;
+
+    if (hdma->Init.Mode == DMA_NORMAL)
+    {
+      TIM_CHANNEL_STATE_SET(htim, TIM_CHANNEL_4, HAL_TIM_CHANNEL_STATE_READY);
+      TIM_CHANNEL_N_STATE_SET(htim, TIM_CHANNEL_4, HAL_TIM_CHANNEL_STATE_READY);
+    }
   }
   else
   {
@@ -5858,8 +6652,6 @@ void TIM_DMACaptureCplt(DMA_HandleTypeDef *hdma)
 void TIM_DMACaptureHalfCplt(DMA_HandleTypeDef *hdma)
 {
   TIM_HandleTypeDef *htim = (TIM_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
-
-  htim->State = HAL_TIM_STATE_READY;
 
   if (hdma == htim->hdma[TIM_DMA_ID_CC1])
   {
@@ -5898,9 +6690,12 @@ void TIM_DMACaptureHalfCplt(DMA_HandleTypeDef *hdma)
   */
 static void TIM_DMAPeriodElapsedCplt(DMA_HandleTypeDef *hdma)
 {
-  TIM_HandleTypeDef* htim = ( TIM_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
+  TIM_HandleTypeDef *htim = (TIM_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
 
-  htim->State= HAL_TIM_STATE_READY;
+  if (htim->hdma[TIM_DMA_ID_UPDATE]->Init.Mode == DMA_NORMAL)
+  {
+    htim->State = HAL_TIM_STATE_READY;
+  }
 
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
   htim->PeriodElapsedCallback(htim);
@@ -5918,8 +6713,6 @@ static void TIM_DMAPeriodElapsedHalfCplt(DMA_HandleTypeDef *hdma)
 {
   TIM_HandleTypeDef *htim = (TIM_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
 
-  htim->State = HAL_TIM_STATE_READY;
-
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
   htim->PeriodElapsedHalfCpltCallback(htim);
 #else
@@ -5934,15 +6727,18 @@ static void TIM_DMAPeriodElapsedHalfCplt(DMA_HandleTypeDef *hdma)
   */
 static void TIM_DMATriggerCplt(DMA_HandleTypeDef *hdma)
 {
-  TIM_HandleTypeDef* htim = ( TIM_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
+  TIM_HandleTypeDef *htim = (TIM_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
 
-  htim->State= HAL_TIM_STATE_READY;
+  if (htim->hdma[TIM_DMA_ID_TRIGGER]->Init.Mode == DMA_NORMAL)
+  {
+    htim->State = HAL_TIM_STATE_READY;
+  }
 
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
   htim->TriggerCallback(htim);
 #else
   HAL_TIM_TriggerCallback(htim);
- #endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
+#endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
 }
 
 /**
@@ -5953,8 +6749,6 @@ static void TIM_DMATriggerCplt(DMA_HandleTypeDef *hdma)
 static void TIM_DMATriggerHalfCplt(DMA_HandleTypeDef *hdma)
 {
   TIM_HandleTypeDef *htim = (TIM_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
-
-  htim->State = HAL_TIM_STATE_READY;
 
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1)
   htim->TriggerHalfCpltCallback(htim);
@@ -5982,7 +6776,7 @@ void TIM_Base_SetConfig(TIM_TypeDef *TIMx, TIM_Base_InitTypeDef *Structure)
     tmpcr1 |= Structure->CounterMode;
   }
 
-  if(IS_TIM_CLOCK_DIVISION_INSTANCE(TIMx))
+  if (IS_TIM_CLOCK_DIVISION_INSTANCE(TIMx))
   {
     /* Set the clock division */
     tmpcr1 &= ~TIM_CR1_CKD;
@@ -6014,7 +6808,7 @@ void TIM_Base_SetConfig(TIM_TypeDef *TIMx, TIM_Base_InitTypeDef *Structure)
 /**
   * @brief  Timer Output Compare 1 configuration
   * @param  TIMx to select the TIM peripheral
-  * @param  OC_Config The ouput configuration structure
+  * @param  OC_Config The output configuration structure
   * @retval None
   */
 static void TIM_OC1_SetConfig(TIM_TypeDef *TIMx, TIM_OC_InitTypeDef *OC_Config)
@@ -6045,7 +6839,7 @@ static void TIM_OC1_SetConfig(TIM_TypeDef *TIMx, TIM_OC_InitTypeDef *OC_Config)
   /* Set the Output Compare Polarity */
   tmpccer |= OC_Config->OCPolarity;
 
-  if(IS_TIM_CCXN_INSTANCE(TIMx, TIM_CHANNEL_1))
+  if (IS_TIM_CCXN_INSTANCE(TIMx, TIM_CHANNEL_1))
   {
     /* Check parameters */
     assert_param(IS_TIM_OCN_POLARITY(OC_Config->OCNPolarity));
@@ -6058,7 +6852,7 @@ static void TIM_OC1_SetConfig(TIM_TypeDef *TIMx, TIM_OC_InitTypeDef *OC_Config)
     tmpccer &= ~TIM_CCER_CC1NE;
   }
 
-  if(IS_TIM_BREAK_INSTANCE(TIMx))
+  if (IS_TIM_BREAK_INSTANCE(TIMx))
   {
     /* Check parameters */
     assert_param(IS_TIM_OCNIDLE_STATE(OC_Config->OCNIdleState));
@@ -6089,7 +6883,7 @@ static void TIM_OC1_SetConfig(TIM_TypeDef *TIMx, TIM_OC_InitTypeDef *OC_Config)
 /**
   * @brief  Timer Output Compare 2 configuration
   * @param  TIMx to select the TIM peripheral
-  * @param  OC_Config The ouput configuration structure
+  * @param  OC_Config The output configuration structure
   * @retval None
   */
 void TIM_OC2_SetConfig(TIM_TypeDef *TIMx, TIM_OC_InitTypeDef *OC_Config)
@@ -6121,7 +6915,7 @@ void TIM_OC2_SetConfig(TIM_TypeDef *TIMx, TIM_OC_InitTypeDef *OC_Config)
   /* Set the Output Compare Polarity */
   tmpccer |= (OC_Config->OCPolarity << 4U);
 
-  if(IS_TIM_CCXN_INSTANCE(TIMx, TIM_CHANNEL_2))
+  if (IS_TIM_CCXN_INSTANCE(TIMx, TIM_CHANNEL_2))
   {
     assert_param(IS_TIM_OCN_POLARITY(OC_Config->OCNPolarity));
 
@@ -6134,7 +6928,7 @@ void TIM_OC2_SetConfig(TIM_TypeDef *TIMx, TIM_OC_InitTypeDef *OC_Config)
 
   }
 
-  if(IS_TIM_BREAK_INSTANCE(TIMx))
+  if (IS_TIM_BREAK_INSTANCE(TIMx))
   {
     /* Check parameters */
     assert_param(IS_TIM_OCNIDLE_STATE(OC_Config->OCNIdleState));
@@ -6165,7 +6959,7 @@ void TIM_OC2_SetConfig(TIM_TypeDef *TIMx, TIM_OC_InitTypeDef *OC_Config)
 /**
   * @brief  Timer Output Compare 3 configuration
   * @param  TIMx to select the TIM peripheral
-  * @param  OC_Config The ouput configuration structure
+  * @param  OC_Config The output configuration structure
   * @retval None
   */
 static void TIM_OC3_SetConfig(TIM_TypeDef *TIMx, TIM_OC_InitTypeDef *OC_Config)
@@ -6196,7 +6990,7 @@ static void TIM_OC3_SetConfig(TIM_TypeDef *TIMx, TIM_OC_InitTypeDef *OC_Config)
   /* Set the Output Compare Polarity */
   tmpccer |= (OC_Config->OCPolarity << 8U);
 
-  if(IS_TIM_CCXN_INSTANCE(TIMx, TIM_CHANNEL_3))
+  if (IS_TIM_CCXN_INSTANCE(TIMx, TIM_CHANNEL_3))
   {
     assert_param(IS_TIM_OCN_POLARITY(OC_Config->OCNPolarity));
 
@@ -6208,7 +7002,7 @@ static void TIM_OC3_SetConfig(TIM_TypeDef *TIMx, TIM_OC_InitTypeDef *OC_Config)
     tmpccer &= ~TIM_CCER_CC3NE;
   }
 
-  if(IS_TIM_BREAK_INSTANCE(TIMx))
+  if (IS_TIM_BREAK_INSTANCE(TIMx))
   {
     /* Check parameters */
     assert_param(IS_TIM_OCNIDLE_STATE(OC_Config->OCNIdleState));
@@ -6239,7 +7033,7 @@ static void TIM_OC3_SetConfig(TIM_TypeDef *TIMx, TIM_OC_InitTypeDef *OC_Config)
 /**
   * @brief  Timer Output Compare 4 configuration
   * @param  TIMx to select the TIM peripheral
-  * @param  OC_Config The ouput configuration structure
+  * @param  OC_Config The output configuration structure
   * @retval None
   */
 static void TIM_OC4_SetConfig(TIM_TypeDef *TIMx, TIM_OC_InitTypeDef *OC_Config)
@@ -6271,7 +7065,7 @@ static void TIM_OC4_SetConfig(TIM_TypeDef *TIMx, TIM_OC_InitTypeDef *OC_Config)
   /* Set the Output Compare Polarity */
   tmpccer |= (OC_Config->OCPolarity << 12U);
 
-  if(IS_TIM_BREAK_INSTANCE(TIMx))
+  if (IS_TIM_BREAK_INSTANCE(TIMx))
   {
     /* Check parameters */
     assert_param(IS_TIM_OCIDLE_STATE(OC_Config->OCIdleState));
@@ -6299,7 +7093,7 @@ static void TIM_OC4_SetConfig(TIM_TypeDef *TIMx, TIM_OC_InitTypeDef *OC_Config)
 /**
   * @brief  Timer Output Compare 5 configuration
   * @param  TIMx to select the TIM peripheral
-  * @param  OC_Config The ouput configuration structure
+  * @param  OC_Config The output configuration structure
   * @retval None
   */
 static void TIM_OC5_SetConfig(TIM_TypeDef *TIMx,
@@ -6329,7 +7123,7 @@ static void TIM_OC5_SetConfig(TIM_TypeDef *TIMx,
   /* Set the Output Compare Polarity */
   tmpccer |= (OC_Config->OCPolarity << 16U);
 
-  if(IS_TIM_BREAK_INSTANCE(TIMx))
+  if (IS_TIM_BREAK_INSTANCE(TIMx))
   {
     /* Reset the Output Compare IDLE State */
     tmpcr2 &= ~TIM_CR2_OIS5;
@@ -6352,7 +7146,7 @@ static void TIM_OC5_SetConfig(TIM_TypeDef *TIMx,
 /**
   * @brief  Timer Output Compare 6 configuration
   * @param  TIMx to select the TIM peripheral
-  * @param  OC_Config The ouput configuration structure
+  * @param  OC_Config The output configuration structure
   * @retval None
   */
 static void TIM_OC6_SetConfig(TIM_TypeDef *TIMx,
@@ -6382,7 +7176,7 @@ static void TIM_OC6_SetConfig(TIM_TypeDef *TIMx,
   /* Set the Output Compare Polarity */
   tmpccer |= (OC_Config->OCPolarity << 20U);
 
-  if(IS_TIM_BREAK_INSTANCE(TIMx))
+  if (IS_TIM_BREAK_INSTANCE(TIMx))
   {
     /* Reset the Output Compare IDLE State */
     tmpcr2 &= ~TIM_CR2_OIS6;
@@ -6410,7 +7204,7 @@ static void TIM_OC6_SetConfig(TIM_TypeDef *TIMx,
   * @retval None
   */
 static HAL_StatusTypeDef TIM_SlaveTimer_SetConfig(TIM_HandleTypeDef *htim,
-                                     TIM_SlaveConfigTypeDef * sSlaveConfig)
+                                                  TIM_SlaveConfigTypeDef *sSlaveConfig)
 {
   uint32_t tmpsmcr;
   uint32_t tmpccmr1;
@@ -6431,7 +7225,7 @@ static HAL_StatusTypeDef TIM_SlaveTimer_SetConfig(TIM_HandleTypeDef *htim,
 
   /* Write to TIMx SMCR */
   htim->Instance->SMCR = tmpsmcr;
- 
+
   /* Configure the trigger prescaler, filter, and polarity */
   switch (sSlaveConfig->InputTrigger)
   {
@@ -6443,20 +7237,20 @@ static HAL_StatusTypeDef TIM_SlaveTimer_SetConfig(TIM_HandleTypeDef *htim,
       assert_param(IS_TIM_TRIGGERPOLARITY(sSlaveConfig->TriggerPolarity));
       assert_param(IS_TIM_TRIGGERFILTER(sSlaveConfig->TriggerFilter));
       /* Configure the ETR Trigger source */
-      TIM_ETR_SetConfig(htim->Instance, 
-                        sSlaveConfig->TriggerPrescaler, 
-                        sSlaveConfig->TriggerPolarity, 
+      TIM_ETR_SetConfig(htim->Instance,
+                        sSlaveConfig->TriggerPrescaler,
+                        sSlaveConfig->TriggerPolarity,
                         sSlaveConfig->TriggerFilter);
       break;
     }
-    
+
     case TIM_TS_TI1F_ED:
     {
       /* Check the parameters */
       assert_param(IS_TIM_CC1_INSTANCE(htim->Instance));
       assert_param(IS_TIM_TRIGGERFILTER(sSlaveConfig->TriggerFilter));
-  
-      if(sSlaveConfig->SlaveMode == TIM_SLAVEMODE_GATED)
+
+      if (sSlaveConfig->SlaveMode == TIM_SLAVEMODE_GATED)
       {
         return HAL_ERROR;
       }
@@ -6464,56 +7258,56 @@ static HAL_StatusTypeDef TIM_SlaveTimer_SetConfig(TIM_HandleTypeDef *htim,
       /* Disable the Channel 1: Reset the CC1E Bit */
       tmpccer = htim->Instance->CCER;
       htim->Instance->CCER &= ~TIM_CCER_CC1E;
-      tmpccmr1 = htim->Instance->CCMR1;    
-      
+      tmpccmr1 = htim->Instance->CCMR1;
+
       /* Set the filter */
       tmpccmr1 &= ~TIM_CCMR1_IC1F;
       tmpccmr1 |= ((sSlaveConfig->TriggerFilter) << 4U);
-      
+
       /* Write to TIMx CCMR1 and CCER registers */
       htim->Instance->CCMR1 = tmpccmr1;
-      htim->Instance->CCER = tmpccer;                               
+      htim->Instance->CCER = tmpccer;
       break;
     }
-    
+
     case TIM_TS_TI1FP1:
     {
       /* Check the parameters */
       assert_param(IS_TIM_CC1_INSTANCE(htim->Instance));
       assert_param(IS_TIM_TRIGGERPOLARITY(sSlaveConfig->TriggerPolarity));
       assert_param(IS_TIM_TRIGGERFILTER(sSlaveConfig->TriggerFilter));
-  
+
       /* Configure TI1 Filter and Polarity */
       TIM_TI1_ConfigInputStage(htim->Instance,
                                sSlaveConfig->TriggerPolarity,
                                sSlaveConfig->TriggerFilter);
       break;
     }
-    
+
     case TIM_TS_TI2FP2:
     {
       /* Check the parameters */
       assert_param(IS_TIM_CC2_INSTANCE(htim->Instance));
       assert_param(IS_TIM_TRIGGERPOLARITY(sSlaveConfig->TriggerPolarity));
       assert_param(IS_TIM_TRIGGERFILTER(sSlaveConfig->TriggerFilter));
-  
+
       /* Configure TI2 Filter and Polarity */
       TIM_TI2_ConfigInputStage(htim->Instance,
                                sSlaveConfig->TriggerPolarity,
                                sSlaveConfig->TriggerFilter);
       break;
     }
-    
+
     case TIM_TS_ITR0:
     case TIM_TS_ITR1:
     case TIM_TS_ITR2:
     case TIM_TS_ITR3:
-    {
-      /* Check the parameter */
-      assert_param(IS_TIM_CC2_INSTANCE(htim->Instance));
-      break;
-    }
-       
+      {
+        /* Check the parameter */
+        assert_param(IS_TIM_CC2_INSTANCE(htim->Instance));
+        break;
+      }
+
     default:
       break;
   }
@@ -6552,7 +7346,7 @@ void TIM_TI1_SetConfig(TIM_TypeDef *TIMx, uint32_t TIM_ICPolarity, uint32_t TIM_
   tmpccer = TIMx->CCER;
 
   /* Select the Input */
-  if(IS_TIM_CC2_INSTANCE(TIMx) != RESET)
+  if (IS_TIM_CC2_INSTANCE(TIMx) != RESET)
   {
     tmpccmr1 &= ~TIM_CCMR1_CC1S;
     tmpccmr1 |= TIM_ICSelection;
@@ -6834,7 +7628,7 @@ static void TIM_ITRx_SetConfig(TIM_TypeDef *TIMx, uint32_t InputTriggerSource)
   *          This parameter must be a value between 0x00 and 0x0F
   * @retval None
   */
-void TIM_ETR_SetConfig(TIM_TypeDef* TIMx, uint32_t TIM_ExtTRGPrescaler,
+void TIM_ETR_SetConfig(TIM_TypeDef *TIMx, uint32_t TIM_ExtTRGPrescaler,
                        uint32_t TIM_ExtTRGPolarity, uint32_t ExtTRGFilter)
 {
   uint32_t tmpsmcr;
@@ -6866,7 +7660,7 @@ void TIM_ETR_SetConfig(TIM_TypeDef* TIMx, uint32_t TIM_ExtTRGPrescaler,
   *          This parameter can be: TIM_CCx_ENABLE or TIM_CCx_DISABLE.
   * @retval None
   */
-void TIM_CCxChannelCmd(TIM_TypeDef* TIMx, uint32_t Channel, uint32_t ChannelState)
+void TIM_CCxChannelCmd(TIM_TypeDef *TIMx, uint32_t Channel, uint32_t ChannelState)
 {
   uint32_t tmp;
 
@@ -6893,19 +7687,19 @@ void TIM_CCxChannelCmd(TIM_TypeDef* TIMx, uint32_t Channel, uint32_t ChannelStat
 void TIM_ResetCallback(TIM_HandleTypeDef *htim)
 {
   /* Reset the TIM callback to the legacy weak callbacks */
-  htim->PeriodElapsedCallback     = HAL_TIM_PeriodElapsedCallback;     /* Legacy weak PeriodElapsedCallback     */
+  htim->PeriodElapsedCallback             = HAL_TIM_PeriodElapsedCallback;             /* Legacy weak PeriodElapsedCallback             */
   htim->PeriodElapsedHalfCpltCallback     = HAL_TIM_PeriodElapsedHalfCpltCallback;     /* Legacy weak PeriodElapsedHalfCpltCallback     */
-  htim->TriggerCallback           = HAL_TIM_TriggerCallback;           /* Legacy weak TriggerCallback           */
+  htim->TriggerCallback                   = HAL_TIM_TriggerCallback;                   /* Legacy weak TriggerCallback                   */
   htim->TriggerHalfCpltCallback           = HAL_TIM_TriggerHalfCpltCallback;           /* Legacy weak TriggerHalfCpltCallback           */
-  htim->IC_CaptureCallback        = HAL_TIM_IC_CaptureCallback;        /* Legacy weak IC_CaptureCallback        */
+  htim->IC_CaptureCallback                = HAL_TIM_IC_CaptureCallback;                /* Legacy weak IC_CaptureCallback                */
   htim->IC_CaptureHalfCpltCallback        = HAL_TIM_IC_CaptureHalfCpltCallback;        /* Legacy weak IC_CaptureHalfCpltCallback        */
-  htim->OC_DelayElapsedCallback   = HAL_TIM_OC_DelayElapsedCallback;   /* Legacy weak OC_DelayElapsedCallback   */
-  htim->PWM_PulseFinishedCallback = HAL_TIM_PWM_PulseFinishedCallback; /* Legacy weak PWM_PulseFinishedCallback */
+  htim->OC_DelayElapsedCallback           = HAL_TIM_OC_DelayElapsedCallback;           /* Legacy weak OC_DelayElapsedCallback           */
+  htim->PWM_PulseFinishedCallback         = HAL_TIM_PWM_PulseFinishedCallback;         /* Legacy weak PWM_PulseFinishedCallback         */
   htim->PWM_PulseFinishedHalfCpltCallback = HAL_TIM_PWM_PulseFinishedHalfCpltCallback; /* Legacy weak PWM_PulseFinishedHalfCpltCallback */
-  htim->ErrorCallback             = HAL_TIM_ErrorCallback;             /* Legacy weak ErrorCallback             */
+  htim->ErrorCallback                     = HAL_TIM_ErrorCallback;                     /* Legacy weak ErrorCallback                     */
   htim->CommutationCallback               = HAL_TIMEx_CommutCallback;                  /* Legacy weak CommutationCallback               */
   htim->CommutationHalfCpltCallback       = HAL_TIMEx_CommutHalfCpltCallback;          /* Legacy weak CommutationHalfCpltCallback       */
-  htim->BreakCallback             = HAL_TIMEx_BreakCallback;           /* Legacy weak BreakCallback             */
+  htim->BreakCallback                     = HAL_TIMEx_BreakCallback;                   /* Legacy weak BreakCallback                     */
   htim->Break2Callback                    = HAL_TIMEx_Break2Callback;                  /* Legacy weak Break2Callback                    */
 }
 #endif /* USE_HAL_TIM_REGISTER_CALLBACKS */

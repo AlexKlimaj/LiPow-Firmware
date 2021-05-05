@@ -25,7 +25,7 @@
  *
  * 1 tab == 4 spaces!
  */
- /* USER CODE END Header */
+/* USER CODE END Header */
 
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
@@ -42,18 +42,20 @@
  * See http://www.freertos.org/a00110.html
  *----------------------------------------------------------*/
 
-/* USER CODE BEGIN Includes */   	      
+/* USER CODE BEGIN Includes */
 /* Section where include file can be added */
-/* USER CODE END Includes */ 
+/* USER CODE END Includes */
 
-/* Ensure stdint is only used by the compiler, and not the assembler. */
+/* Ensure definitions are only used by the compiler, and not by the assembler. */
 #if defined(__ICCARM__) || defined(__CC_ARM) || defined(__GNUC__)
-    #include <stdint.h>
-    extern uint32_t SystemCoreClock;
-/* USER CODE BEGIN 0 */   	      
+  #include <stdint.h>
+  extern uint32_t SystemCoreClock;
+/* USER CODE BEGIN 0 */
     extern volatile unsigned long ulHighFrequencyTimerTicks;
-/* USER CODE END 0 */       
+/* USER CODE END 0 */
 #endif
+#define configENABLE_FPU                         0
+#define configENABLE_MPU                         0
 
 #define configUSE_PREEMPTION                     1
 #define configSUPPORT_STATIC_ALLOCATION          0
@@ -71,6 +73,12 @@
 #define configUSE_16_BIT_TICKS                   0
 #define configUSE_MUTEXES                        1
 #define configQUEUE_REGISTRY_SIZE                8
+#define configUSE_PORT_OPTIMISED_TASK_SELECTION  0
+/* USER CODE BEGIN MESSAGE_BUFFER_LENGTH_TYPE */
+/* Defaults to size_t for backward compatibility, but can be changed
+   if lengths will always be less than the number of bytes in a size_t. */
+#define configMESSAGE_BUFFER_LENGTH_TYPE         size_t
+/* USER CODE END MESSAGE_BUFFER_LENGTH_TYPE */
 
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES                    0
@@ -78,14 +86,14 @@
 
 /* Set the following definitions to 1 to include the API function, or zero
 to exclude the API function. */
-#define INCLUDE_vTaskPrioritySet            1
-#define INCLUDE_uxTaskPriorityGet           1
-#define INCLUDE_vTaskDelete                 1
-#define INCLUDE_vTaskCleanUpResources       0
-#define INCLUDE_vTaskSuspend                1
-#define INCLUDE_vTaskDelayUntil             0
-#define INCLUDE_vTaskDelay                  1
-#define INCLUDE_xTaskGetSchedulerState      1
+#define INCLUDE_vTaskPrioritySet             1
+#define INCLUDE_uxTaskPriorityGet            1
+#define INCLUDE_vTaskDelete                  1
+#define INCLUDE_vTaskCleanUpResources        0
+#define INCLUDE_vTaskSuspend                 1
+#define INCLUDE_vTaskDelayUntil              0
+#define INCLUDE_vTaskDelay                   1
+#define INCLUDE_xTaskGetSchedulerState       1
 
 /* Normal assert() semantics without relying on the provision of an assert.h
 header file. */
@@ -100,15 +108,16 @@ standard names. */
 
 /* IMPORTANT: This define is commented when used with STM32Cube firmware, when the timebase source is SysTick,
               to prevent overwriting SysTick_Handler defined within STM32Cube HAL */
+
 #define xPortSysTickHandler SysTick_Handler
 
-/* USER CODE BEGIN 2 */    
+/* USER CODE BEGIN 2 */
 /* Definitions needed when configGENERATE_RUN_TIME_STATS is on */
 #define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() ( ulHighFrequencyTimerTicks = 0UL )
 #define portGET_RUN_TIME_COUNTER_VALUE() ulHighFrequencyTimerTicks
 /* USER CODE END 2 */
 
-/* USER CODE BEGIN Defines */   	      
+/* USER CODE BEGIN Defines */
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
 #define configCOMMAND_INT_MAX_OUTPUT_SIZE 3200
 #define configUSE_STATS_FORMATTING_FUNCTIONS 1
@@ -125,6 +134,6 @@ standard names. */
 #define vRead_ADC_STACK_SIZE			( configMINIMAL_STACK_SIZE * 5 )
 #define vRegulator_STACK_SIZE			( configMINIMAL_STACK_SIZE * 4 )
 
-/* USER CODE END Defines */ 
+/* USER CODE END Defines */
 
 #endif /* FREERTOS_CONFIG_H */

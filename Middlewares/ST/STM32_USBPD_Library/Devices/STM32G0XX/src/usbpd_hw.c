@@ -40,6 +40,8 @@ DMA_Channel_TypeDef *USBPD_HW_Init_DMARxInstance(uint8_t PortNum)
 {
   LL_DMA_InitTypeDef DMA_InitStruct;
 
+  /* Initialise the DMA */
+  LL_DMA_StructInit(&DMA_InitStruct);
   DMA_InitStruct.Direction = LL_DMA_DIRECTION_PERIPH_TO_MEMORY;
   DMA_InitStruct.Mode = LL_DMA_MODE_NORMAL;
   DMA_InitStruct.PeriphOrM2MSrcIncMode = LL_DMA_PERIPH_NOINCREMENT;
@@ -51,30 +53,30 @@ DMA_Channel_TypeDef *USBPD_HW_Init_DMARxInstance(uint8_t PortNum)
   DMA_InitStruct.PeriphOrM2MSrcAddress = 0x0;
   DMA_InitStruct.Priority = LL_DMA_PRIORITY_HIGH;
 
-  switch(PortNum)
+  switch (PortNum)
   {
-  case 0 :
-    /* Enable the clock */
-    UCPDDMA_INSTANCE0_CLOCKENABLE_RX;
+    case 0 :
+      /* Enable the clock */
+      UCPDDMA_INSTANCE0_CLOCKENABLE_RX;
 
-    /* Initialise the DMA */
-    DMA_InitStruct.PeriphRequest = UCPDDMA_INSTANCE0_REQUEST_RX;
+      /* Initialise the DMA */
+      DMA_InitStruct.PeriphRequest = UCPDDMA_INSTANCE0_REQUEST_RX;
 
-    (void)LL_DMA_Init(UCPDDMA_INSTANCE0_DMA_RX, UCPDDMA_INSTANCE0_LL_CHANNEL_RX, &DMA_InitStruct);
-    break;
+      (void)LL_DMA_Init(UCPDDMA_INSTANCE0_DMA_RX, UCPDDMA_INSTANCE0_LL_CHANNEL_RX, &DMA_InitStruct);
+      break;
 #if defined(UCPD_INSTANCE1)
-  case 1 :
-    /* Enable the clock */
-    UCPDDMA_INSTANCE1_CLOCKENABLE_RX;
+    case 1 :
+      /* Enable the clock */
+      UCPDDMA_INSTANCE1_CLOCKENABLE_RX;
 
-    /* Initialise the DMA */
-    DMA_InitStruct.PeriphRequest = UCPDDMA_INSTANCE1_REQUEST_RX;
+      /* Initialise the DMA */
+      DMA_InitStruct.PeriphRequest = UCPDDMA_INSTANCE1_REQUEST_RX;
 
-    (void)LL_DMA_Init(UCPDDMA_INSTANCE1_DMA_RX, UCPDDMA_INSTANCE1_LL_CHANNEL_RX, &DMA_InitStruct);
-    break;
+      (void)LL_DMA_Init(UCPDDMA_INSTANCE1_DMA_RX, UCPDDMA_INSTANCE1_LL_CHANNEL_RX, &DMA_InitStruct);
+      break;
 #endif
-  default:
-    break;
+    default:
+      break;
   }
 
 #if defined(UCPD_INSTANCE1)
@@ -94,6 +96,7 @@ DMA_Channel_TypeDef *USBPD_HW_Init_DMATxInstance(uint8_t PortNum)
   LL_DMA_InitTypeDef DMA_InitStruct;
 
   /* Initialise the DMA */
+  LL_DMA_StructInit(&DMA_InitStruct);
   DMA_InitStruct.Direction = LL_DMA_DIRECTION_MEMORY_TO_PERIPH;
   DMA_InitStruct.Mode = LL_DMA_MODE_NORMAL;
   DMA_InitStruct.PeriphOrM2MSrcIncMode = LL_DMA_PERIPH_NOINCREMENT;
@@ -104,31 +107,31 @@ DMA_Channel_TypeDef *USBPD_HW_Init_DMATxInstance(uint8_t PortNum)
   DMA_InitStruct.MemoryOrM2MDstAddress = 0x0;
   DMA_InitStruct.PeriphOrM2MSrcAddress = 0x0;
 
-  switch(PortNum)
+  switch (PortNum)
   {
-  case 0 :
-    /* Enable the clock */
-    UCPDDMA_INSTANCE0_CLOCKENABLE_TX;
+    case 0 :
+      /* Enable the clock */
+      UCPDDMA_INSTANCE0_CLOCKENABLE_TX;
 
-    DMA_InitStruct.PeriphRequest = UCPDDMA_INSTANCE0_REQUEST_TX;
-    DMA_InitStruct.Priority = LL_DMA_PRIORITY_MEDIUM;
-    (void)LL_DMA_Init(UCPDDMA_INSTANCE0_DMA_TX, UCPDDMA_INSTANCE0_LL_CHANNEL_TX, &DMA_InitStruct);
-    break;
+      DMA_InitStruct.PeriphRequest = UCPDDMA_INSTANCE0_REQUEST_TX;
+      DMA_InitStruct.Priority = LL_DMA_PRIORITY_MEDIUM;
+      (void)LL_DMA_Init(UCPDDMA_INSTANCE0_DMA_TX, UCPDDMA_INSTANCE0_LL_CHANNEL_TX, &DMA_InitStruct);
+      break;
 #if defined(UCPD_INSTANCE1)
-  case 1 :
-    UCPDDMA_INSTANCE1_CLOCKENABLE_TX;
+    case 1 :
+      UCPDDMA_INSTANCE1_CLOCKENABLE_TX;
 
-    DMA_InitStruct.PeriphRequest = UCPDDMA_INSTANCE1_REQUEST_TX;
-    DMA_InitStruct.Priority = LL_DMA_PRIORITY_MEDIUM;
-    (void)LL_DMA_Init(UCPDDMA_INSTANCE1_DMA_TX, UCPDDMA_INSTANCE1_LL_CHANNEL_TX, &DMA_InitStruct);
-    break;
+      DMA_InitStruct.PeriphRequest = UCPDDMA_INSTANCE1_REQUEST_TX;
+      DMA_InitStruct.Priority = LL_DMA_PRIORITY_MEDIUM;
+      (void)LL_DMA_Init(UCPDDMA_INSTANCE1_DMA_TX, UCPDDMA_INSTANCE1_LL_CHANNEL_TX, &DMA_InitStruct);
+      break;
 #endif
-  default:
-    break;
+    default:
+      break;
   }
 
 #if defined(UCPD_INSTANCE1)
-  return (PortNum == 0u)? UCPDDMA_INSTANCE0_CHANNEL_TX : UCPDDMA_INSTANCE1_CHANNEL_TX;
+  return (PortNum == 0u) ? UCPDDMA_INSTANCE0_CHANNEL_TX : UCPDDMA_INSTANCE1_CHANNEL_TX;
 #else
   return UCPDDMA_INSTANCE0_CHANNEL_TX;
 #endif
@@ -147,40 +150,40 @@ uint32_t USBPD_HW_GetRpResistorValue(uint8_t PortNum)
 
 void USBPD_HW_SetFRSSignalling(uint8_t PortNum, uint8_t cc)
 {
-  switch(PortNum)
+  switch (PortNum)
   {
-  case 0 :
+    case 0 :
     {
       /* Configure the GPIO with the AF corresponding to UCPD */
       if (1u == cc)
       {
-          /* FRS_TX1 PA2 (CC1) */
-          UCPDFRS_INSTANCE0_FRSCC1;
+        /* FRS_TX1 PA2 (CC1) */
+        UCPDFRS_INSTANCE0_FRSCC1;
       }
       else
       {
-          /* FRS_TX2 PB0 (CC2) */
-          UCPDFRS_INSTANCE0_FRSCC2;
+        /* FRS_TX2 PB0 (CC2) */
+        UCPDFRS_INSTANCE0_FRSCC2;
       }
       break;
     }
 #if defined(UCPD_INSTANCE1)
-  case 1 :
+    case 1 :
     {
       /* the FRS is not available for the second port */
       if (1u == cc)
       {
-          UCPDFRS_INSTANCE1_FRSCC1;
+        UCPDFRS_INSTANCE1_FRSCC1;
       }
       else
       {
-          UCPDFRS_INSTANCE1_FRSCC2;
+        UCPDFRS_INSTANCE1_FRSCC2;
       }
       break;
     }
 #endif
-  default:
-    break;
+    default:
+      break;
   }
 }
 

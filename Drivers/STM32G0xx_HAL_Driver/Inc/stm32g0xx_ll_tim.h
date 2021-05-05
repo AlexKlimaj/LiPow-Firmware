@@ -6,11 +6,11 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2018 STMicroelectronics. 
+  * <h2><center>&copy; Copyright (c) 2018 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the 
+  * the "License"; You may not use this file except in compliance with the
   * License. You may obtain a copy of the License at:
   *                        opensource.org/licenses/BSD-3-Clause
   *
@@ -32,7 +32,7 @@ extern "C" {
   * @{
   */
 
-#if defined (TIM1) || defined (TIM2) || defined (TIM3) ||  defined (TIM14) ||  defined (TIM15) || defined (TIM16) || defined (TIM17) || defined (TIM6) || defined (TIM7)
+#if defined (TIM1) || defined (TIM2) || defined (TIM3) || defined (TIM4) ||  defined (TIM14) ||  defined (TIM15) || defined (TIM16) || defined (TIM17) || defined (TIM6) || defined (TIM7)
 
 /** @defgroup TIM_LL TIM
   * @{
@@ -117,33 +117,18 @@ static const uint8_t SHIFT_TAB_OISx[] =
   */
 
 /* Defines used for the bit position in the register and perform offsets */
-#define TIM_POSITION_BRK_SOURCE            ((Source >> 1U) & 0x1FU)
+#if defined(COMP3)
+#define TIM_POSITION_BRK_SOURCE \
+  ((Source == LL_TIM_BKIN_SOURCE_BKIN)    ? 0U :\
+   (Source == LL_TIM_BKIN_SOURCE_BKCOMP1) ? 1U :\
+   (Source == LL_TIM_BKIN_SOURCE_BKCOMP2) ? 2U :3U)
+#else
+#define TIM_POSITION_BRK_SOURCE            ((Source >> 1U) & 0x1FUL)
+#endif
 
 /* Generic bit definitions for TIMx_AF1 register */
-#define TIMx_AF1_BKINE     TIM1_AF1_BKINE     /*!< BRK BKIN input enable */
-#if defined(COMP1) && defined(COMP2)
-#define TIMx_AF1_BKCOMP1E  TIM1_AF1_BKCMP1E   /*!< BRK COMP1 enable */
-#define TIMx_AF1_BKCOMP2E  TIM1_AF1_BKCMP2E   /*!< BRK COMP2 enable */
-#endif /* COMP1 && COMP2 */
 #define TIMx_AF1_BKINP     TIM1_AF1_BKINP     /*!< BRK BKIN input polarity */
-#if defined(COMP1) && defined(COMP2)
-#define TIMx_AF1_BKCOMP1P  TIM1_AF1_BKCMP1P   /*!< BRK COMP1 input polarity */
-#define TIMx_AF1_BKCOMP2P  TIM1_AF1_BKCMP2P   /*!< BRK COMP2 input polarity */
-#endif /* COMP1 && COMP2 */
 #define TIMx_AF1_ETRSEL    TIM1_AF1_ETRSEL    /*!< TIMx ETR source selection */
-
-/* Generic bit definitions for TIMx_AF2 register */
-#define TIMx_AF2_BK2INE    TIM1_AF2_BK2INE      /*!< BRK2 BKIN2 input enable */
-#if defined(COMP1) && defined(COMP2)
-#define TIMx_AF2_BK2COMP1E TIM1_AF2_BK2CMP1E    /*!< BRK2 COMP1 enable */
-#define TIMx_AF2_BK2COMP2E TIM1_AF2_BK2CMP2E    /*!< BRK2 COMP2 enable */
-#endif /* COMP1 && COMP2 */
-#define TIMx_AF2_BK2INP    TIM1_AF2_BK2INP      /*!< BRK2 BKIN2 input polarity */
-#if defined(COMP1) && defined(COMP2)
-#define TIMx_AF2_BK2COMP1P TIM1_AF2_BK2CMP1P    /*!< BRK2 COMP1 input polarity */
-#define TIMx_AF2_BK2COMP2P TIM1_AF2_BK2CMP2P    /*!< BRK2 COMP2 input polarity */
-
-#endif /* COMP1 && COMP2 */
 
 
 /* Mask used to set the TDG[x:0] of the DTG bits of the TIMx_BDTR register */
@@ -160,7 +145,7 @@ static const uint8_t SHIFT_TAB_OISx[] =
 
 /** Legacy definitions for compatibility purpose
 @cond 0
-*/
+  */
 /**
 @endcond
   */
@@ -189,14 +174,14 @@ static const uint8_t SHIFT_TAB_OISx[] =
   * @retval none
   */
 #define TIM_GET_CHANNEL_INDEX( __CHANNEL__) \
-(((__CHANNEL__) == LL_TIM_CHANNEL_CH1) ? 0U :\
-((__CHANNEL__) == LL_TIM_CHANNEL_CH1N) ? 1U :\
-((__CHANNEL__) == LL_TIM_CHANNEL_CH2) ? 2U :\
-((__CHANNEL__) == LL_TIM_CHANNEL_CH2N) ? 3U :\
-((__CHANNEL__) == LL_TIM_CHANNEL_CH3) ? 4U :\
-((__CHANNEL__) == LL_TIM_CHANNEL_CH3N) ? 5U :\
-((__CHANNEL__) == LL_TIM_CHANNEL_CH4) ? 6U :\
-((__CHANNEL__) == LL_TIM_CHANNEL_CH5) ? 7U : 8U)
+  (((__CHANNEL__) == LL_TIM_CHANNEL_CH1) ? 0U :\
+   ((__CHANNEL__) == LL_TIM_CHANNEL_CH1N) ? 1U :\
+   ((__CHANNEL__) == LL_TIM_CHANNEL_CH2) ? 2U :\
+   ((__CHANNEL__) == LL_TIM_CHANNEL_CH2N) ? 3U :\
+   ((__CHANNEL__) == LL_TIM_CHANNEL_CH3) ? 4U :\
+   ((__CHANNEL__) == LL_TIM_CHANNEL_CH3N) ? 5U :\
+   ((__CHANNEL__) == LL_TIM_CHANNEL_CH4) ? 6U :\
+   ((__CHANNEL__) == LL_TIM_CHANNEL_CH5) ? 7U : 8U)
 
 /** @brief  Calculate the deadtime sampling period(in ps).
   * @param  __TIMCLK__ timer input clock frequency (in Hz).
@@ -207,9 +192,9 @@ static const uint8_t SHIFT_TAB_OISx[] =
   * @retval none
   */
 #define TIM_CALC_DTS(__TIMCLK__, __CKD__)                                                        \
-    (((__CKD__) == LL_TIM_CLOCKDIVISION_DIV1) ? ((uint64_t)1000000000000U/(__TIMCLK__))         : \
-     ((__CKD__) == LL_TIM_CLOCKDIVISION_DIV2) ? ((uint64_t)1000000000000U/((__TIMCLK__) >> 1U)) : \
-     ((uint64_t)1000000000000U/((__TIMCLK__) >> 2U)))
+  (((__CKD__) == LL_TIM_CLOCKDIVISION_DIV1) ? ((uint64_t)1000000000000U/(__TIMCLK__))         : \
+   ((__CKD__) == LL_TIM_CLOCKDIVISION_DIV2) ? ((uint64_t)1000000000000U/((__TIMCLK__) >> 1U)) : \
+   ((uint64_t)1000000000000U/((__TIMCLK__) >> 2U)))
 /**
   * @}
   */
@@ -248,13 +233,14 @@ typedef struct
 
                                    This feature can be modified afterwards using unitary function @ref LL_TIM_SetClockDivision().*/
 
-  uint8_t RepetitionCounter;  /*!< Specifies the repetition counter value. Each time the RCR downcounter
+  uint32_t RepetitionCounter;  /*!< Specifies the repetition counter value. Each time the RCR downcounter
                                    reaches zero, an update event is generated and counting restarts
                                    from the RCR value (N).
                                    This means in PWM mode that (N+1) corresponds to:
                                       - the number of PWM periods in edge-aligned mode
                                       - the number of half PWM period in center-aligned mode
-                                   This parameter must be a number between 0x00 and 0xFF.
+                                   GP timers: this parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF.
+                                   Advanced timers: this parameter must be a number between Min_Data = 0x0000 and Max_Data = 0xFFFF.
 
                                    This feature can be modified afterwards using unitary function @ref LL_TIM_SetRepetitionCounter().*/
 } LL_TIM_InitTypeDef;
@@ -621,8 +607,8 @@ typedef struct
   */
 #define LL_TIM_COUNTERMODE_UP                  0x00000000U          /*!<Counter used as upcounter */
 #define LL_TIM_COUNTERMODE_DOWN                TIM_CR1_DIR          /*!< Counter used as downcounter */
-#define LL_TIM_COUNTERMODE_CENTER_UP           TIM_CR1_CMS_0        /*!< The counter counts up and down alternatively. Output compare interrupt flags of output channels  are set only when the counter is counting down. */
-#define LL_TIM_COUNTERMODE_CENTER_DOWN         TIM_CR1_CMS_1        /*!<The counter counts up and down alternatively. Output compare interrupt flags of output channels  are set only when the counter is counting up */
+#define LL_TIM_COUNTERMODE_CENTER_DOWN         TIM_CR1_CMS_0        /*!< The counter counts up and down alternatively. Output compare interrupt flags of output channels  are set only when the counter is counting down. */
+#define LL_TIM_COUNTERMODE_CENTER_UP           TIM_CR1_CMS_1        /*!<The counter counts up and down alternatively. Output compare interrupt flags of output channels  are set only when the counter is counting up */
 #define LL_TIM_COUNTERMODE_CENTER_UP_DOWN      TIM_CR1_CMS          /*!< The counter counts up and down alternatively. Output compare interrupt flags of output channels  are set only when the counter is counting up or down. */
 /**
   * @}
@@ -710,7 +696,7 @@ typedef struct
 #define LL_TIM_OCMODE_ACTIVE                   TIM_CCMR1_OC1M_0                                         /*!<OCyREF is forced high on compare match*/
 #define LL_TIM_OCMODE_INACTIVE                 TIM_CCMR1_OC1M_1                                         /*!<OCyREF is forced low on compare match*/
 #define LL_TIM_OCMODE_TOGGLE                   (TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0)                    /*!<OCyREF toggles on compare match*/
-#define LL_TIM_OCMODE_FORCED_INACTIVE          TIM_CCMR1_OC1M_2                                       /*!<OCyREF is forced low*/
+#define LL_TIM_OCMODE_FORCED_INACTIVE          TIM_CCMR1_OC1M_2                                         /*!<OCyREF is forced low*/
 #define LL_TIM_OCMODE_FORCED_ACTIVE            (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_0)                    /*!<OCyREF is forced high*/
 #define LL_TIM_OCMODE_PWM1                     (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1)                    /*!<In upcounting, channel y is active as long as TIMx_CNT<TIMx_CCRy else inactive.  In downcounting, channel y is inactive as long as TIMx_CNT>TIMx_CCRy else active.*/
 #define LL_TIM_OCMODE_PWM2                     (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0) /*!<In upcounting, channel y is inactive as long as TIMx_CNT<TIMx_CCRy else active.  In downcounting, channel y is active as long as TIMx_CNT>TIMx_CCRy else inactive*/
@@ -766,7 +752,7 @@ typedef struct
 /** @defgroup TIM_LL_EC_ICPSC Input Configuration Prescaler
   * @{
   */
-#define LL_TIM_ICPSC_DIV1                      0x00000000U                              /*!< No prescaler, capture is done each time an edge is detected on the capture input */
+#define LL_TIM_ICPSC_DIV1                      0x00000000U                    /*!< No prescaler, capture is done each time an edge is detected on the capture input */
 #define LL_TIM_ICPSC_DIV2                      (TIM_CCMR1_IC1PSC_0 << 16U)    /*!< Capture is done once every 2 events */
 #define LL_TIM_ICPSC_DIV4                      (TIM_CCMR1_IC1PSC_1 << 16U)    /*!< Capture is done once every 4 events */
 #define LL_TIM_ICPSC_DIV8                      (TIM_CCMR1_IC1PSC << 16U)      /*!< Capture is done once every 8 events */
@@ -888,6 +874,9 @@ typedef struct
 #define LL_TIM_TS_TI1FP1                       (TIM_SMCR_TS_2 | TIM_SMCR_TS_0)                                 /*!< Filtered Timer Input 1 (TI1FP1) is used as trigger input */
 #define LL_TIM_TS_TI2FP2                       (TIM_SMCR_TS_2 | TIM_SMCR_TS_1)                                 /*!< Filtered Timer Input 2 (TI12P2) is used as trigger input */
 #define LL_TIM_TS_ETRF                         (TIM_SMCR_TS_2 | TIM_SMCR_TS_1 | TIM_SMCR_TS_0)                 /*!< Filtered external Trigger (ETRF) is used as trigger input */
+#if defined(USB_BASE)
+#define LL_TIM_TS_ITR7                         (TIM_SMCR_TS_3 | TIM_SMCR_TS_1 | TIM_SMCR_TS_0)                 /*!< Internal Trigger 7 (ITR7) is used as trigger input */
+#endif /* USB_BASE */
 /**
   * @}
   */
@@ -938,15 +927,20 @@ typedef struct
 /** @defgroup TIM_LL_EC_ETRSOURCE External Trigger Source
   * @{
   */
-#define LL_TIM_ETRSOURCE_GPIO                  0x00000000U                             /*!< ETR input is connected to GPIO */
+#define LL_TIM_ETRSOURCE_GPIO                  0x00000000U                                                 /*!< ETR input is connected to GPIO */
 #if defined(COMP1) && defined(COMP2)
-#define LL_TIM_ETRSOURCE_COMP1                 TIM1_AF1_ETRSEL_0                       /*!< ETR input is connected to COMP1_OUT */
-#define LL_TIM_ETRSOURCE_COMP2                 TIM1_AF1_ETRSEL_1                       /*!< ETR input is connected to COMP2_OUT */
+#define LL_TIM_ETRSOURCE_COMP1                 TIM1_AF1_ETRSEL_0                                 /*!< ETR input is connected to COMP1_OUT */
+#define LL_TIM_ETRSOURCE_COMP2                 TIM1_AF1_ETRSEL_1                                 /*!< ETR input is connected to COMP2_OUT */
 #endif /* COMP1 && COMP2 */
+#if defined(COMP3)
+#define LL_TIM_ETRSOURCE_COMP3                 (TIM1_AF1_ETRSEL_2 | TIM1_AF1_ETRSEL_1) /*!< ETR input is connected to COMP3_OUT */
+#endif /* COMP3 */
 #define LL_TIM_ETRSOURCE_ADC1_AWD1             (TIM1_AF1_ETRSEL_1 | TIM1_AF1_ETRSEL_0) /*!< ETR input is connected to ADC1 analog watchdog 1 */
-#define LL_TIM_ETRSOURCE_ADC1_AWD2             TIM1_AF1_ETRSEL_2                       /*!< ETR input is connected to ADC1 analog watchdog 2 */
+#define LL_TIM_ETRSOURCE_ADC1_AWD2             TIM1_AF1_ETRSEL_2                                 /*!< ETR input is connected to ADC1 analog watchdog 2 */
 #define LL_TIM_ETRSOURCE_ADC1_AWD3             (TIM1_AF1_ETRSEL_2 | TIM1_AF1_ETRSEL_0) /*!< ETR input is connected to ADC1 analog watchdog 3 */
 #define LL_TIM_ETRSOURCE_LSE                   (TIM1_AF1_ETRSEL_1 | TIM1_AF1_ETRSEL_0) /*!< ETR input is connected to LSE */
+#define LL_TIM_ETRSOURCE_MCO                   TIM1_AF1_ETRSEL_2                                 /*!< ETR input is connected to MCO */
+#define LL_TIM_ETRSOURCE_MCO2                  (TIM1_AF1_ETRSEL_2 | TIM1_AF1_ETRSEL_0) /*!< ETR input is connected to MCO2 */
 /**
   * @}
   */
@@ -1050,6 +1044,9 @@ typedef struct
 #define LL_TIM_BKIN_SOURCE_BKCOMP1             TIM1_AF1_BKCMP1E    /*!< internal signal: COMP1 output */
 #define LL_TIM_BKIN_SOURCE_BKCOMP2             TIM1_AF1_BKCMP2E    /*!< internal signal: COMP2 output */
 #endif /* COMP1 && COMP2 */
+#if defined(COMP3)
+#define LL_TIM_BKIN_SOURCE_BKCOMP3             TIM1_AF1_BKCMP3E    /*!< internal signal: COMP3 output */
+#endif /* COMP3 */
 /**
   * @}
   */
@@ -1057,7 +1054,7 @@ typedef struct
 /** @defgroup TIM_LL_EC_BKIN_POLARITY BKIN POLARITY
   * @{
   */
-#define LL_TIM_BKIN_POLARITY_LOW               TIM1_AF1_BKINP          /*!< BRK BKIN input is active low */
+#define LL_TIM_BKIN_POLARITY_LOW               TIM1_AF1_BKINP           /*!< BRK BKIN input is active low */
 #define LL_TIM_BKIN_POLARITY_HIGH              0x00000000U              /*!< BRK BKIN input is active high */
 /**
   * @}
@@ -1072,7 +1069,7 @@ typedef struct
   * @}
   */
 
-  /** @defgroup TIM_LL_EC_BREAK2_AFMODE BREAK2 AF MODE
+/** @defgroup TIM_LL_EC_BREAK2_AFMODE BREAK2 AF MODE
   * @{
   */
 #define LL_TIM_BREAK2_AFMODE_INPUT             0x00000000U             /*!< Break2 input BRK2 in input mode */
@@ -1102,7 +1099,7 @@ typedef struct
 #define LL_TIM_DMABURST_BASEADDR_CCR3          (TIM_DCR_DBA_3 | TIM_DCR_DBA_2 | TIM_DCR_DBA_1 | TIM_DCR_DBA_0)  /*!< TIMx_CCR3 register is the DMA base address for DMA burst */
 #define LL_TIM_DMABURST_BASEADDR_CCR4          TIM_DCR_DBA_4                                                    /*!< TIMx_CCR4 register is the DMA base address for DMA burst */
 #define LL_TIM_DMABURST_BASEADDR_BDTR          (TIM_DCR_DBA_4 | TIM_DCR_DBA_0)                                  /*!< TIMx_BDTR register is the DMA base address for DMA burst */
-#define LL_TIM_DMABURST_BASEADDR_OR1            (TIM_DCR_DBA_4 | TIM_DCR_DBA_2)                                  /*!< TIMx_OR1 register is the DMA base address for DMA burst */
+#define LL_TIM_DMABURST_BASEADDR_OR1           (TIM_DCR_DBA_4 | TIM_DCR_DBA_2)                                  /*!< TIMx_OR1 register is the DMA base address for DMA burst */
 #define LL_TIM_DMABURST_BASEADDR_CCMR3         (TIM_DCR_DBA_4 | TIM_DCR_DBA_2 | TIM_DCR_DBA_0)                  /*!< TIMx_CCMR3 register is the DMA base address for DMA burst */
 #define LL_TIM_DMABURST_BASEADDR_CCR5          (TIM_DCR_DBA_4 | TIM_DCR_DBA_2 | TIM_DCR_DBA_1)                  /*!< TIMx_CCR5 register is the DMA base address for DMA burst */
 #define LL_TIM_DMABURST_BASEADDR_CCR6          (TIM_DCR_DBA_4 | TIM_DCR_DBA_2 | TIM_DCR_DBA_1 | TIM_DCR_DBA_0)  /*!< TIMx_CCR6 register is the DMA base address for DMA burst */
@@ -1160,6 +1157,17 @@ typedef struct
   * @}
   */
 
+/** @defgroup TIM_LL_EC_TIM1_TI3_RMP  TIM1 Timer Input Ch3 Remap
+  * @{
+  */
+#define LL_TIM_TIM1_TI3_RMP_GPIO   0x00000000U                                       /*!< TIM1 input 3 is connected to GPIO */
+#if defined(COMP3)
+#define LL_TIM_TIM1_TI3_RMP_COMP3  TIM_TISEL_TI3SEL_0                                /*!< TIM1 input 3 is connected to COMP3_OUT */
+#endif
+/**
+  * @}
+  */
+
 #if defined(TIM2)
 /** @defgroup TIM_LL_EC_TIM2_TI1_RMP  TIM2 Timer Input Ch1 Remap
   * @{
@@ -1175,6 +1183,17 @@ typedef struct
   */
 #define LL_TIM_TIM2_TI2_RMP_GPIO   0x00000000U                                       /*!< TIM2 input 2 is connected to GPIO */
 #define LL_TIM_TIM2_TI2_RMP_COMP2  TIM_TISEL_TI2SEL_0                                /*!< TIM2 input 2 is connected to COMP2_OUT */
+/**
+  * @}
+  */
+
+/** @defgroup TIM_LL_EC_TIM2_TI3_RMP  TIM2 Timer Input Ch3 Remap
+  * @{
+  */
+#define LL_TIM_TIM2_TI3_RMP_GPIO   0x00000000U                                       /*!< TIM2 input 3 is connected to GPIO */
+#if defined(COMP3)
+#define LL_TIM_TIM2_TI3_RMP_COMP3  TIM_TISEL_TI3SEL_0                                /*!< TIM2 input 3 is connected to COMP3_OUT */
+#endif
 /**
   * @}
   */
@@ -1202,13 +1221,60 @@ typedef struct
   * @}
   */
 
+/** @defgroup TIM_LL_EC_TIM3_TI3_RMP  TIM3 Timer Input Ch3 Remap
+  * @{
+  */
+#define LL_TIM_TIM3_TI3_RMP_GPIO   0x00000000U                                       /*!< TIM3 input 3 is connected to GPIO */
+#if defined(COMP3)
+#define LL_TIM_TIM3_TI3_RMP_COMP3  TIM_TISEL_TI3SEL_0                                /*!< TIM3 input 3 is connected to COMP3_OUT */
+#endif
+/**
+  * @}
+  */
+
+#if defined(TIM4)
+/** @defgroup TIM_LL_EC_TIM4_TI1_RMP  TIM4 Timer Input Ch1 Remap
+  * @{
+  */
+#define LL_TIM_TIM4_TI1_RMP_GPIO   0x00000000U                                       /*!< TIM4 input 1 is connected to GPIO */
+#if defined(COMP1)
+#define LL_TIM_TIM4_TI1_RMP_COMP1  TIM_TISEL_TI1SEL_0                                /*!< TIM4 input 1 is connected to COMP1_OUT */
+#endif
+/**
+  * @}
+  */
+
+/** @defgroup TIM_LL_EC_TIM4_TI2_RMP  TIM4 Timer Input Ch2 Remap
+  * @{
+  */
+#define LL_TIM_TIM4_TI2_RMP_GPIO   0x00000000U                                       /*!< TIM4 input 2 is connected to GPIO */
+#if defined(COMP2)
+#define LL_TIM_TIM4_TI2_RMP_COMP2  TIM_TISEL_TI2SEL_0                                /*!< TIM4 input 2 is connected to COMP2_OUT */
+#endif
+/**
+  * @}
+  */
+
+/** @defgroup TIM_LL_EC_TIM4_TI3_RMP  TIM4 Timer Input Ch3 Remap
+  * @{
+  */
+#define LL_TIM_TIM4_TI3_RMP_GPIO   0x00000000U                                       /*!< TIM4 input 3 is connected to GPIO */
+#if defined(COMP3)
+#define LL_TIM_TIM4_TI3_RMP_COMP3  TIM_TISEL_TI3SEL_0                                /*!< TIM4 input 3 is connected to COMP3_OUT */
+#endif
+/**
+  * @}
+  */
+#endif
+
 /** @defgroup TIM_LL_EC_TIM14_TI1_RMP  TIM14 Timer Input Ch1 Remap
   * @{
   */
 #define LL_TIM_TIM14_TI1_RMP_GPIO     0x00000000U                                    /*!< TIM14 input 1 is connected to GPIO */
 #define LL_TIM_TIM14_TI1_RMP_RTC_CLK  TIM_TISEL_TI1SEL_0                             /*!< TIM14 input 1 is connected to RTC clock */
-#define LL_TIM_TIM14_TI1_RMP_HSE_32   TIM_TISEL_TI1SEL_1                             /*!< TIM14_TI1 is connected to HSE/32 clock */
-#define LL_TIM_TIM14_TI1_RMP_MCO      (TIM_TISEL_TI1SEL_0  | TIM_TISEL_TI1SEL_1)     /*!< TIM14 input 1 is connected to MCO */
+#define LL_TIM_TIM14_TI1_RMP_HSE_32   TIM_TISEL_TI1SEL_1                             /*!< TIM14 input 1 is connected to HSE/32 clock */
+#define LL_TIM_TIM14_TI1_RMP_MCO     (TIM_TISEL_TI1SEL_0  | TIM_TISEL_TI1SEL_1)     /*!< TIM14 input 1 is connected to MCO */
+#define LL_TIM_TIM14_TI1_RMP_MCO2    TIM_TISEL_TI1SEL_2                             /*!< TIM14 input 1 is connected to MCO2 */
 /**
   * @}
   */
@@ -1252,6 +1318,7 @@ typedef struct
 #define LL_TIM_TIM16_TI1_RMP_LSI     TIM_TISEL_TI1SEL_0                              /*!< TIM16 input 1 is connected to LSI */
 #define LL_TIM_TIM16_TI1_RMP_LSE     TIM_TISEL_TI1SEL_1                              /*!< TIM16 input 1 is connected to LSE */
 #define LL_TIM_TIM16_TI1_RMP_RTC_WK  (TIM_TISEL_TI1SEL_0 | TIM_TISEL_TI1SEL_1)       /*!< TIM16 input 1 is connected to RTC_WAKEUP */
+#define LL_TIM_TIM16_TI1_RMP_MCO2    TIM_TISEL_TI1SEL_2                              /*!< TIM16 input 1 is connected to MCO2 */
 /**
   * @}
   */
@@ -1260,8 +1327,10 @@ typedef struct
   * @{
   */
 #define LL_TIM_TIM17_TI1_RMP_GPIO    0x00000000U                                     /*!< TIM17 input 1 is connected to GPIO */
+#define LL_TIM_TIM17_TI1_RMP_HSI48   TIM_TISEL_TI1SEL_0                              /*!< TIM17 input 1 is connected to HSI48/256 */
 #define LL_TIM_TIM17_TI1_RMP_HSE_32  TIM_TISEL_TI1SEL_1                              /*!< TIM17 input 1 is connected to HSE/32 clock */
 #define LL_TIM_TIM17_TI1_RMP_MCO    (TIM_TISEL_TI1SEL_0 | TIM_TISEL_TI1SEL_1)        /*!< TIM17 input 1 is connected to MCO */
+#define LL_TIM_TIM17_TI1_RMP_MCO2    TIM_TISEL_TI1SEL_2                              /*!< TIM17 input 1 is connected to MCO2 */
 /**
   * @}
   */
@@ -1272,7 +1341,12 @@ typedef struct
 #define LL_TIM_OCREF_CLR_INT_ETR         OCREF_CLEAR_SELECT_Msk       /*!< OCREF_CLR_INT is connected to ETRF */
 #if defined(COMP1) && defined(COMP2)
 #define LL_TIM_OCREF_CLR_INT_COMP1       0x00000000U                  /*!< OCREF clear input is connected to COMP1_OUT */
+#if defined(COMP3)
+#define LL_TIM_OCREF_CLR_INT_COMP2       TIM1_OR1_OCREF_CLR_0         /*!< OCREF clear input is connected to COMP2_OUT */
+#define LL_TIM_OCREF_CLR_INT_COMP3       TIM1_OR1_OCREF_CLR_1         /*!< OCREF clear input is connected to COMP3_OUT */
+#else
 #define LL_TIM_OCREF_CLR_INT_COMP2       TIM1_OR1_OCREF_CLR           /*!< OCREF clear input is connected to COMP2_OUT */
+#endif /* COMP3 */
 #endif /* COMP1 & COMP2 */
 /**
   * @}
@@ -1280,7 +1354,7 @@ typedef struct
 
 /** Legacy definitions for compatibility purpose
 @cond 0
-*/
+  */
 #define LL_TIM_BKIN_SOURCE_DFBK  LL_TIM_BKIN_SOURCE_DF1BK
 /**
 @endcond
@@ -1330,7 +1404,7 @@ typedef struct
   * @retval UIF status bit
   */
 #define __LL_TIM_GETFLAG_UIFCPY(__CNT__)  \
-   (READ_BIT((__CNT__), TIM_CNT_UIFCPY) >> TIM_CNT_UIFCPY_Pos)
+  (READ_BIT((__CNT__), TIM_CNT_UIFCPY) >> TIM_CNT_UIFCPY_Pos)
 
 /**
   * @brief  HELPER macro calculating DTG[0:7] in the TIMx_BDTR register to achieve the requested dead time duration.
@@ -1344,11 +1418,11 @@ typedef struct
   * @retval DTG[0:7]
   */
 #define __LL_TIM_CALC_DEADTIME(__TIMCLK__, __CKD__, __DT__)  \
-    ( (((uint64_t)((__DT__)*1000U)) < ((DT_DELAY_1+1U) * TIM_CALC_DTS((__TIMCLK__), (__CKD__))))           ? (uint8_t)(((uint64_t)((__DT__)*1000U) / TIM_CALC_DTS((__TIMCLK__), (__CKD__)))  & DT_DELAY_1) :                                               \
-      (((uint64_t)((__DT__)*1000U)) < ((64U + (DT_DELAY_2+1U)) * 2U * TIM_CALC_DTS((__TIMCLK__), (__CKD__))))  ? (uint8_t)(DT_RANGE_2 | ((uint8_t)((uint8_t)((((uint64_t)((__DT__)*1000U))/ TIM_CALC_DTS((__TIMCLK__), (__CKD__))) >> 1U) - (uint8_t) 64) & DT_DELAY_2)) :\
-      (((uint64_t)((__DT__)*1000U)) < ((32U + (DT_DELAY_3+1U)) * 8U * TIM_CALC_DTS((__TIMCLK__), (__CKD__))))  ? (uint8_t)(DT_RANGE_3 | ((uint8_t)((uint8_t)(((((uint64_t)(__DT__)*1000U))/ TIM_CALC_DTS((__TIMCLK__), (__CKD__))) >> 3U) - (uint8_t) 32) & DT_DELAY_3)) :\
-      (((uint64_t)((__DT__)*1000U)) < ((32U + (DT_DELAY_4+1U)) * 16U * TIM_CALC_DTS((__TIMCLK__), (__CKD__)))) ? (uint8_t)(DT_RANGE_4 | ((uint8_t)((uint8_t)(((((uint64_t)(__DT__)*1000U))/ TIM_CALC_DTS((__TIMCLK__), (__CKD__))) >> 4U) - (uint8_t) 32) & DT_DELAY_4)) :\
-       0U)
+  ( (((uint64_t)((__DT__)*1000U)) < ((DT_DELAY_1+1U) * TIM_CALC_DTS((__TIMCLK__), (__CKD__))))    ? (uint8_t)(((uint64_t)((__DT__)*1000U) / TIM_CALC_DTS((__TIMCLK__), (__CKD__)))  & DT_DELAY_1) :                                               \
+    (((uint64_t)((__DT__)*1000U)) < ((64U + (DT_DELAY_2+1U)) * 2U * TIM_CALC_DTS((__TIMCLK__), (__CKD__))))  ? (uint8_t)(DT_RANGE_2 | ((uint8_t)((uint8_t)((((uint64_t)((__DT__)*1000U))/ TIM_CALC_DTS((__TIMCLK__), (__CKD__))) >> 1U) - (uint8_t) 64) & DT_DELAY_2)) :\
+    (((uint64_t)((__DT__)*1000U)) < ((32U + (DT_DELAY_3+1U)) * 8U * TIM_CALC_DTS((__TIMCLK__), (__CKD__))))  ? (uint8_t)(DT_RANGE_3 | ((uint8_t)((uint8_t)(((((uint64_t)(__DT__)*1000U))/ TIM_CALC_DTS((__TIMCLK__), (__CKD__))) >> 3U) - (uint8_t) 32) & DT_DELAY_3)) :\
+    (((uint64_t)((__DT__)*1000U)) < ((32U + (DT_DELAY_4+1U)) * 16U * TIM_CALC_DTS((__TIMCLK__), (__CKD__)))) ? (uint8_t)(DT_RANGE_4 | ((uint8_t)((uint8_t)(((((uint64_t)(__DT__)*1000U))/ TIM_CALC_DTS((__TIMCLK__), (__CKD__))) >> 4U) - (uint8_t) 32) & DT_DELAY_4)) :\
+    0U)
 
 /**
   * @brief  HELPER macro calculating the prescaler value to achieve the required counter clock frequency.
@@ -1358,7 +1432,7 @@ typedef struct
   * @retval Prescaler value  (between Min_Data=0 and Max_Data=65535)
   */
 #define __LL_TIM_CALC_PSC(__TIMCLK__, __CNTCLK__)   \
-   (((__TIMCLK__) >= (__CNTCLK__)) ? (uint32_t)(((__TIMCLK__)/(__CNTCLK__)) - 1U) : 0U)
+  (((__TIMCLK__) >= (__CNTCLK__)) ? (uint32_t)(((__TIMCLK__)/(__CNTCLK__)) - 1U) : 0U)
 
 /**
   * @brief  HELPER macro calculating the auto-reload value to achieve the required output signal frequency.
@@ -1369,7 +1443,7 @@ typedef struct
   * @retval  Auto-reload value  (between Min_Data=0 and Max_Data=65535)
   */
 #define __LL_TIM_CALC_ARR(__TIMCLK__, __PSC__, __FREQ__) \
-     ((((__TIMCLK__)/((__PSC__) + 1U)) >= (__FREQ__)) ? (((__TIMCLK__)/((__FREQ__) * ((__PSC__) + 1U))) - 1U) : 0U)
+  ((((__TIMCLK__)/((__PSC__) + 1U)) >= (__FREQ__)) ? (((__TIMCLK__)/((__FREQ__) * ((__PSC__) + 1U))) - 1U) : 0U)
 
 /**
   * @brief  HELPER macro calculating the compare value required to achieve the required timer output compare active/inactive delay.
@@ -1380,8 +1454,8 @@ typedef struct
   * @retval Compare value  (between Min_Data=0 and Max_Data=65535)
   */
 #define __LL_TIM_CALC_DELAY(__TIMCLK__, __PSC__, __DELAY__)  \
-((uint32_t)(((uint64_t)(__TIMCLK__) * (uint64_t)(__DELAY__)) \
-          / ((uint64_t)1000000U * (uint64_t)((__PSC__) + 1U))))
+  ((uint32_t)(((uint64_t)(__TIMCLK__) * (uint64_t)(__DELAY__)) \
+              / ((uint64_t)1000000U * (uint64_t)((__PSC__) + 1U))))
 
 /**
   * @brief  HELPER macro calculating the auto-reload value to achieve the required pulse duration (when the timer operates in one pulse mode).
@@ -1393,8 +1467,8 @@ typedef struct
   * @retval Auto-reload value  (between Min_Data=0 and Max_Data=65535)
   */
 #define __LL_TIM_CALC_PULSE(__TIMCLK__, __PSC__, __DELAY__, __PULSE__)  \
- ((uint32_t)(__LL_TIM_CALC_DELAY((__TIMCLK__), (__PSC__), (__PULSE__)) \
-           + __LL_TIM_CALC_DELAY((__TIMCLK__), (__PSC__), (__DELAY__))))
+  ((uint32_t)(__LL_TIM_CALC_DELAY((__TIMCLK__), (__PSC__), (__PULSE__)) \
+              + __LL_TIM_CALC_DELAY((__TIMCLK__), (__PSC__), (__DELAY__))))
 
 /**
   * @brief  HELPER macro retrieving the ratio of the input capture prescaler
@@ -1407,7 +1481,7 @@ typedef struct
   * @retval Input capture prescaler ratio (1, 2, 4 or 8)
   */
 #define __LL_TIM_GET_ICPSC_RATIO(__ICPSC__)  \
-   ((uint32_t)(0x01U << (((__ICPSC__) >> 16U) >> TIM_CCMR1_IC1PSC_Pos)))
+  ((uint32_t)(0x01U << (((__ICPSC__) >> 16U) >> TIM_CCMR1_IC1PSC_Pos)))
 
 
 /**
@@ -1556,7 +1630,7 @@ __STATIC_INLINE uint32_t LL_TIM_GetOnePulseMode(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Set the timer counter counting mode.
-  * @note Macro @ref IS_TIM_COUNTER_MODE_SELECT_INSTANCE(TIMx) can be used to
+  * @note Macro IS_TIM_COUNTER_MODE_SELECT_INSTANCE(TIMx) can be used to
   *       check whether or not the counter mode selection feature is supported
   *       by a timer instance.
   * @note Switching from Center Aligned counter mode to Edge counter mode (or reverse)
@@ -1580,7 +1654,7 @@ __STATIC_INLINE void LL_TIM_SetCounterMode(TIM_TypeDef *TIMx, uint32_t CounterMo
 
 /**
   * @brief  Get actual counter mode.
-  * @note Macro @ref IS_TIM_COUNTER_MODE_SELECT_INSTANCE(TIMx) can be used to
+  * @note Macro IS_TIM_COUNTER_MODE_SELECT_INSTANCE(TIMx) can be used to
   *       check whether or not the counter mode selection feature is supported
   *       by a timer instance.
   * @rmtoll CR1          DIR           LL_TIM_GetCounterMode\n
@@ -1633,7 +1707,7 @@ __STATIC_INLINE uint32_t LL_TIM_IsEnabledARRPreload(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Set the division ratio between the timer clock  and the sampling clock used by the dead-time generators (when supported) and the digital filters.
-  * @note Macro @ref IS_TIM_CLOCK_DIVISION_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_CLOCK_DIVISION_INSTANCE(TIMx) can be used to check
   *       whether or not the clock division feature is supported by the timer
   *       instance.
   * @rmtoll CR1          CKD           LL_TIM_SetClockDivision
@@ -1651,7 +1725,7 @@ __STATIC_INLINE void LL_TIM_SetClockDivision(TIM_TypeDef *TIMx, uint32_t ClockDi
 
 /**
   * @brief  Get the actual division ratio between the timer clock  and the sampling clock used by the dead-time generators (when supported) and the digital filters.
-  * @note Macro @ref IS_TIM_CLOCK_DIVISION_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_CLOCK_DIVISION_INSTANCE(TIMx) can be used to check
   *       whether or not the clock division feature is supported by the timer
   *       instance.
   * @rmtoll CR1          CKD           LL_TIM_GetClockDivision
@@ -1668,7 +1742,7 @@ __STATIC_INLINE uint32_t LL_TIM_GetClockDivision(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Set the counter value.
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
   * @rmtoll CNT          CNT           LL_TIM_SetCounter
   * @param  TIMx Timer instance
@@ -1682,7 +1756,7 @@ __STATIC_INLINE void LL_TIM_SetCounter(TIM_TypeDef *TIMx, uint32_t Counter)
 
 /**
   * @brief  Get the counter value.
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
   * @rmtoll CNT          CNT           LL_TIM_GetCounter
   * @param  TIMx Timer instance
@@ -1736,7 +1810,7 @@ __STATIC_INLINE uint32_t LL_TIM_GetPrescaler(TIM_TypeDef *TIMx)
 /**
   * @brief  Set the auto-reload value.
   * @note The counter is blocked while the auto-reload value is null.
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
   * @note Helper macro @ref __LL_TIM_CALC_ARR can be used to calculate the AutoReload parameter
   * @rmtoll ARR          ARR           LL_TIM_SetAutoReload
@@ -1752,7 +1826,7 @@ __STATIC_INLINE void LL_TIM_SetAutoReload(TIM_TypeDef *TIMx, uint32_t AutoReload
 /**
   * @brief  Get the auto-reload value.
   * @rmtoll ARR          ARR           LL_TIM_GetAutoReload
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
   * @param  TIMx Timer instance
   * @retval Auto-reload value
@@ -1765,11 +1839,11 @@ __STATIC_INLINE uint32_t LL_TIM_GetAutoReload(TIM_TypeDef *TIMx)
 /**
   * @brief  Set the repetition counter value.
   * @note For advanced timer instances RepetitionCounter can be up to 65535.
-  * @note Macro @ref IS_TIM_REPETITION_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_REPETITION_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a repetition counter.
   * @rmtoll RCR          REP           LL_TIM_SetRepetitionCounter
   * @param  TIMx Timer instance
-  * @param  RepetitionCounter between Min_Data=0 and Max_Data=255
+  * @param  RepetitionCounter between Min_Data=0 and Max_Data=255 or 65535 for advanced timer.
   * @retval None
   */
 __STATIC_INLINE void LL_TIM_SetRepetitionCounter(TIM_TypeDef *TIMx, uint32_t RepetitionCounter)
@@ -1779,7 +1853,7 @@ __STATIC_INLINE void LL_TIM_SetRepetitionCounter(TIM_TypeDef *TIMx, uint32_t Rep
 
 /**
   * @brief  Get the repetition counter value.
-  * @note Macro @ref IS_TIM_REPETITION_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_REPETITION_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a repetition counter.
   * @rmtoll RCR          REP           LL_TIM_GetRepetitionCounter
   * @param  TIMx Timer instance
@@ -1814,6 +1888,16 @@ __STATIC_INLINE void LL_TIM_DisableUIFRemap(TIM_TypeDef *TIMx)
 }
 
 /**
+  * @brief  Indicate whether update interrupt flag (UIF) copy is set.
+  * @param  Counter Counter value
+  * @retval State of bit (1 or 0).
+  */
+__STATIC_INLINE uint32_t LL_TIM_IsActiveUIFCPY(uint32_t Counter)
+{
+  return (((Counter & TIM_CNT_UIFCPY) == (TIM_CNT_UIFCPY)) ? 1UL : 0UL);
+}
+
+/**
   * @}
   */
 
@@ -1825,7 +1909,7 @@ __STATIC_INLINE void LL_TIM_DisableUIFRemap(TIM_TypeDef *TIMx)
   * @note CCxE, CCxNE and OCxM bits are preloaded, after having been written,
   *       they are updated only when a commutation event (COM) occurs.
   * @note Only on channels that have a complementary output.
-  * @note Macro @ref IS_TIM_COMMUTATION_EVENT_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_COMMUTATION_EVENT_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance is able to generate a commutation event.
   * @rmtoll CR2          CCPC          LL_TIM_CC_EnablePreload
   * @param  TIMx Timer instance
@@ -1838,7 +1922,7 @@ __STATIC_INLINE void LL_TIM_CC_EnablePreload(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Disable  the capture/compare control bits (CCxE, CCxNE and OCxM) preload.
-  * @note Macro @ref IS_TIM_COMMUTATION_EVENT_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_COMMUTATION_EVENT_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance is able to generate a commutation event.
   * @rmtoll CR2          CCPC          LL_TIM_CC_DisablePreload
   * @param  TIMx Timer instance
@@ -1851,7 +1935,7 @@ __STATIC_INLINE void LL_TIM_CC_DisablePreload(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Set the updated source of the capture/compare control bits (CCxE, CCxNE and OCxM).
-  * @note Macro @ref IS_TIM_COMMUTATION_EVENT_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_COMMUTATION_EVENT_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance is able to generate a commutation event.
   * @rmtoll CR2          CCUS          LL_TIM_CC_SetUpdate
   * @param  TIMx Timer instance
@@ -1895,7 +1979,7 @@ __STATIC_INLINE uint32_t LL_TIM_CC_GetDMAReqTrigger(TIM_TypeDef *TIMx)
 /**
   * @brief  Set the lock level to freeze the
   *         configuration of several capture/compare parameters.
-  * @note Macro @ref IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
   *       the lock mechanism is supported by a timer instance.
   * @rmtoll BDTR         LOCK          LL_TIM_CC_SetLockLevel
   * @param  TIMx Timer instance
@@ -2040,8 +2124,8 @@ __STATIC_INLINE uint32_t LL_TIM_CC_IsEnabledChannel(TIM_TypeDef *TIMx, uint32_t 
   */
 __STATIC_INLINE void LL_TIM_OC_ConfigOutput(TIM_TypeDef *TIMx, uint32_t Channel, uint32_t Configuration)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   CLEAR_BIT(*pReg, (TIM_CCMR1_CC1S << SHIFT_TAB_OCxx[iChannel]));
   MODIFY_REG(TIMx->CCER, (TIM_CCER_CC1P << SHIFT_TAB_CCxP[iChannel]),
              (Configuration & TIM_CCER_CC1P) << SHIFT_TAB_CCxP[iChannel]);
@@ -2085,8 +2169,8 @@ __STATIC_INLINE void LL_TIM_OC_ConfigOutput(TIM_TypeDef *TIMx, uint32_t Channel,
   */
 __STATIC_INLINE void LL_TIM_OC_SetMode(TIM_TypeDef *TIMx, uint32_t Channel, uint32_t Mode)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   MODIFY_REG(*pReg, ((TIM_CCMR1_OC1M  | TIM_CCMR1_CC1S) << SHIFT_TAB_OCxx[iChannel]),  Mode << SHIFT_TAB_OCxx[iChannel]);
 }
 
@@ -2124,8 +2208,8 @@ __STATIC_INLINE void LL_TIM_OC_SetMode(TIM_TypeDef *TIMx, uint32_t Channel, uint
   */
 __STATIC_INLINE uint32_t LL_TIM_OC_GetMode(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register const __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  const __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   return (READ_BIT(*pReg, ((TIM_CCMR1_OC1M  | TIM_CCMR1_CC1S) << SHIFT_TAB_OCxx[iChannel])) >> SHIFT_TAB_OCxx[iChannel]);
 }
 
@@ -2158,7 +2242,7 @@ __STATIC_INLINE uint32_t LL_TIM_OC_GetMode(TIM_TypeDef *TIMx, uint32_t Channel)
   */
 __STATIC_INLINE void LL_TIM_OC_SetPolarity(TIM_TypeDef *TIMx, uint32_t Channel, uint32_t Polarity)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
   MODIFY_REG(TIMx->CCER, (TIM_CCER_CC1P << SHIFT_TAB_CCxP[iChannel]),  Polarity << SHIFT_TAB_CCxP[iChannel]);
 }
 
@@ -2190,14 +2274,14 @@ __STATIC_INLINE void LL_TIM_OC_SetPolarity(TIM_TypeDef *TIMx, uint32_t Channel, 
   */
 __STATIC_INLINE uint32_t LL_TIM_OC_GetPolarity(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
   return (READ_BIT(TIMx->CCER, (TIM_CCER_CC1P << SHIFT_TAB_CCxP[iChannel])) >> SHIFT_TAB_CCxP[iChannel]);
 }
 
 /**
   * @brief  Set the IDLE state of an output channel
   * @note This function is significant only for the timer instances
-  *       supporting the break feature. Macro @ref IS_TIM_BREAK_INSTANCE(TIMx)
+  *       supporting the break feature. Macro IS_TIM_BREAK_INSTANCE(TIMx)
   *       can be used to check whether or not a timer instance provides
   *       a break input.
   * @rmtoll CR2         OIS1          LL_TIM_OC_SetIdleState\n
@@ -2227,7 +2311,7 @@ __STATIC_INLINE uint32_t LL_TIM_OC_GetPolarity(TIM_TypeDef *TIMx, uint32_t Chann
   */
 __STATIC_INLINE void LL_TIM_OC_SetIdleState(TIM_TypeDef *TIMx, uint32_t Channel, uint32_t IdleState)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
   MODIFY_REG(TIMx->CR2, (TIM_CR2_OIS1 << SHIFT_TAB_OISx[iChannel]),  IdleState << SHIFT_TAB_OISx[iChannel]);
 }
 
@@ -2259,7 +2343,7 @@ __STATIC_INLINE void LL_TIM_OC_SetIdleState(TIM_TypeDef *TIMx, uint32_t Channel,
   */
 __STATIC_INLINE uint32_t LL_TIM_OC_GetIdleState(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
   return (READ_BIT(TIMx->CR2, (TIM_CR2_OIS1 << SHIFT_TAB_OISx[iChannel])) >> SHIFT_TAB_OISx[iChannel]);
 }
 
@@ -2284,8 +2368,8 @@ __STATIC_INLINE uint32_t LL_TIM_OC_GetIdleState(TIM_TypeDef *TIMx, uint32_t Chan
   */
 __STATIC_INLINE void LL_TIM_OC_EnableFast(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   SET_BIT(*pReg, (TIM_CCMR1_OC1FE << SHIFT_TAB_OCxx[iChannel]));
 
 }
@@ -2310,8 +2394,8 @@ __STATIC_INLINE void LL_TIM_OC_EnableFast(TIM_TypeDef *TIMx, uint32_t Channel)
   */
 __STATIC_INLINE void LL_TIM_OC_DisableFast(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   CLEAR_BIT(*pReg, (TIM_CCMR1_OC1FE << SHIFT_TAB_OCxx[iChannel]));
 
 }
@@ -2336,9 +2420,9 @@ __STATIC_INLINE void LL_TIM_OC_DisableFast(TIM_TypeDef *TIMx, uint32_t Channel)
   */
 __STATIC_INLINE uint32_t LL_TIM_OC_IsEnabledFast(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register const __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
-  register uint32_t bitfield = TIM_CCMR1_OC1FE << SHIFT_TAB_OCxx[iChannel];
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  const __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint32_t bitfield = TIM_CCMR1_OC1FE << SHIFT_TAB_OCxx[iChannel];
   return ((READ_BIT(*pReg, bitfield) == bitfield) ? 1UL : 0UL);
 }
 
@@ -2362,8 +2446,8 @@ __STATIC_INLINE uint32_t LL_TIM_OC_IsEnabledFast(TIM_TypeDef *TIMx, uint32_t Cha
   */
 __STATIC_INLINE void LL_TIM_OC_EnablePreload(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   SET_BIT(*pReg, (TIM_CCMR1_OC1PE << SHIFT_TAB_OCxx[iChannel]));
 }
 
@@ -2387,8 +2471,8 @@ __STATIC_INLINE void LL_TIM_OC_EnablePreload(TIM_TypeDef *TIMx, uint32_t Channel
   */
 __STATIC_INLINE void LL_TIM_OC_DisablePreload(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   CLEAR_BIT(*pReg, (TIM_CCMR1_OC1PE << SHIFT_TAB_OCxx[iChannel]));
 }
 
@@ -2412,16 +2496,16 @@ __STATIC_INLINE void LL_TIM_OC_DisablePreload(TIM_TypeDef *TIMx, uint32_t Channe
   */
 __STATIC_INLINE uint32_t LL_TIM_OC_IsEnabledPreload(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register const __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
-  register uint32_t bitfield = TIM_CCMR1_OC1PE << SHIFT_TAB_OCxx[iChannel];
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  const __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint32_t bitfield = TIM_CCMR1_OC1PE << SHIFT_TAB_OCxx[iChannel];
   return ((READ_BIT(*pReg, bitfield) == bitfield) ? 1UL : 0UL);
 }
 
 /**
   * @brief  Enable clearing the output channel on an external event.
   * @note This function can only be used in Output compare and PWM modes. It does not work in Forced mode.
-  * @note Macro @ref IS_TIM_OCXREF_CLEAR_INSTANCE(TIMx) can be used to check whether
+  * @note Macro IS_TIM_OCXREF_CLEAR_INSTANCE(TIMx) can be used to check whether
   *       or not a timer instance can clear the OCxREF signal on an external event.
   * @rmtoll CCMR1        OC1CE          LL_TIM_OC_EnableClear\n
   *         CCMR1        OC2CE          LL_TIM_OC_EnableClear\n
@@ -2441,14 +2525,14 @@ __STATIC_INLINE uint32_t LL_TIM_OC_IsEnabledPreload(TIM_TypeDef *TIMx, uint32_t 
   */
 __STATIC_INLINE void LL_TIM_OC_EnableClear(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   SET_BIT(*pReg, (TIM_CCMR1_OC1CE << SHIFT_TAB_OCxx[iChannel]));
 }
 
 /**
   * @brief  Disable clearing the output channel on an external event.
-  * @note Macro @ref IS_TIM_OCXREF_CLEAR_INSTANCE(TIMx) can be used to check whether
+  * @note Macro IS_TIM_OCXREF_CLEAR_INSTANCE(TIMx) can be used to check whether
   *       or not a timer instance can clear the OCxREF signal on an external event.
   * @rmtoll CCMR1        OC1CE          LL_TIM_OC_DisableClear\n
   *         CCMR1        OC2CE          LL_TIM_OC_DisableClear\n
@@ -2468,8 +2552,8 @@ __STATIC_INLINE void LL_TIM_OC_EnableClear(TIM_TypeDef *TIMx, uint32_t Channel)
   */
 __STATIC_INLINE void LL_TIM_OC_DisableClear(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   CLEAR_BIT(*pReg, (TIM_CCMR1_OC1CE << SHIFT_TAB_OCxx[iChannel]));
 }
 
@@ -2477,7 +2561,7 @@ __STATIC_INLINE void LL_TIM_OC_DisableClear(TIM_TypeDef *TIMx, uint32_t Channel)
   * @brief  Indicates clearing the output channel on an external event is enabled for the output channel.
   * @note This function enables clearing the output channel on an external event.
   * @note This function can only be used in Output compare and PWM modes. It does not work in Forced mode.
-  * @note Macro @ref IS_TIM_OCXREF_CLEAR_INSTANCE(TIMx) can be used to check whether
+  * @note Macro IS_TIM_OCXREF_CLEAR_INSTANCE(TIMx) can be used to check whether
   *       or not a timer instance can clear the OCxREF signal on an external event.
   * @rmtoll CCMR1        OC1CE          LL_TIM_OC_IsEnabledClear\n
   *         CCMR1        OC2CE          LL_TIM_OC_IsEnabledClear\n
@@ -2497,15 +2581,15 @@ __STATIC_INLINE void LL_TIM_OC_DisableClear(TIM_TypeDef *TIMx, uint32_t Channel)
   */
 __STATIC_INLINE uint32_t LL_TIM_OC_IsEnabledClear(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register const __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
-  register uint32_t bitfield = TIM_CCMR1_OC1CE << SHIFT_TAB_OCxx[iChannel];
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  const __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint32_t bitfield = TIM_CCMR1_OC1CE << SHIFT_TAB_OCxx[iChannel];
   return ((READ_BIT(*pReg, bitfield) == bitfield) ? 1UL : 0UL);
 }
 
 /**
   * @brief  Set the dead-time delay (delay inserted between the rising edge of the OCxREF signal and the rising edge of the Ocx and OCxN signals).
-  * @note Macro @ref IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
   *       dead-time insertion feature is supported by a timer instance.
   * @note Helper macro @ref __LL_TIM_CALC_DEADTIME can be used to calculate the DeadTime parameter
   * @rmtoll BDTR         DTG           LL_TIM_OC_SetDeadTime
@@ -2521,9 +2605,9 @@ __STATIC_INLINE void LL_TIM_OC_SetDeadTime(TIM_TypeDef *TIMx, uint32_t DeadTime)
 /**
   * @brief  Set compare value for output channel 1 (TIMx_CCR1).
   * @note In 32-bit timer implementations compare value can be between 0x00000000 and 0xFFFFFFFF.
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
-  * @note Macro @ref IS_TIM_CC1_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC1_INSTANCE(TIMx) can be used to check whether or not
   *       output channel 1 is supported by a timer instance.
   * @rmtoll CCR1         CCR1          LL_TIM_OC_SetCompareCH1
   * @param  TIMx Timer instance
@@ -2538,9 +2622,9 @@ __STATIC_INLINE void LL_TIM_OC_SetCompareCH1(TIM_TypeDef *TIMx, uint32_t Compare
 /**
   * @brief  Set compare value for output channel 2 (TIMx_CCR2).
   * @note In 32-bit timer implementations compare value can be between 0x00000000 and 0xFFFFFFFF.
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
-  * @note Macro @ref IS_TIM_CC2_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC2_INSTANCE(TIMx) can be used to check whether or not
   *       output channel 2 is supported by a timer instance.
   * @rmtoll CCR2         CCR2          LL_TIM_OC_SetCompareCH2
   * @param  TIMx Timer instance
@@ -2555,9 +2639,9 @@ __STATIC_INLINE void LL_TIM_OC_SetCompareCH2(TIM_TypeDef *TIMx, uint32_t Compare
 /**
   * @brief  Set compare value for output channel 3 (TIMx_CCR3).
   * @note In 32-bit timer implementations compare value can be between 0x00000000 and 0xFFFFFFFF.
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
-  * @note Macro @ref IS_TIM_CC3_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC3_INSTANCE(TIMx) can be used to check whether or not
   *       output channel is supported by a timer instance.
   * @rmtoll CCR3         CCR3          LL_TIM_OC_SetCompareCH3
   * @param  TIMx Timer instance
@@ -2572,9 +2656,9 @@ __STATIC_INLINE void LL_TIM_OC_SetCompareCH3(TIM_TypeDef *TIMx, uint32_t Compare
 /**
   * @brief  Set compare value for output channel 4 (TIMx_CCR4).
   * @note In 32-bit timer implementations compare value can be between 0x00000000 and 0xFFFFFFFF.
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
-  * @note Macro @ref IS_TIM_CC4_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC4_INSTANCE(TIMx) can be used to check whether or not
   *       output channel 4 is supported by a timer instance.
   * @rmtoll CCR4         CCR4          LL_TIM_OC_SetCompareCH4
   * @param  TIMx Timer instance
@@ -2588,7 +2672,7 @@ __STATIC_INLINE void LL_TIM_OC_SetCompareCH4(TIM_TypeDef *TIMx, uint32_t Compare
 
 /**
   * @brief  Set compare value for output channel 5 (TIMx_CCR5).
-  * @note Macro @ref IS_TIM_CC5_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC5_INSTANCE(TIMx) can be used to check whether or not
   *       output channel 5 is supported by a timer instance.
   * @rmtoll CCR5         CCR5          LL_TIM_OC_SetCompareCH5
   * @param  TIMx Timer instance
@@ -2597,12 +2681,12 @@ __STATIC_INLINE void LL_TIM_OC_SetCompareCH4(TIM_TypeDef *TIMx, uint32_t Compare
   */
 __STATIC_INLINE void LL_TIM_OC_SetCompareCH5(TIM_TypeDef *TIMx, uint32_t CompareValue)
 {
-  WRITE_REG(TIMx->CCR5, CompareValue);
+  MODIFY_REG(TIMx->CCR5, TIM_CCR5_CCR5, CompareValue);
 }
 
 /**
   * @brief  Set compare value for output channel 6 (TIMx_CCR6).
-  * @note Macro @ref IS_TIM_CC6_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC6_INSTANCE(TIMx) can be used to check whether or not
   *       output channel 6 is supported by a timer instance.
   * @rmtoll CCR6         CCR6          LL_TIM_OC_SetCompareCH6
   * @param  TIMx Timer instance
@@ -2617,9 +2701,9 @@ __STATIC_INLINE void LL_TIM_OC_SetCompareCH6(TIM_TypeDef *TIMx, uint32_t Compare
 /**
   * @brief  Get compare value (TIMx_CCR1) set for  output channel 1.
   * @note In 32-bit timer implementations returned compare value can be between 0x00000000 and 0xFFFFFFFF.
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
-  * @note Macro @ref IS_TIM_CC1_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC1_INSTANCE(TIMx) can be used to check whether or not
   *       output channel 1 is supported by a timer instance.
   * @rmtoll CCR1         CCR1          LL_TIM_OC_GetCompareCH1
   * @param  TIMx Timer instance
@@ -2633,9 +2717,9 @@ __STATIC_INLINE uint32_t LL_TIM_OC_GetCompareCH1(TIM_TypeDef *TIMx)
 /**
   * @brief  Get compare value (TIMx_CCR2) set for  output channel 2.
   * @note In 32-bit timer implementations returned compare value can be between 0x00000000 and 0xFFFFFFFF.
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
-  * @note Macro @ref IS_TIM_CC2_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC2_INSTANCE(TIMx) can be used to check whether or not
   *       output channel 2 is supported by a timer instance.
   * @rmtoll CCR2         CCR2          LL_TIM_OC_GetCompareCH2
   * @param  TIMx Timer instance
@@ -2649,9 +2733,9 @@ __STATIC_INLINE uint32_t LL_TIM_OC_GetCompareCH2(TIM_TypeDef *TIMx)
 /**
   * @brief  Get compare value (TIMx_CCR3) set for  output channel 3.
   * @note In 32-bit timer implementations returned compare value can be between 0x00000000 and 0xFFFFFFFF.
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
-  * @note Macro @ref IS_TIM_CC3_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC3_INSTANCE(TIMx) can be used to check whether or not
   *       output channel 3 is supported by a timer instance.
   * @rmtoll CCR3         CCR3          LL_TIM_OC_GetCompareCH3
   * @param  TIMx Timer instance
@@ -2665,9 +2749,9 @@ __STATIC_INLINE uint32_t LL_TIM_OC_GetCompareCH3(TIM_TypeDef *TIMx)
 /**
   * @brief  Get compare value (TIMx_CCR4) set for  output channel 4.
   * @note In 32-bit timer implementations returned compare value can be between 0x00000000 and 0xFFFFFFFF.
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
-  * @note Macro @ref IS_TIM_CC4_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC4_INSTANCE(TIMx) can be used to check whether or not
   *       output channel 4 is supported by a timer instance.
   * @rmtoll CCR4         CCR4          LL_TIM_OC_GetCompareCH4
   * @param  TIMx Timer instance
@@ -2680,7 +2764,7 @@ __STATIC_INLINE uint32_t LL_TIM_OC_GetCompareCH4(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Get compare value (TIMx_CCR5) set for  output channel 5.
-  * @note Macro @ref IS_TIM_CC5_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC5_INSTANCE(TIMx) can be used to check whether or not
   *       output channel 5 is supported by a timer instance.
   * @rmtoll CCR5         CCR5          LL_TIM_OC_GetCompareCH5
   * @param  TIMx Timer instance
@@ -2688,12 +2772,12 @@ __STATIC_INLINE uint32_t LL_TIM_OC_GetCompareCH4(TIM_TypeDef *TIMx)
   */
 __STATIC_INLINE uint32_t LL_TIM_OC_GetCompareCH5(TIM_TypeDef *TIMx)
 {
-  return (uint32_t)(READ_REG(TIMx->CCR5));
+  return (uint32_t)(READ_BIT(TIMx->CCR5, TIM_CCR5_CCR5));
 }
 
 /**
   * @brief  Get compare value (TIMx_CCR6) set for  output channel 6.
-  * @note Macro @ref IS_TIM_CC6_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC6_INSTANCE(TIMx) can be used to check whether or not
   *       output channel 6 is supported by a timer instance.
   * @rmtoll CCR6         CCR6          LL_TIM_OC_GetCompareCH6
   * @param  TIMx Timer instance
@@ -2706,13 +2790,13 @@ __STATIC_INLINE uint32_t LL_TIM_OC_GetCompareCH6(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Select on which reference signal the OC5REF is combined to.
-  * @note Macro @ref IS_TIM_COMBINED3PHASEPWM_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_COMBINED3PHASEPWM_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports the combined 3-phase PWM mode.
   * @rmtoll CCR5         GC5C3          LL_TIM_SetCH5CombinedChannels\n
   *         CCR5         GC5C2          LL_TIM_SetCH5CombinedChannels\n
   *         CCR5         GC5C1          LL_TIM_SetCH5CombinedChannels
   * @param  TIMx Timer instance
-  * @param  GroupCH5 This parameter can be one of the following values:
+  * @param  GroupCH5 This parameter can be a combination of the following values:
   *         @arg @ref LL_TIM_GROUPCH5_NONE
   *         @arg @ref LL_TIM_GROUPCH5_OC1REFC
   *         @arg @ref LL_TIM_GROUPCH5_OC2REFC
@@ -2721,7 +2805,7 @@ __STATIC_INLINE uint32_t LL_TIM_OC_GetCompareCH6(TIM_TypeDef *TIMx)
   */
 __STATIC_INLINE void LL_TIM_SetCH5CombinedChannels(TIM_TypeDef *TIMx, uint32_t GroupCH5)
 {
-  MODIFY_REG(TIMx->CCR5, TIM_CCR5_CCR5, GroupCH5);
+  MODIFY_REG(TIMx->CCR5, (TIM_CCR5_GC5C3 | TIM_CCR5_GC5C2 | TIM_CCR5_GC5C1), GroupCH5);
 }
 
 /**
@@ -2768,8 +2852,8 @@ __STATIC_INLINE void LL_TIM_SetCH5CombinedChannels(TIM_TypeDef *TIMx, uint32_t G
   */
 __STATIC_INLINE void LL_TIM_IC_Config(TIM_TypeDef *TIMx, uint32_t Channel, uint32_t Configuration)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   MODIFY_REG(*pReg, ((TIM_CCMR1_IC1F | TIM_CCMR1_IC1PSC | TIM_CCMR1_CC1S) << SHIFT_TAB_ICxx[iChannel]),
              ((Configuration >> 16U) & (TIM_CCMR1_IC1F | TIM_CCMR1_IC1PSC | TIM_CCMR1_CC1S))  << SHIFT_TAB_ICxx[iChannel]);
   MODIFY_REG(TIMx->CCER, ((TIM_CCER_CC1NP | TIM_CCER_CC1P) << SHIFT_TAB_CCxP[iChannel]),
@@ -2796,8 +2880,8 @@ __STATIC_INLINE void LL_TIM_IC_Config(TIM_TypeDef *TIMx, uint32_t Channel, uint3
   */
 __STATIC_INLINE void LL_TIM_IC_SetActiveInput(TIM_TypeDef *TIMx, uint32_t Channel, uint32_t ICActiveInput)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   MODIFY_REG(*pReg, ((TIM_CCMR1_CC1S) << SHIFT_TAB_ICxx[iChannel]), (ICActiveInput >> 16U) << SHIFT_TAB_ICxx[iChannel]);
 }
 
@@ -2820,8 +2904,8 @@ __STATIC_INLINE void LL_TIM_IC_SetActiveInput(TIM_TypeDef *TIMx, uint32_t Channe
   */
 __STATIC_INLINE uint32_t LL_TIM_IC_GetActiveInput(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register const __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  const __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   return ((READ_BIT(*pReg, ((TIM_CCMR1_CC1S) << SHIFT_TAB_ICxx[iChannel])) >> SHIFT_TAB_ICxx[iChannel]) << 16U);
 }
 
@@ -2846,8 +2930,8 @@ __STATIC_INLINE uint32_t LL_TIM_IC_GetActiveInput(TIM_TypeDef *TIMx, uint32_t Ch
   */
 __STATIC_INLINE void LL_TIM_IC_SetPrescaler(TIM_TypeDef *TIMx, uint32_t Channel, uint32_t ICPrescaler)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   MODIFY_REG(*pReg, ((TIM_CCMR1_IC1PSC) << SHIFT_TAB_ICxx[iChannel]), (ICPrescaler >> 16U) << SHIFT_TAB_ICxx[iChannel]);
 }
 
@@ -2871,8 +2955,8 @@ __STATIC_INLINE void LL_TIM_IC_SetPrescaler(TIM_TypeDef *TIMx, uint32_t Channel,
   */
 __STATIC_INLINE uint32_t LL_TIM_IC_GetPrescaler(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register const __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  const __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   return ((READ_BIT(*pReg, ((TIM_CCMR1_IC1PSC) << SHIFT_TAB_ICxx[iChannel])) >> SHIFT_TAB_ICxx[iChannel]) << 16U);
 }
 
@@ -2909,8 +2993,8 @@ __STATIC_INLINE uint32_t LL_TIM_IC_GetPrescaler(TIM_TypeDef *TIMx, uint32_t Chan
   */
 __STATIC_INLINE void LL_TIM_IC_SetFilter(TIM_TypeDef *TIMx, uint32_t Channel, uint32_t ICFilter)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   MODIFY_REG(*pReg, ((TIM_CCMR1_IC1F) << SHIFT_TAB_ICxx[iChannel]), (ICFilter >> 16U) << SHIFT_TAB_ICxx[iChannel]);
 }
 
@@ -2946,8 +3030,8 @@ __STATIC_INLINE void LL_TIM_IC_SetFilter(TIM_TypeDef *TIMx, uint32_t Channel, ui
   */
 __STATIC_INLINE uint32_t LL_TIM_IC_GetFilter(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
-  register const __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  const __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->CCMR1) + OFFSET_TAB_CCMRx[iChannel]));
   return ((READ_BIT(*pReg, ((TIM_CCMR1_IC1F) << SHIFT_TAB_ICxx[iChannel])) >> SHIFT_TAB_ICxx[iChannel]) << 16U);
 }
 
@@ -2975,7 +3059,7 @@ __STATIC_INLINE uint32_t LL_TIM_IC_GetFilter(TIM_TypeDef *TIMx, uint32_t Channel
   */
 __STATIC_INLINE void LL_TIM_IC_SetPolarity(TIM_TypeDef *TIMx, uint32_t Channel, uint32_t ICPolarity)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
   MODIFY_REG(TIMx->CCER, ((TIM_CCER_CC1NP | TIM_CCER_CC1P) << SHIFT_TAB_CCxP[iChannel]),
              ICPolarity << SHIFT_TAB_CCxP[iChannel]);
 }
@@ -3003,14 +3087,14 @@ __STATIC_INLINE void LL_TIM_IC_SetPolarity(TIM_TypeDef *TIMx, uint32_t Channel, 
   */
 __STATIC_INLINE uint32_t LL_TIM_IC_GetPolarity(TIM_TypeDef *TIMx, uint32_t Channel)
 {
-  register uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
+  uint8_t iChannel = TIM_GET_CHANNEL_INDEX(Channel);
   return (READ_BIT(TIMx->CCER, ((TIM_CCER_CC1NP | TIM_CCER_CC1P) << SHIFT_TAB_CCxP[iChannel])) >>
           SHIFT_TAB_CCxP[iChannel]);
 }
 
 /**
   * @brief  Connect the TIMx_CH1, CH2 and CH3 pins  to the TI1 input (XOR combination).
-  * @note Macro @ref IS_TIM_XOR_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_XOR_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides an XOR input.
   * @rmtoll CR2          TI1S          LL_TIM_IC_EnableXORCombination
   * @param  TIMx Timer instance
@@ -3023,7 +3107,7 @@ __STATIC_INLINE void LL_TIM_IC_EnableXORCombination(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Disconnect the TIMx_CH1, CH2 and CH3 pins  from the TI1 input.
-  * @note Macro @ref IS_TIM_XOR_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_XOR_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides an XOR input.
   * @rmtoll CR2          TI1S          LL_TIM_IC_DisableXORCombination
   * @param  TIMx Timer instance
@@ -3036,7 +3120,7 @@ __STATIC_INLINE void LL_TIM_IC_DisableXORCombination(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Indicates whether the TIMx_CH1, CH2 and CH3 pins are connectected to the TI1 input.
-  * @note Macro @ref IS_TIM_XOR_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_XOR_INSTANCE(TIMx) can be used to check whether or not
   * a timer instance provides an XOR input.
   * @rmtoll CR2          TI1S          LL_TIM_IC_IsEnabledXORCombination
   * @param  TIMx Timer instance
@@ -3050,9 +3134,9 @@ __STATIC_INLINE uint32_t LL_TIM_IC_IsEnabledXORCombination(TIM_TypeDef *TIMx)
 /**
   * @brief  Get captured value for input channel 1.
   * @note In 32-bit timer implementations returned captured value can be between 0x00000000 and 0xFFFFFFFF.
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
-  * @note Macro @ref IS_TIM_CC1_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC1_INSTANCE(TIMx) can be used to check whether or not
   *       input channel 1 is supported by a timer instance.
   * @rmtoll CCR1         CCR1          LL_TIM_IC_GetCaptureCH1
   * @param  TIMx Timer instance
@@ -3066,9 +3150,9 @@ __STATIC_INLINE uint32_t LL_TIM_IC_GetCaptureCH1(TIM_TypeDef *TIMx)
 /**
   * @brief  Get captured value for input channel 2.
   * @note In 32-bit timer implementations returned captured value can be between 0x00000000 and 0xFFFFFFFF.
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
-  * @note Macro @ref IS_TIM_CC2_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC2_INSTANCE(TIMx) can be used to check whether or not
   *       input channel 2 is supported by a timer instance.
   * @rmtoll CCR2         CCR2          LL_TIM_IC_GetCaptureCH2
   * @param  TIMx Timer instance
@@ -3082,9 +3166,9 @@ __STATIC_INLINE uint32_t LL_TIM_IC_GetCaptureCH2(TIM_TypeDef *TIMx)
 /**
   * @brief  Get captured value for input channel 3.
   * @note In 32-bit timer implementations returned captured value can be between 0x00000000 and 0xFFFFFFFF.
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
-  * @note Macro @ref IS_TIM_CC3_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC3_INSTANCE(TIMx) can be used to check whether or not
   *       input channel 3 is supported by a timer instance.
   * @rmtoll CCR3         CCR3          LL_TIM_IC_GetCaptureCH3
   * @param  TIMx Timer instance
@@ -3098,9 +3182,9 @@ __STATIC_INLINE uint32_t LL_TIM_IC_GetCaptureCH3(TIM_TypeDef *TIMx)
 /**
   * @brief  Get captured value for input channel 4.
   * @note In 32-bit timer implementations returned captured value can be between 0x00000000 and 0xFFFFFFFF.
-  * @note Macro @ref IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_32B_COUNTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports a 32 bits counter.
-  * @note Macro @ref IS_TIM_CC4_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_CC4_INSTANCE(TIMx) can be used to check whether or not
   *       input channel 4 is supported by a timer instance.
   * @rmtoll CCR4         CCR4          LL_TIM_IC_GetCaptureCH4
   * @param  TIMx Timer instance
@@ -3121,7 +3205,7 @@ __STATIC_INLINE uint32_t LL_TIM_IC_GetCaptureCH4(TIM_TypeDef *TIMx)
 /**
   * @brief  Enable external clock mode 2.
   * @note When external clock mode 2 is enabled the counter is clocked by any active edge on the ETRF signal.
-  * @note Macro @ref IS_TIM_CLOCKSOURCE_ETRMODE2_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_CLOCKSOURCE_ETRMODE2_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports external clock mode2.
   * @rmtoll SMCR         ECE           LL_TIM_EnableExternalClock
   * @param  TIMx Timer instance
@@ -3134,7 +3218,7 @@ __STATIC_INLINE void LL_TIM_EnableExternalClock(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Disable external clock mode 2.
-  * @note Macro @ref IS_TIM_CLOCKSOURCE_ETRMODE2_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_CLOCKSOURCE_ETRMODE2_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports external clock mode2.
   * @rmtoll SMCR         ECE           LL_TIM_DisableExternalClock
   * @param  TIMx Timer instance
@@ -3147,7 +3231,7 @@ __STATIC_INLINE void LL_TIM_DisableExternalClock(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Indicate whether external clock mode 2 is enabled.
-  * @note Macro @ref IS_TIM_CLOCKSOURCE_ETRMODE2_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_CLOCKSOURCE_ETRMODE2_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports external clock mode2.
   * @rmtoll SMCR         ECE           LL_TIM_IsEnabledExternalClock
   * @param  TIMx Timer instance
@@ -3164,9 +3248,9 @@ __STATIC_INLINE uint32_t LL_TIM_IsEnabledExternalClock(TIM_TypeDef *TIMx)
   *       the external clock is applied is selected by calling the @ref LL_TIM_SetTriggerInput()
   *       function. This timer input must be configured by calling
   *       the @ref LL_TIM_IC_Config() function.
-  * @note Macro @ref IS_TIM_CLOCKSOURCE_ETRMODE1_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_CLOCKSOURCE_ETRMODE1_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports external clock mode1.
-  * @note Macro @ref IS_TIM_CLOCKSOURCE_ETRMODE2_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_CLOCKSOURCE_ETRMODE2_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports external clock mode2.
   * @rmtoll SMCR         SMS           LL_TIM_SetClockSource\n
   *         SMCR         ECE           LL_TIM_SetClockSource
@@ -3184,7 +3268,7 @@ __STATIC_INLINE void LL_TIM_SetClockSource(TIM_TypeDef *TIMx, uint32_t ClockSour
 
 /**
   * @brief  Set the encoder interface mode.
-  * @note Macro @ref IS_TIM_ENCODER_INTERFACE_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_ENCODER_INTERFACE_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance supports the encoder mode.
   * @rmtoll SMCR         SMS           LL_TIM_SetEncoderMode
   * @param  TIMx Timer instance
@@ -3208,7 +3292,7 @@ __STATIC_INLINE void LL_TIM_SetEncoderMode(TIM_TypeDef *TIMx, uint32_t EncoderMo
   */
 /**
   * @brief  Set the trigger output (TRGO) used for timer synchronization .
-  * @note Macro @ref IS_TIM_MASTER_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_MASTER_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance can operate as a master timer.
   * @rmtoll CR2          MMS           LL_TIM_SetTriggerOutput
   * @param  TIMx Timer instance
@@ -3230,7 +3314,7 @@ __STATIC_INLINE void LL_TIM_SetTriggerOutput(TIM_TypeDef *TIMx, uint32_t TimerSy
 
 /**
   * @brief  Set the trigger output 2 (TRGO2) used for ADC synchronization .
-  * @note Macro @ref IS_TIM_TRGO2_INSTANCE(TIMx) can be used to check
+  * @note Macro IS_TIM_TRGO2_INSTANCE(TIMx) can be used to check
   *       whether or not a timer instance can be used for ADC synchronization.
   * @rmtoll CR2          MMS2          LL_TIM_SetTriggerOutput2
   * @param  TIMx Timer Instance
@@ -3260,7 +3344,7 @@ __STATIC_INLINE void LL_TIM_SetTriggerOutput2(TIM_TypeDef *TIMx, uint32_t ADCSyn
 
 /**
   * @brief  Set the synchronization mode of a slave timer.
-  * @note Macro @ref IS_TIM_SLAVE_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_SLAVE_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance can operate as a slave timer.
   * @rmtoll SMCR         SMS           LL_TIM_SetSlaveMode
   * @param  TIMx Timer instance
@@ -3279,7 +3363,7 @@ __STATIC_INLINE void LL_TIM_SetSlaveMode(TIM_TypeDef *TIMx, uint32_t SlaveMode)
 
 /**
   * @brief  Set the selects the trigger input to be used to synchronize the counter.
-  * @note Macro @ref IS_TIM_SLAVE_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_SLAVE_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance can operate as a slave timer.
   * @rmtoll SMCR         TS            LL_TIM_SetTriggerInput
   * @param  TIMx Timer instance
@@ -3292,6 +3376,9 @@ __STATIC_INLINE void LL_TIM_SetSlaveMode(TIM_TypeDef *TIMx, uint32_t SlaveMode)
   *         @arg @ref LL_TIM_TS_TI1FP1
   *         @arg @ref LL_TIM_TS_TI2FP2
   *         @arg @ref LL_TIM_TS_ETRF
+  *         @arg @ref LL_TIM_TS_ITR7 (*)
+  *
+  *      (*)  Value not defined in all devices.
   * @retval None
   */
 __STATIC_INLINE void LL_TIM_SetTriggerInput(TIM_TypeDef *TIMx, uint32_t TriggerInput)
@@ -3301,7 +3388,7 @@ __STATIC_INLINE void LL_TIM_SetTriggerInput(TIM_TypeDef *TIMx, uint32_t TriggerI
 
 /**
   * @brief  Enable the Master/Slave mode.
-  * @note Macro @ref IS_TIM_SLAVE_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_SLAVE_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance can operate as a slave timer.
   * @rmtoll SMCR         MSM           LL_TIM_EnableMasterSlaveMode
   * @param  TIMx Timer instance
@@ -3314,7 +3401,7 @@ __STATIC_INLINE void LL_TIM_EnableMasterSlaveMode(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Disable the Master/Slave mode.
-  * @note Macro @ref IS_TIM_SLAVE_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_SLAVE_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance can operate as a slave timer.
   * @rmtoll SMCR         MSM           LL_TIM_DisableMasterSlaveMode
   * @param  TIMx Timer instance
@@ -3327,7 +3414,7 @@ __STATIC_INLINE void LL_TIM_DisableMasterSlaveMode(TIM_TypeDef *TIMx)
 
 /**
   * @brief Indicates whether the Master/Slave mode is enabled.
-  * @note Macro @ref IS_TIM_SLAVE_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_SLAVE_INSTANCE(TIMx) can be used to check whether or not
   * a timer instance can operate as a slave timer.
   * @rmtoll SMCR         MSM           LL_TIM_IsEnabledMasterSlaveMode
   * @param  TIMx Timer instance
@@ -3340,7 +3427,7 @@ __STATIC_INLINE uint32_t LL_TIM_IsEnabledMasterSlaveMode(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Configure the external trigger (ETR) input.
-  * @note Macro @ref IS_TIM_ETR_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_ETR_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides an external trigger input.
   * @rmtoll SMCR         ETP           LL_TIM_ConfigETR\n
   *         SMCR         ETPS          LL_TIM_ConfigETR\n
@@ -3381,7 +3468,7 @@ __STATIC_INLINE void LL_TIM_ConfigETR(TIM_TypeDef *TIMx, uint32_t ETRPolarity, u
 
 /**
   * @brief  Select the external trigger (ETR) input source.
-  * @note Macro @ref IS_TIM_ETRSEL_INSTANCE(TIMx) can be used to check whether or
+  * @note Macro IS_TIM_ETRSEL_INSTANCE(TIMx) can be used to check whether or
   *       not a timer instance supports ETR source selection.
   * @rmtoll AF1          ETRSEL        LL_TIM_SetETRSource
   * @param  TIMx Timer instance
@@ -3389,36 +3476,57 @@ __STATIC_INLINE void LL_TIM_ConfigETR(TIM_TypeDef *TIMx, uint32_t ETRPolarity, u
   *         TIM1
   *
   *         @arg @ref LL_TIM_ETRSOURCE_GPIO
-  * @if STM32G081xx
-  *         @arg @ref LL_TIM_ETRSOURCE_COMP1
-  *         @arg @ref LL_TIM_ETRSOURCE_COMP2
-  * @endif
+  *         @arg @ref LL_TIM_ETRSOURCE_COMP1 (**)
+  *         @arg @ref LL_TIM_ETRSOURCE_COMP2 (**)
+  *         @arg @ref LL_TIM_ETRSOURCE_COMP3 (**)
   *         @arg @ref LL_TIM_ETRSOURCE_ADC1_AWD1
   *         @arg @ref LL_TIM_ETRSOURCE_ADC1_AWD2
   *         @arg @ref LL_TIM_ETRSOURCE_ADC1_AWD3
   *
-  *         TIM2
+  *         TIM2 (*)
   *
   *         @arg @ref LL_TIM_ETRSOURCE_GPIO
-  * @if STM32G081xx
   *         @arg @ref LL_TIM_ETRSOURCE_COMP1
   *         @arg @ref LL_TIM_ETRSOURCE_COMP2
-  * @endif
+  *         @arg @ref LL_TIM_ETRSOURCE_COMP3 (**)
   *         @arg @ref LL_TIM_ETRSOURCE_LSE
+  *         @arg @ref LL_TIM_ETRSOURCE_MCO (**)
+  *         @arg @ref LL_TIM_ETRSOURCE_MCO2 (**)
   *
   *         TIM3
   *
   *         @arg @ref LL_TIM_ETRSOURCE_GPIO
-  * @if STM32G081xx
+  *         @arg @ref LL_TIM_ETRSOURCE_COMP1 (**)
+  *         @arg @ref LL_TIM_ETRSOURCE_COMP2 (**)
+  *         @arg @ref LL_TIM_ETRSOURCE_COMP3 (**)
+  *
+  *         TIM4 (*)
+  *
+  *         @arg @ref LL_TIM_ETRSOURCE_GPIO
   *         @arg @ref LL_TIM_ETRSOURCE_COMP1
   *         @arg @ref LL_TIM_ETRSOURCE_COMP2
-  * @endif
+  *         @arg @ref LL_TIM_ETRSOURCE_COMP3 (**)
+  *
+  *  (*) Timer instance not available on all devices \n
+  *  (**) Value not defined in all devices. \n
+  *
   * @retval None
   */
 __STATIC_INLINE void LL_TIM_SetETRSource(TIM_TypeDef *TIMx, uint32_t ETRSource)
 {
-
+#if defined(COMP3)
+  uint32_t etrsel_shift = ((ETRSource == LL_TIM_ETRSOURCE_COMP3) ? 1u : 0u);
+  if ((TIMx == TIM1) || (TIMx == TIM2))
+  {
+    MODIFY_REG(TIMx->AF1, TIMx_AF1_ETRSEL, ETRSource);
+  }
+  else
+  {
+    MODIFY_REG(TIMx->AF1, TIMx_AF1_ETRSEL, ETRSource >> etrsel_shift);
+  }
+#else
   MODIFY_REG(TIMx->AF1, TIMx_AF1_ETRSEL, ETRSource);
+#endif
 }
 
 /**
@@ -3430,7 +3538,7 @@ __STATIC_INLINE void LL_TIM_SetETRSource(TIM_TypeDef *TIMx, uint32_t ETRSource)
   */
 /**
   * @brief  Enable the break function.
-  * @note Macro @ref IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides a break input.
   * @rmtoll BDTR         BKE           LL_TIM_EnableBRK
   * @param  TIMx Timer instance
@@ -3445,7 +3553,7 @@ __STATIC_INLINE void LL_TIM_EnableBRK(TIM_TypeDef *TIMx)
   * @brief  Disable the break function.
   * @rmtoll BDTR         BKE           LL_TIM_DisableBRK
   * @param  TIMx Timer instance
-  * @note Macro @ref IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides a break input.
   * @retval None
   */
@@ -3456,16 +3564,16 @@ __STATIC_INLINE void LL_TIM_DisableBRK(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Configure the break input.
-  * @note Macro @ref IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides a break input.
   * @note Bidirectional mode is only supported by advanced timer instances.
-  *       Macro @ref IS_TIM_ADVANCED_INSTANCE(TIMx) can be used to check whether or not
+  *       Macro IS_TIM_ADVANCED_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance is an advanced-control timer.
-  * @note In bidirectional mode (BKBID bit set), the Break input is configured both 
+  * @note In bidirectional mode (BKBID bit set), the Break input is configured both
   *        in input mode and in open drain output mode. Any active Break event will
   *        assert a low logic level on the Break input to indicate an internal break
   *        event to external devices.
-  * @note When bidirectional mode isn't supported, BreakAFMode must be set to 
+  * @note When bidirectional mode isn't supported, BreakAFMode must be set to
   *       LL_TIM_BREAK_AFMODE_INPUT.
   * @rmtoll BDTR         BKP           LL_TIM_ConfigBRK\n
   *         BDTR         BKF           LL_TIM_ConfigBRK\n
@@ -3496,9 +3604,10 @@ __STATIC_INLINE void LL_TIM_DisableBRK(TIM_TypeDef *TIMx)
   *         @arg @ref LL_TIM_BREAK_AFMODE_BIDIRECTIONAL
   * @retval None
   */
-__STATIC_INLINE void LL_TIM_ConfigBRK(TIM_TypeDef *TIMx, uint32_t BreakPolarity, uint32_t BreakFilter, uint32_t BreakAFMode)
+__STATIC_INLINE void LL_TIM_ConfigBRK(TIM_TypeDef *TIMx, uint32_t BreakPolarity, uint32_t BreakFilter,
+                                      uint32_t BreakAFMode)
 {
-  MODIFY_REG(TIMx->BDTR, TIM_BDTR_BKP | TIM_BDTR_BKF | TIM_BDTR_BKBID , BreakPolarity | BreakFilter | BreakAFMode);
+  MODIFY_REG(TIMx->BDTR, TIM_BDTR_BKP | TIM_BDTR_BKF | TIM_BDTR_BKBID, BreakPolarity | BreakFilter | BreakAFMode);
 }
 
 /**
@@ -3530,7 +3639,7 @@ __STATIC_INLINE void LL_TIM_ReArmBRK(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Enable the break 2 function.
-  * @note Macro @ref IS_TIM_BKIN2_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_BKIN2_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides a second break input.
   * @rmtoll BDTR         BK2E          LL_TIM_EnableBRK2
   * @param  TIMx Timer instance
@@ -3543,7 +3652,7 @@ __STATIC_INLINE void LL_TIM_EnableBRK2(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Disable the break  2 function.
-  * @note Macro @ref IS_TIM_BKIN2_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_BKIN2_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides a second break input.
   * @rmtoll BDTR         BK2E          LL_TIM_DisableBRK2
   * @param  TIMx Timer instance
@@ -3556,16 +3665,16 @@ __STATIC_INLINE void LL_TIM_DisableBRK2(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Configure the break 2 input.
-  * @note Macro @ref IS_TIM_BKIN2_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_BKIN2_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides a second break input.
   * @note Bidirectional mode is only supported by advanced timer instances.
-  *       Macro @ref IS_TIM_ADVANCED_INSTANCE(TIMx) can be used to check whether or not
+  *       Macro IS_TIM_ADVANCED_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance is an advanced-control timer.
-  * @note In bidirectional mode (BK2BID bit set), the Break 2 input is configured both 
+  * @note In bidirectional mode (BK2BID bit set), the Break 2 input is configured both
   *        in input mode and in open drain output mode. Any active Break event will
   *        assert a low logic level on the Break 2 input to indicate an internal break
   *        event to external devices.
-  * @note When bidirectional mode isn't supported, Break2AFMode must be set to 
+  * @note When bidirectional mode isn't supported, Break2AFMode must be set to
   *       LL_TIM_BREAK2_AFMODE_INPUT.
   * @rmtoll BDTR         BK2P          LL_TIM_ConfigBRK2\n
   *         BDTR         BK2F          LL_TIM_ConfigBRK2\n
@@ -3596,7 +3705,8 @@ __STATIC_INLINE void LL_TIM_DisableBRK2(TIM_TypeDef *TIMx)
   *         @arg @ref LL_TIM_BREAK2_AFMODE_BIDIRECTIONAL
   * @retval None
   */
-__STATIC_INLINE void LL_TIM_ConfigBRK2(TIM_TypeDef *TIMx, uint32_t Break2Polarity, uint32_t Break2Filter, uint32_t Break2AFMode)
+__STATIC_INLINE void LL_TIM_ConfigBRK2(TIM_TypeDef *TIMx, uint32_t Break2Polarity, uint32_t Break2Filter,
+                                       uint32_t Break2AFMode)
 {
   MODIFY_REG(TIMx->BDTR, TIM_BDTR_BK2P | TIM_BDTR_BK2F | TIM_BDTR_BK2BID, Break2Polarity | Break2Filter | Break2AFMode);
 }
@@ -3630,7 +3740,7 @@ __STATIC_INLINE void LL_TIM_ReArmBRK2(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Select the outputs off state (enabled v.s. disabled) in Idle and Run modes.
-  * @note Macro @ref IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides a break input.
   * @rmtoll BDTR         OSSI          LL_TIM_SetOffStates\n
   *         BDTR         OSSR          LL_TIM_SetOffStates
@@ -3650,7 +3760,7 @@ __STATIC_INLINE void LL_TIM_SetOffStates(TIM_TypeDef *TIMx, uint32_t OffStateIdl
 
 /**
   * @brief  Enable automatic output (MOE can be set by software or automatically when a break input is active).
-  * @note Macro @ref IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides a break input.
   * @rmtoll BDTR         AOE           LL_TIM_EnableAutomaticOutput
   * @param  TIMx Timer instance
@@ -3663,7 +3773,7 @@ __STATIC_INLINE void LL_TIM_EnableAutomaticOutput(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Disable automatic output (MOE can be set only by software).
-  * @note Macro @ref IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides a break input.
   * @rmtoll BDTR         AOE           LL_TIM_DisableAutomaticOutput
   * @param  TIMx Timer instance
@@ -3676,7 +3786,7 @@ __STATIC_INLINE void LL_TIM_DisableAutomaticOutput(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Indicate whether automatic output is enabled.
-  * @note Macro @ref IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides a break input.
   * @rmtoll BDTR         AOE           LL_TIM_IsEnabledAutomaticOutput
   * @param  TIMx Timer instance
@@ -3691,7 +3801,7 @@ __STATIC_INLINE uint32_t LL_TIM_IsEnabledAutomaticOutput(TIM_TypeDef *TIMx)
   * @brief  Enable the outputs (set the MOE bit in TIMx_BDTR register).
   * @note The MOE bit in TIMx_BDTR register allows to enable /disable the outputs by
   *       software and is reset in case of break or break2 event
-  * @note Macro @ref IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides a break input.
   * @rmtoll BDTR         MOE           LL_TIM_EnableAllOutputs
   * @param  TIMx Timer instance
@@ -3706,7 +3816,7 @@ __STATIC_INLINE void LL_TIM_EnableAllOutputs(TIM_TypeDef *TIMx)
   * @brief  Disable the outputs (reset the MOE bit in TIMx_BDTR register).
   * @note The MOE bit in TIMx_BDTR register allows to enable /disable the outputs by
   *       software and is reset in case of break or break2 event.
-  * @note Macro @ref IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides a break input.
   * @rmtoll BDTR         MOE           LL_TIM_DisableAllOutputs
   * @param  TIMx Timer instance
@@ -3719,7 +3829,7 @@ __STATIC_INLINE void LL_TIM_DisableAllOutputs(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Indicates whether outputs are enabled.
-  * @note Macro @ref IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_BREAK_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides a break input.
   * @rmtoll BDTR         MOE           LL_TIM_IsEnabledAllOutputs
   * @param  TIMx Timer instance
@@ -3732,102 +3842,102 @@ __STATIC_INLINE uint32_t LL_TIM_IsEnabledAllOutputs(TIM_TypeDef *TIMx)
 
 /**
   * @brief  Enable the signals connected to the designated timer break input.
-  * @note Macro @ref IS_TIM_BREAKSOURCE_INSTANCE(TIMx) can be used to check whether
+  * @note Macro IS_TIM_BREAKSOURCE_INSTANCE(TIMx) can be used to check whether
   *       or not a timer instance allows for break input selection.
   * @rmtoll AF1          BKINE         LL_TIM_EnableBreakInputSource\n
-  * @if STM32G081xx
   *         AF1          BKCMP1E       LL_TIM_EnableBreakInputSource\n
   *         AF1          BKCMP2E       LL_TIM_EnableBreakInputSource\n
-  * @endif
+  *         AF1          BKCMP3E       LL_TIM_EnableBreakInputSource\n
   *         AF2          BK2INE        LL_TIM_EnableBreakInputSource\n
-  * @if STM32G081xx
   *         AF2          BK2CMP1E      LL_TIM_EnableBreakInputSource\n
-  *         AF2          BK2CMP2E      LL_TIM_EnableBreakInputSource
-  * @endif
+  *         AF2          BK2CMP2E      LL_TIM_EnableBreakInputSource\n
+  *         AF2          BK2CMP3E      LL_TIM_EnableBreakInputSource
   * @param  TIMx Timer instance
   * @param  BreakInput This parameter can be one of the following values:
   *         @arg @ref LL_TIM_BREAK_INPUT_BKIN
   *         @arg @ref LL_TIM_BREAK_INPUT_BKIN2
   * @param  Source This parameter can be one of the following values:
   *         @arg @ref LL_TIM_BKIN_SOURCE_BKIN
-  * @if STM32G081xx
   *         @arg @ref LL_TIM_BKIN_SOURCE_BKCOMP1
   *         @arg @ref LL_TIM_BKIN_SOURCE_BKCOMP2
-  * @endif
+  *         @arg @ref LL_TIM_BKIN_SOURCE_BKCOMP3 (*)
+  *
+  *         (*)  Value not defined in all devices. \n
+  *
   * @retval None
   */
 __STATIC_INLINE void LL_TIM_EnableBreakInputSource(TIM_TypeDef *TIMx, uint32_t BreakInput, uint32_t Source)
 {
-  register __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->AF1) + BreakInput));
+  __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->AF1) + BreakInput));
   SET_BIT(*pReg, Source);
 }
 
 /**
   * @brief  Disable the signals connected to the designated timer break input.
-  * @note Macro @ref IS_TIM_BREAKSOURCE_INSTANCE(TIMx) can be used to check whether
+  * @note Macro IS_TIM_BREAKSOURCE_INSTANCE(TIMx) can be used to check whether
   *       or not a timer instance allows for break input selection.
   * @rmtoll AF1          BKINE         LL_TIM_DisableBreakInputSource\n
-  * @if STM32G081xx
   *         AF1          BKCMP1E       LL_TIM_DisableBreakInputSource\n
   *         AF1          BKCMP2E       LL_TIM_DisableBreakInputSource\n
-  * @endif
+  *         AF1          BKCMP3E       LL_TIM_DisableBreakInputSource\n
   *         AF2          BK2INE        LL_TIM_DisableBreakInputSource\n
-  * @if STM32G081xx
   *         AF2          BK2CMP1E      LL_TIM_DisableBreakInputSource\n
-  *         AF2          BK2CMP2E      LL_TIM_DisableBreakInputSource
-  * @endif
+  *         AF2          BK2CMP2E      LL_TIM_DisableBreakInputSource\n
+  *         AF2          BK2CMP3E      LL_TIM_DisableBreakInputSource
   * @param  TIMx Timer instance
   * @param  BreakInput This parameter can be one of the following values:
   *         @arg @ref LL_TIM_BREAK_INPUT_BKIN
   *         @arg @ref LL_TIM_BREAK_INPUT_BKIN2
   * @param  Source This parameter can be one of the following values:
   *         @arg @ref LL_TIM_BKIN_SOURCE_BKIN
-  * @if STM32G081xx
   *         @arg @ref LL_TIM_BKIN_SOURCE_BKCOMP1
   *         @arg @ref LL_TIM_BKIN_SOURCE_BKCOMP2
-  * @endif
+  *         @arg @ref LL_TIM_BKIN_SOURCE_BKCOMP3 (*)
+  *
+  *         (*)  Value not defined in all devices. \n
+  *
   * @retval None
   */
 __STATIC_INLINE void LL_TIM_DisableBreakInputSource(TIM_TypeDef *TIMx, uint32_t BreakInput, uint32_t Source)
 {
-  register __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->AF1) + BreakInput));
+  __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->AF1) + BreakInput));
   CLEAR_BIT(*pReg, Source);
 }
 
 /**
   * @brief  Set the polarity of the break signal for the timer break input.
-  * @note Macro @ref IS_TIM_BREAKSOURCE_INSTANCE(TIMx) can be used to check whether
+  * @note Macro IS_TIM_BREAKSOURCE_INSTANCE(TIMx) can be used to check whether
   *       or not a timer instance allows for break input selection.
   * @rmtoll AF1          BKINP         LL_TIM_SetBreakInputSourcePolarity\n
-  * @if STM32G081xx
   *         AF1          BKCMP1P       LL_TIM_SetBreakInputSourcePolarity\n
   *         AF1          BKCMP2P       LL_TIM_SetBreakInputSourcePolarity\n
-  * @endif
+  *         AF1          BKCMP3P       LL_TIM_SetBreakInputSourcePolarity\n
   *         AF2          BK2INP        LL_TIM_SetBreakInputSourcePolarity\n
-  * @if STM32G081xx
   *         AF2          BK2CMP1P      LL_TIM_SetBreakInputSourcePolarity\n
-  *         AF2          BK2CMP2P      LL_TIM_SetBreakInputSourcePolarity
-  * @endif
+  *         AF2          BK2CMP2P      LL_TIM_SetBreakInputSourcePolarity\n
+  *         AF2          BK2CMP3P      LL_TIM_SetBreakInputSourcePolarity
   * @param  TIMx Timer instance
   * @param  BreakInput This parameter can be one of the following values:
   *         @arg @ref LL_TIM_BREAK_INPUT_BKIN
   *         @arg @ref LL_TIM_BREAK_INPUT_BKIN2
   * @param  Source This parameter can be one of the following values:
   *         @arg @ref LL_TIM_BKIN_SOURCE_BKIN
-  * @if STM32G081xx
   *         @arg @ref LL_TIM_BKIN_SOURCE_BKCOMP1
   *         @arg @ref LL_TIM_BKIN_SOURCE_BKCOMP2
-  * @endif
+  *         @arg @ref LL_TIM_BKIN_SOURCE_BKCOMP3 (*)
   * @param  Polarity This parameter can be one of the following values:
   *         @arg @ref LL_TIM_BKIN_POLARITY_LOW
   *         @arg @ref LL_TIM_BKIN_POLARITY_HIGH
+  *
+  *         (*)  Value not defined in all devices. \n
+  *
   * @retval None
   */
 __STATIC_INLINE void LL_TIM_SetBreakInputSourcePolarity(TIM_TypeDef *TIMx, uint32_t BreakInput, uint32_t Source,
                                                         uint32_t Polarity)
 {
-  register __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->AF1) + BreakInput));
-  MODIFY_REG(*pReg, (TIMx_AF1_BKINP << TIM_POSITION_BRK_SOURCE) , (Polarity << TIM_POSITION_BRK_SOURCE));
+  __IO uint32_t *pReg = (__IO uint32_t *)((uint32_t)((uint32_t)(&TIMx->AF1) + BreakInput));
+  MODIFY_REG(*pReg, (TIMx_AF1_BKINP << TIM_POSITION_BRK_SOURCE), (Polarity << TIM_POSITION_BRK_SOURCE));
 }
 /**
   * @}
@@ -3838,7 +3948,7 @@ __STATIC_INLINE void LL_TIM_SetBreakInputSourcePolarity(TIM_TypeDef *TIMx, uint3
   */
 /**
   * @brief  Configures the timer DMA burst feature.
-  * @note Macro @ref IS_TIM_DMABURST_INSTANCE(TIMx) can be used to check whether or
+  * @note Macro IS_TIM_DMABURST_INSTANCE(TIMx) can be used to check whether or
   *       not a timer instance supports the DMA burst mode.
   * @rmtoll DCR          DBL           LL_TIM_ConfigDMABurst\n
   *         DCR          DBA           LL_TIM_ConfigDMABurst
@@ -3904,7 +4014,7 @@ __STATIC_INLINE void LL_TIM_ConfigDMABurst(TIM_TypeDef *TIMx, uint32_t DMABurstB
   */
 /**
   * @brief  Remap TIM inputs (input channel, internal/external triggers).
-  * @note Macro @ref IS_TIM_REMAP_INSTANCE(TIMx) can be used to check whether or not
+  * @note Macro IS_TIM_REMAP_INSTANCE(TIMx) can be used to check whether or not
   *       a some timer inputs can be remapped.
   * @rmtoll TIM1_TISEL    TI1SEL      LL_TIM_SetRemap\n
   *         TIM1_TISEL    TI2SEL      LL_TIM_SetRemap\n
@@ -3912,6 +4022,9 @@ __STATIC_INLINE void LL_TIM_ConfigDMABurst(TIM_TypeDef *TIMx, uint32_t DMABurstB
   *         TIM2_TISEL    TI2SEL      LL_TIM_SetRemap\n
   *         TIM3_TISEL    TI1SEL      LL_TIM_SetRemap\n
   *         TIM3_TISEL    TI2SEL      LL_TIM_SetRemap\n
+  *         TIM4_TISEL    TI1SEL      LL_TIM_SetRemap\n
+  *         TIM4_TISEL    TI2SEL      LL_TIM_SetRemap\n
+  *         TIM4_TISEL    TI3SEL      LL_TIM_SetRemap\n
   *         TIM14_TISEL   TI1SEL      LL_TIM_SetRemap\n
   *         TIM15_TISEL   TI1SEL      LL_TIM_SetRemap\n
   *         TIM15_TISEL   TI2SEL      LL_TIM_SetRemap\n
@@ -3928,31 +4041,57 @@ __STATIC_INLINE void LL_TIM_ConfigDMABurst(TIM_TypeDef *TIMx, uint32_t DMABurstB
   *
   *            . . TI1_RMP can be one of the following values
   *            @arg @ref LL_TIM_TIM1_TI1_RMP_GPIO
-  *            @arg @ref LL_TIM_TIM1_TI1_RMP_COMP1
+  *            @arg @ref LL_TIM_TIM1_TI1_RMP_COMP1 (**)
   *
   *            . . TI2_RMP can be one of the following values
   *            @arg @ref LL_TIM_TIM1_TI2_RMP_GPIO
-  *            @arg @ref LL_TIM_TIM1_TI2_RMP_COMP2
+  *            @arg @ref LL_TIM_TIM1_TI2_RMP_COMP2 (**)
+  *
+  *            . . TI3_RMP can be one of the following values
+  *            @arg @ref LL_TIM_TIM1_TI3_RMP_GPIO
+  *            @arg @ref LL_TIM_TIM1_TI3_RMP_COMP3 (**)
   *
   *         TIM2: any combination of TI1_RMP and TI2_RMP where
   *
   *            . . TI1_RMP can be one of the following values
   *            @arg @ref LL_TIM_TIM2_TI1_RMP_GPIO
-  *            @arg @ref LL_TIM_TIM2_TI1_RMP_COMP1
+  *            @arg @ref LL_TIM_TIM2_TI1_RMP_COMP1 (**)
   *
   *            . . TI2_RMP can be one of the following values
   *            @arg @ref LL_TIM_TIM2_TI2_RMP_GPIO
-  *            @arg @ref LL_TIM_TIM2_TI2_RMP_COMP2
+  *            @arg @ref LL_TIM_TIM2_TI2_RMP_COMP2 (**)
+  *
+  *            . . TI3_RMP can be one of the following values
+  *            @arg @ref LL_TIM_TIM2_TI3_RMP_GPIO
+  *            @arg @ref LL_TIM_TIM2_TI3_RMP_COMP3 (**)
   *
   *         TIM3: any combination of TI1_RMP and TI2_RMP where
   *
   *            . . TI1_RMP can be one of the following values
   *            @arg @ref LL_TIM_TIM3_TI1_RMP_GPIO
-  *            @arg @ref LL_TIM_TIM3_TI1_RMP_COMP1
+  *            @arg @ref LL_TIM_TIM3_TI1_RMP_COMP1 (**)
   *
   *            . . TI2_RMP can be one of the following values
   *            @arg @ref LL_TIM_TIM3_TI2_RMP_GPIO
-  *            @arg @ref LL_TIM_TIM3_TI2_RMP_COMP2
+  *            @arg @ref LL_TIM_TIM3_TI2_RMP_COMP2 (**)
+  *
+  *            . . TI3_RMP can be one of the following values
+  *            @arg @ref LL_TIM_TIM3_TI3_RMP_GPIO
+  *            @arg @ref LL_TIM_TIM3_TI3_RMP_COMP3 (**)
+  *
+  *         TIM4: any combination of TI1_RMP, TI2_RMP and TI3_RMP where  (*)
+  *
+  *            . . TI1_RMP can be one of the following values
+  *            @arg @ref LL_TIM_TIM4_TI1_RMP_GPIO
+  *            @arg @ref LL_TIM_TIM4_TI1_RMP_COMP1 (**)
+  *
+  *            . . TI2_RMP can be one of the following values
+  *            @arg @ref LL_TIM_TIM4_TI2_RMP_GPIO
+  *            @arg @ref LL_TIM_TIM4_TI2_RMP_COMP2 (**)
+  *
+  *            . . TI3_RMP can be one of the following values
+  *            @arg @ref LL_TIM_TIM4_TI3_RMP_GPIO
+  *            @arg @ref LL_TIM_TIM4_TI3_RMP_COMP3 (**)
   *
   *         TIM14: one of the following values
   *
@@ -3960,6 +4099,7 @@ __STATIC_INLINE void LL_TIM_ConfigDMABurst(TIM_TypeDef *TIMx, uint32_t DMABurstB
   *            @arg @ref LL_TIM_TIM14_TI1_RMP_RTC_CLK
   *            @arg @ref LL_TIM_TIM14_TI1_RMP_HSE_32
   *            @arg @ref LL_TIM_TIM14_TI1_RMP_MCO
+  *            @arg @ref LL_TIM_TIM14_TI1_RMP_MCO2 (**)
   *
   *         TIM15: any combination of TI1_RMP and TI2_RMP where
   *
@@ -3979,12 +4119,18 @@ __STATIC_INLINE void LL_TIM_ConfigDMABurst(TIM_TypeDef *TIMx, uint32_t DMABurstB
   *            @arg @ref LL_TIM_TIM16_TI1_RMP_LSI
   *            @arg @ref LL_TIM_TIM16_TI1_RMP_LSE
   *            @arg @ref LL_TIM_TIM16_TI1_RMP_RTC_WK
+  *            @arg @ref LL_TIM_TIM16_TI1_RMP_MCO2(**)
   *
   *         TIM17: one of the following values
   *
   *            @arg @ref LL_TIM_TIM17_TI1_RMP_GPIO
   *            @arg @ref LL_TIM_TIM17_TI1_RMP_HSE_32
   *            @arg @ref LL_TIM_TIM17_TI1_RMP_MCO
+  *            @arg @ref LL_TIM_TIM17_TI1_RMP_HSI48 (**)
+  *            @arg @ref LL_TIM_TIM17_TI1_RMP_MCO2(**)
+  *
+  *  (*) Timer instance not available on all devices \n
+  *  (**) Value not defined in all devices. \n
   *
   * @retval None
   */
@@ -4009,8 +4155,12 @@ __STATIC_INLINE void LL_TIM_SetRemap(TIM_TypeDef *TIMx, uint32_t Remap)
   * @param  TIMx Timer instance
   * @param  OCRefClearInputSource This parameter can be one of the following values:
   *         @arg @ref LL_TIM_OCREF_CLR_INT_ETR
-  *         @arg @ref LL_TIM_OCREF_CLR_INT_COMP1
-  *         @arg @ref LL_TIM_OCREF_CLR_INT_COMP2
+  *         @arg @ref LL_TIM_OCREF_CLR_INT_COMP1 (*)
+  *         @arg @ref LL_TIM_OCREF_CLR_INT_COMP2 (*)
+  *         @arg @ref LL_TIM_OCREF_CLR_INT_COMP3 (*)
+  *
+  *         (*)  Value not defined in all devices. \n
+  *
   * @retval None
   */
 __STATIC_INLINE void LL_TIM_SetOCRefClearInputSource(TIM_TypeDef *TIMx, uint32_t OCRefClearInputSource)
@@ -5028,7 +5178,7 @@ ErrorStatus LL_TIM_BDTR_Init(TIM_TypeDef *TIMx, LL_TIM_BDTR_InitTypeDef *TIM_BDT
   * @}
   */
 
-#endif /* TIM1 || TIM2 || TIM3 ||  TIM14 || TIM15 || TIM16 || TIM17 || TIM6 || TIM7 */
+#endif /* TIM1 || TIM2 || TIM3 || TIM4 || TIM14 || TIM15 || TIM16 || TIM17 || TIM6 || TIM7 */
 
 /**
   * @}
