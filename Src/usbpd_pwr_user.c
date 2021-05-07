@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -28,7 +28,6 @@
 #endif /* _TRACE */
 
 /* USER CODE BEGIN include */
-
 /* USER CODE END include */
 
 /** @addtogroup BSP
@@ -120,7 +119,7 @@ __weak PWR_StatusTypeDef BSP_PWR_VBUSInit(uint32_t               PortId)
 {
   PWR_DEBUG_TRACE(PortId, "ADVICE: Obsolete BSP_PWR_VBUSInit");
 /* USER CODE BEGIN BSP_PWR_VBUSInit */
-  return PWR_ERROR;
+  return ((BSP_ERROR_NONE == BSP_USBPD_PWR_VBUSInit(PortId)) ? PWR_OK : PWR_ERROR);
 /* USER CODE END BSP_PWR_VBUSInit */
 }
 
@@ -138,7 +137,7 @@ __weak PWR_StatusTypeDef BSP_PWR_VBUSDeInit(uint32_t PortId)
 {
   PWR_DEBUG_TRACE(PortId, "ADVICE: Obsolete BSP_PWR_VBUSDeInit");
 /* USER CODE BEGIN BSP_PWR_VBUSDeInit */
-  return PWR_ERROR;
+  return ((BSP_ERROR_NONE == BSP_USBPD_PWR_VBUSDeInit(PortId)) ? PWR_OK : PWR_ERROR);
 /* USER CODE END BSP_PWR_VBUSDeInit */
 }
 
@@ -155,7 +154,7 @@ __weak PWR_StatusTypeDef BSP_PWR_VBUSOn(uint32_t PortId)
 {
   PWR_DEBUG_TRACE(PortId, "ADVICE: Obsolete BSP_PWR_VBUSOn");
 /* USER CODE BEGIN BSP_PWR_VBUSOn */
-  return PWR_ERROR;
+  return ((BSP_ERROR_NONE == BSP_USBPD_PWR_VBUSOn(PortId)) ? PWR_OK : PWR_ERROR);
 /* USER CODE END BSP_PWR_VBUSOn */
 }
 
@@ -172,7 +171,7 @@ __weak PWR_StatusTypeDef BSP_PWR_VBUSOff(uint32_t PortId)
 {
   PWR_DEBUG_TRACE(PortId, "ADVICE: Obsolete BSP_PWR_VBUSOff");
 /* USER CODE BEGIN BSP_PWR_VBUSOff */
-  return PWR_ERROR;
+  return ((BSP_ERROR_NONE == BSP_USBPD_PWR_VBUSOff(PortId)) ? PWR_OK : PWR_ERROR);
 /* USER CODE END BSP_PWR_VBUSOff */
 }
 
@@ -195,7 +194,7 @@ __weak PWR_StatusTypeDef BSP_PWR_VBUSSetVoltage_Fixed(uint32_t PortId,
 {
   PWR_DEBUG_TRACE(PortId, "ADVICE: Obsolete BSP_PWR_VBUSSetVoltage_Fixed");
 /* USER CODE BEGIN BSP_PWR_VBUSSetVoltage_Fixed */
-  return PWR_ERROR;
+  return ((BSP_ERROR_NONE == BSP_USBPD_PWR_VBUSSetVoltage_Fixed(PortId, VbusTargetInmv, OperatingCurrent, MaxOperatingCurrent)) ? PWR_OK : PWR_ERROR);
 /* USER CODE END BSP_PWR_VBUSSetVoltage_Fixed */
 }
 
@@ -285,7 +284,11 @@ __weak uint32_t BSP_PWR_VBUSGetVoltage(uint32_t PortId)
 {
   PWR_DEBUG_TRACE(PortId, "ADVICE: Obsolete BSP_PWR_VBUSGetVoltage");
 /* USER CODE BEGIN BSP_PWR_VBUSGetVoltage */
-  return ((Get_VBUS_ADC_Reading()*1000)/REG_ADC_MULTIPLIER);
+  uint32_t voltage = 0;
+
+  (void)BSP_USBPD_PWR_VBUSGetVoltage(PortId, &voltage);
+
+  return voltage;
 /* USER CODE END BSP_PWR_VBUSGetVoltage */
 }
 
@@ -302,7 +305,11 @@ __weak int32_t BSP_PWR_VBUSGetCurrent(uint32_t PortId)
 {
   PWR_DEBUG_TRACE(PortId, "ADVICE: Obsolete BSP_PWR_VBUSGetCurrent");
 /* USER CODE BEGIN BSP_PWR_VBUSGetCurrent */
-  return ((Get_Input_Current_ADC_Reading()*1000)/REG_ADC_MULTIPLIER);;
+  int32_t current = 0;
+
+  (void)BSP_USBPD_PWR_VBUSGetCurrent(PortId, &current);
+
+  return current;
 /* USER CODE END BSP_PWR_VBUSGetCurrent */
 }
 
@@ -324,7 +331,7 @@ __weak PWR_StatusTypeDef BSP_PWR_VCONNInit(uint32_t PortId,
 {
   PWR_DEBUG_TRACE(PortId, "ADVICE: Obsolete BSP_PWR_VCONNInit");
 /* USER CODE BEGIN BSP_PWR_VCONNInit */
-  return PWR_ERROR;
+  return ((BSP_ERROR_NONE == BSP_USBPD_PWR_VCONNInit(PortId, CCPinId)) ? PWR_OK : PWR_ERROR);
 /* USER CODE END BSP_PWR_VCONNInit */
 }
 
@@ -346,7 +353,7 @@ __weak PWR_StatusTypeDef BSP_PWR_VCONNDeInit(uint32_t PortId,
 {
   PWR_DEBUG_TRACE(PortId, "ADVICE: Obsolete BSP_PWR_VCONNDeInit");
 /* USER CODE BEGIN BSP_PWR_VCONNDeInit */
-  return PWR_ERROR;
+  return ((BSP_ERROR_NONE == BSP_USBPD_PWR_VCONNDeInit(PortId, CCPinId)) ? PWR_OK : PWR_ERROR);
 /* USER CODE END BSP_PWR_VCONNDeInit */
 }
 
@@ -368,7 +375,7 @@ __weak PWR_StatusTypeDef BSP_PWR_VCONNOn(uint32_t PortId,
 {
   PWR_DEBUG_TRACE(PortId, "ADVICE: Obsolete BSP_PWR_VCONNOn");
 /* USER CODE BEGIN BSP_PWR_VCONNOn */
-  return PWR_ERROR;
+  return ((BSP_ERROR_NONE == BSP_USBPD_PWR_VCONNOn(PortId, CCPinId)) ? PWR_OK : PWR_ERROR);
 /* USER CODE END BSP_PWR_VCONNOn */
 }
 
@@ -390,7 +397,7 @@ __weak PWR_StatusTypeDef BSP_PWR_VCONNOff(uint32_t PortId,
 {
   PWR_DEBUG_TRACE(PortId, "ADVICE: Obsolete BSP_PWR_VCONNOff");
 /* USER CODE BEGIN BSP_PWR_VCONNOff */
-  return PWR_ERROR;
+  return ((BSP_ERROR_NONE == BSP_USBPD_PWR_VCONNOff(PortId, CCPinId)) ? PWR_OK : PWR_ERROR);
 /* USER CODE END BSP_PWR_VCONNOff */
 }
 
@@ -412,7 +419,7 @@ __weak void BSP_PWR_SetVBUSDisconnectionThreshold(uint32_t PortId,
 {
   PWR_DEBUG_TRACE(PortId, "ADVICE: Obsolete BSP_PWR_SetVBUSDisconnectionThreshold");
 /* USER CODE BEGIN BSP_PWR_SetVBUSDisconnectionThreshold */
-
+  (void)BSP_USBPD_PWR_SetVBUSDisconnectionThreshold(PortId, VoltageThreshold);
 /* USER CODE END BSP_PWR_SetVBUSDisconnectionThreshold */
 }
 
@@ -435,7 +442,7 @@ __weak PWR_StatusTypeDef BSP_PWR_RegisterVBUSDetectCallback(uint32_t            
 {
   PWR_DEBUG_TRACE(PortId, "ADVICE: Obsolete BSP_PWR_RegisterVBUSDetectCallback");
 /* USER CODE BEGIN BSP_PWR_RegisterVBUSDetectCallback */
-  return 0;
+  return ((BSP_ERROR_NONE == BSP_USBPD_PWR_RegisterVBUSDetectCallback(PortId, (USBPD_PWR_VBUSDetectCallbackFunc*)pfnVBUSDetectCallback)) ? PWR_OK : PWR_ERROR);
 /* USER CODE END BSP_PWR_RegisterVBUSDetectCallback */
 }
 
@@ -452,7 +459,11 @@ __weak uint8_t BSP_PWR_VBUSIsOn(uint32_t PortId)
 {
   PWR_DEBUG_TRACE(PortId, "ADVICE: Obsolete BSP_PWR_VBUSIsOn");
 /* USER CODE BEGIN BSP_PWR_VBUSIsOn */
-  return 1;
+  uint8_t state = 0;
+
+  (void)BSP_USBPD_PWR_VBUSIsOn(PortId, &state);
+
+  return state;
 /* USER CODE END BSP_PWR_VBUSIsOn */
 }
 
@@ -474,7 +485,11 @@ __weak uint8_t BSP_PWR_VCONNIsOn(uint32_t PortId,
 {
   PWR_DEBUG_TRACE(PortId, "ADVICE: Obsolete BSP_PWR_VCONNIsOn");
 /* USER CODE BEGIN BSP_PWR_VCONNIsOn */
-  return 0;
+  uint8_t state = 0;
+
+  (void)BSP_USBPD_PWR_VCONNIsOn(PortId, CCPinId, &state);
+
+  return state;
 /* USER CODE END BSP_PWR_VCONNIsOn */
 }
 

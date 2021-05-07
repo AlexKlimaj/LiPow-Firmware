@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -23,22 +23,13 @@
 #include "usbpd.h"
 
 /* USER CODE BEGIN 0 */
-
-#include "usbpd_core.h"
-#include "usbpd_dpm_core.h"
-#include "usbpd_dpm_conf.h"
-#include "usbpd_dpm_user.h"
-#include "usbpd_pwr_if.h"
-
 #include "battery.h"
 #include "bq25703a_regulator.h"
 #include "printf.h"
 #include <stdlib.h>
-
 /* USER CODE END 0 */
 
 /* USER CODE BEGIN 1 */
-
 /* USER CODE END 1 */
 
 /* Private variables ---------------------------------------------------------*/
@@ -46,35 +37,6 @@
 /* Private functions ---------------------------------------------------------*/
 
 /* USER CODE BEGIN 2 */
-
-/* Private typedef -----------------------------------------------------------*/
-struct USB_PD_Received_Source_PDO {
-	uint32_t voltage_mv;
-	uint32_t current_ma;
-	uint32_t power_mw;
-};
-
-/* Private variables ---------------------------------------------------------*/
-volatile struct USB_PD_Received_Source_PDO source_pdo[USBPD_MAX_NB_PDO];
-volatile uint32_t max_source_power_mw = 0;
-volatile uint8_t max_source_power_pdo = 0;
-
-volatile uint8_t selected_source_pdo = 0;
-volatile uint8_t power_ready = NOT_READY;
-volatile uint8_t match_found = 0;
-
-volatile uint16_t voltage_choice_list_mv[3][VOLTAGE_CHOICE_ARRAY_SIZE] = {
-		{9000, 12000, 15000, 5000, 20000}, //Two S voltage choice list
-		{12000, 15000, 20000, 9000, 5000}, //Three S voltage choice list
-		{20000, 15000, 12000, 9000, 5000}  //Four S voltage choice list
-};
-
-osMessageQId  USBPDMsgBox;
-osThreadId USBPD_User_TaskHandle;
-
-void vUSBPD_User(void const *pvParameters);
-uint8_t check_if_power_ready(void);
-
 /* USER CODE END 2 */
 
 /* USBPD init function */

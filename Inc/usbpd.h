@@ -52,6 +52,11 @@ void            MX_USBPD_Init(void);
 
 /* USER CODE BEGIN 2 */
 
+uint8_t Get_Input_Power_Ready(void);
+uint32_t Get_Max_Input_Power(void);
+uint32_t Get_Max_Input_Current(void);
+uint32_t Get_Input_Voltage(void);
+
 /* USER CODE END 2 */
 
 #ifdef __cplusplus

@@ -39,7 +39,6 @@
 #include "usbpd.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "tracer_emb.h"
 #include "printf.h"
 /* USER CODE END Includes */
 

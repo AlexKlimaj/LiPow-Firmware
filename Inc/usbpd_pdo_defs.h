@@ -35,7 +35,7 @@
 
 /* Define   ------------------------------------------------------------------*/
 #define PORT0_NB_SOURCEPDO         0U   /* Number of Source PDOs (applicable for port 0)   */
-#define PORT0_NB_SINKPDO           1U   /* Number of Sink PDOs (applicable for port 0)     */
+#define PORT0_NB_SINKPDO           5U   /* Number of Sink PDOs (applicable for port 0)     */
 #define PORT1_NB_SOURCEPDO         0U   /* Number of Source PDOs (applicable for port 1)   */
 #define PORT1_NB_SINKPDO           0U   /* Number of Sink PDOs (applicable for port 1)     */
 
@@ -110,7 +110,7 @@ uint32_t PORT0_PDO_ListSNK[USBPD_MAX_NB_PDO] =
   /* PDO 1 */
         (0x2201912CU),
   /* PDO 2 */
-        (0U),
+        (0x00000000U),
   /* PDO 3 */
         (0x00000000U),
   /* PDO 4 */

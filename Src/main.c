@@ -60,7 +60,6 @@
 #include "adc_interface.h"
 #include "battery.h"
 #include "bq25703a_regulator.h"
-#include "gui_api.h"
 
 // System
 #include "printf.h"
